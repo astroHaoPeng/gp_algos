@@ -1,0 +1,93 @@
+package utils
+
+import org.scalatest.{WordSpec}
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
+import breeze.linalg.{cholesky, DenseVector, DenseMatrix}
+import breeze.numerics.abs
+import utils.KernelRequisites.{GaussianRbfParams, GaussianRbfKernel}
+
+/**
+ * Created by mjamroz on 13/03/14.
+ */
+
+@RunWith(classOf[JUnitRunner])
+class MatrixUtilsTest extends WordSpec {
+
+  val eps:Double = 0.001
+  val lowerMatrix = DenseMatrix((0.3,0.,0.),(0.2,0.3,0.),(0.1,0.99,0.11))
+  val upperMatrix = DenseMatrix((0.4,0.1,0.9),(0.,0.2,0.89),(0.,0.,.5))
+
+  "forwardsolve function" should {
+
+	"solve properly set of linear equations with triangular lower matrix" in {
+
+	  val rhs = DenseVector(3., 2., 1.)
+	  val solution: DenseVector[Double] = (lowerMatrix \ rhs)
+	  val solutionFromMatrixUtils: DenseVector[Double] = MatrixUtils.forwardSolve(L = lowerMatrix, b = rhs)
+	  assert(solution == solutionFromMatrixUtils)
+	  compare2Vectors(solution,solutionFromMatrixUtils)
+	}
+
+	"solve properly set of linear equations with triangular upper matrix" in {
+
+	  val rhs = DenseVector(7.,3.,4.)
+	  val solution:DenseVector[Double] = (upperMatrix \ rhs)
+	  val solutionFromMatrixUtils:DenseVector[Double] = MatrixUtils.backSolve(R = upperMatrix,b = rhs)
+	  compare2Vectors(solution,solutionFromMatrixUtils)
+	}
+
+	"solve properly set of linear equations with triangular lower matrix and matrix on the right side" in {
+
+	  val rhs = DenseMatrix((0.4,0.9),(0.8,0.3),(0.7,0.4))
+	  val solution:DenseMatrix[Double] = (lowerMatrix \ rhs)
+	  assert(solution.rows == 3 && solution.cols == 2)
+	  val solutionFromMatrixUtils:DenseMatrix[Double] = MatrixUtils.forwardSolve(L = lowerMatrix,b = rhs)
+	  assert(solutionFromMatrixUtils.rows == 3 && solutionFromMatrixUtils.cols == 2)
+	  compare2Matrices(solution,solutionFromMatrixUtils)
+	}
+
+	"solve properly set of linear equations with triangular upper matrix and matrix on the right side" in {
+	  val rhs = DenseMatrix((0.4,0.9),(0.8,0.3),(0.7,0.4))
+	  val solution:DenseMatrix[Double] = (upperMatrix \ rhs)
+	  assert(solution.rows == 3 && solution.cols == 2)
+	  val solutionFromMatrixUtils:DenseMatrix[Double] = MatrixUtils.backSolve(R = upperMatrix,b = rhs)
+	  assert(solutionFromMatrixUtils.rows == 3 && solutionFromMatrixUtils.cols == 2)
+	  compare2Matrices(solution,solutionFromMatrixUtils)
+	}
+
+  }
+
+  "vector by matrix elementwise multiplication" should {
+
+	"work properly" in {
+	  val vec = DenseVector(1.,2.,3.)
+	  val m = DenseMatrix((3.,3.,3.),(3.,3.,3.),(3.,3.,3.))
+	  val resultMatrix:DenseMatrix[Double] = MatrixUtils.dvToElementWiseMultDenseVector(vec) :* m
+	  assert(resultMatrix == DenseMatrix((3.,3.,3.),(6.,6.,6.),(9.,9.,9.)))
+	}
+
+  }
+
+  "kernel matrix building function" should {
+
+	"work properly" in {
+
+	  val input = DenseMatrix((2.4,1.3,1.9),(2.1,0.99,3.1),(1.89,2.01,4.))
+	  val kernelFun = GaussianRbfKernel(GaussianRbfParams(alpha = 1.,gamma = 1.))
+	  val kernelMatrix = KernelRequisites.buildKernelMatrix(kernelFun,input,beta = Double.PositiveInfinity)
+	  assert(kernelMatrix.rows == 3 && kernelMatrix.cols == 3)
+	  (0 until 3).foreach {index => assert(kernelMatrix(index,index) == 1.)}
+	  cholesky(kernelMatrix)
+	}
+  }
+
+  def compare2Vectors(vec1:DenseVector[Double],vec2:DenseVector[Double]):Unit = {
+	(0 until vec1.length).foreach {indx => assert(abs(vec1(indx) - vec2(indx)) < eps)}
+  }
+
+  def compare2Matrices(m1:DenseMatrix[Double],m2:DenseMatrix[Double]):Unit = {
+	(0 until m1.rows).foreach {rowIndx => compare2Vectors(m1(rowIndx,::).toDenseVector, m2(rowIndx,::).toDenseVector)}
+  }
+
+}
