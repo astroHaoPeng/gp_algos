@@ -6,7 +6,7 @@ import gp.classification.{EpParameterEstimator, MarginalLikelihoodEvaluator, Hyp
 import utils.KernelRequisites.{GaussianRbfParams, GaussianRbfKernel}
 import gp.classification.GpClassifier.{ClassifierInput, AfterEstimationClassifierInput}
 import gp.classification.MarginalLikelihoodEvaluator.HyperParameterOptimInput
-import gp.classification.HyperParamsOptimization.BreezeLBFGSOptimizer
+import gp.classification.HyperParamsOptimization.{ApacheCommonsOptimizer, BreezeLBFGSOptimizer}
 import gp.classification.EpParameterEstimator.AvgBasedStopCriterion
 import breeze.numerics.exp
 
@@ -15,9 +15,12 @@ import breeze.numerics.exp
  */
 class CancerClassificationTest {
 
-  val initRbfParams = GaussianRbfParams(alpha = exp(3.6),gamma = exp(5.1))
+  //val initRbfParams = GaussianRbfParams(alpha = exp(4.34),gamma = exp(5.1))
+  val initRbfParams = GaussianRbfParams(alpha = 2.046,gamma = 164.021)
+  //2.046,164.021
+  //val initRbfParams = GaussianRbfParams(alpha = 40887.67,gamma = 164.021)
 //  val initRbfParams = GaussianRbfParams(alpha = 1.,gamma = 1.)
-  val eps = 2.5
+  val eps = 0.01
   val stopCriterion:EpParameterEstimator.stopCriterionFunc = new AvgBasedStopCriterion(eps)
   val rbfKernel = GaussianRbfKernel(rbfParams = initRbfParams)
   val gpClassfier = new GpClassifier(rbfKernel,stopCriterion)
@@ -43,7 +46,8 @@ class CancerClassificationTest {
 	val input:DenseMatrix[Double] = wholeDataSet(::,0 until (wholeDataSet.cols-1))
 	val targets:DenseVector[Int] = wholeDataSet(::,wholeDataSet.cols-1).mapValues(_.toInt)
 	val marginalEvaluator = new MarginalLikelihoodEvaluator(stopCriterion,rbfKernel)
-	val hyperParamOptimizer = new BreezeLBFGSOptimizer(marginalEvaluator)
+	//val hyperParamOptimizer = new BreezeLBFGSOptimizer(marginalEvaluator)
+	val hyperParamOptimizer = new ApacheCommonsOptimizer(marginalEvaluator)
 	val optimizedParams = hyperParamOptimizer.optimizeHyperParams(
 	  ClassifierInput(trainInput = input,targets = targets,hyperParams = rbfKernel.rbfParams))
 	val newGpClassifier = new GpClassifier(optimizedParams.asInstanceOf[GaussianRbfKernel],stopCriterion)
@@ -58,7 +62,7 @@ class CancerClassificationTest {
 object CancerClassificationTest{
 
   def main(args:Array[String]):Unit = {
-	println(new CancerClassificationTest().test)
+	println(new CancerClassificationTest().testWithParamOptimization)
   }
 
 }

@@ -17,12 +17,13 @@ class MarginalLikelihoodEvaluator(stopCriterion:EpParameterEstimator.stopCriteri
   def logLikelihood(trainData:DenseMatrix[Double],targets:DenseVector[Int],
 							   hyperParams:DenseVector[Double]):(Double,IndexedSeq[logLikelihoodAfterParamDerivative]) = {
 
-  	val kernelMatrix = buildKernelMatrix(kernelFunc.changeHyperParams(hyperParams),trainData)
+	val newKernelFunc = kernelFunc.changeHyperParams(hyperParams)
+  	val kernelMatrix = buildKernelMatrix(newKernelFunc,trainData)
 	val epParameterEstimator = new EpParameterEstimator(kernelMatrix,targets,stopCriterion)
 	val (siteParams,lowerTriangular) = epParameterEstimator.estimateSiteParams
 	val optimInput = HyperParameterOptimInput(siteParams = siteParams,lowerTriangular = lowerTriangular,
-	  kernelMatrix,trainData = trainData)
-	val derivatives = logLikelihoodDerivativesAfterHyperParams(optimInput,kernelFunc)
+	  kernelMatrix = kernelMatrix,trainData = trainData)
+	val derivatives = logLikelihoodDerivativesAfterHyperParams(optimInput,newKernelFunc)
 	(siteParams.marginalLogLikelihood.get,derivatives)
   }
 
@@ -73,15 +74,5 @@ object MarginalLikelihoodEvaluator {
 
   case class HyperParameterOptimInput(siteParams:SiteParams,lowerTriangular:DenseMatrix[Double],
 									  kernelMatrix:DenseMatrix[Double],trainData:DenseMatrix[Double])
-
-
-  class SimpleLBFGSOptimizer {
-
-	val diffFunction = new DiffFunction[DenseVector[Double]] {
-
-	  def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = ???
-	}
-
-  }
 
 }

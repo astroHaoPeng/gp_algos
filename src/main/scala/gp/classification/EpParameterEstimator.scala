@@ -2,7 +2,7 @@ package gp.classification
 
 import breeze.linalg.{cholesky, diag, DenseVector, DenseMatrix}
 import breeze.stats.distributions.Gaussian
-import breeze.numerics.{log, sqrt}
+import breeze.numerics.{abs, log, sqrt}
 import org.slf4j.LoggerFactory
 
 /**
@@ -213,7 +213,7 @@ object EpParameterEstimator {
 
 	def apply(context: EpEstimationContext): Boolean = {
 	  val (oldParams,currentParams) = (context.oldParams,context.currentParams)
-	  avgBetweenSiteParams(oldParams,currentParams) < eps
+	  abs(avgBetweenSiteParams(oldParams,currentParams)) < eps
 	}
   }
 
