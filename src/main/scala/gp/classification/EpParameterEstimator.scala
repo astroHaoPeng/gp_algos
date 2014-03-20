@@ -106,18 +106,24 @@ class EpParameterEstimator(kernelMatrix:DenseMatrix[Double],targets:DenseVector[
 	val n = siteParams.tauSiteParams.length
 	val cavityMiParams:DenseVector[Double] = cavityParams.niParams/cavityParams.tauParams
 
-	val temp2:DenseMatrix[Double] = sigmaMatrix - diag(1 / (tauSiteParams + cavityTauParams))
-	val fifthAndSecondTerm:DenseVector[Double] = (siteParams.niSiteParams.t :* 0.5) * temp2 * siteParams.niSiteParams
+	val tauSiteCavityParamsSum:DenseVector[Double] = tauSiteParams + cavityTauParams
+	val tauSiteCavityParamsSumDiagMatrix = diag(1 / tauSiteCavityParamsSum)
+	val tauSiteCavityParamsSumDiagVec = (1 / tauSiteCavityParamsSum)
+	val temp2:DenseMatrix[Double] = sigmaMatrix - tauSiteCavityParamsSumDiagMatrix
+	val fifthAndSecondTermFirst:DenseVector[Double] = (siteParams.niSiteParams.t * temp2) * siteParams.niSiteParams
+	val temp3:DenseVector[Double] = ((cavityMiParams :* cavityTauParams) :* tauSiteCavityParamsSumDiagVec)
+	val temp4:DenseVector[Double] = ((tauSiteParams :* cavityMiParams) - (siteParams.niSiteParams :* 2.))
+	val fifthAndSecondTermSecond:Double = temp3 dot temp4
 
 	val (thirdTerm,fourthAndSecondTerm) = (0 until n).foldLeft((0.,0.)){
 	  case ((thirdTerm,forthAndSecondTerm),i) => 
 		val newThirdTerm = thirdTerm + 
-			log(gaussianHelper.pdf(targets(i)*cavityMiParams(i)/sqrt(1 + 1/cavityParams.tauParams(i))))
+			log(pnorm(targets(i)*cavityMiParams(i)/sqrt(1 + 1/cavityParams.tauParams(i))))
 	  	val newFourthAndSecondTerm = forthAndSecondTerm 
 		+ 0.5*log(1+siteParams.tauSiteParams(i)/cavityParams.tauParams(i)) - log(lowerTriangular(i,i))
 		(newThirdTerm,newFourthAndSecondTerm)
 	}
-	thirdTerm + fourthAndSecondTerm + fifthAndSecondTerm(0)
+	thirdTerm + fourthAndSecondTerm + 0.5*(fifthAndSecondTermFirst(0) + fifthAndSecondTermSecond)
   }
 
   private def marginalMoments(cavDistrMiParam:Double,cavDistrSigmaParam:Double,target:Int)

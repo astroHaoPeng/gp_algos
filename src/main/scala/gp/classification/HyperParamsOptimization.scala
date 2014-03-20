@@ -18,7 +18,7 @@ import gp.classification.GpClassifier.ClassifierInput
  */
 object HyperParamsOptimization {
 
-  val apacheLogger = LoggerFactory.getLogger(classOf[HyperParamsOptimization.ApacheCommonsOptimizer])
+  val apacheLogger = LoggerFactory.getLogger(classOf[HyperParamsOptimization.HyperParameterOptimizer])
 
   trait HyperParameterOptimizer {
 
@@ -43,6 +43,7 @@ object HyperParamsOptimization {
 			foldLeft(DenseVector.zeros[Double](hyperParams.length)){
 				case (gradient,index) => gradient.update(index,-derivatives(index)(hyperParams(index))); gradient
 		  }
+		  apacheLogger.info(s"Current solution is = ${hyperParams}, objective function value = ${-logLikelihood}")
 		  (-logLikelihood,evaluatedDerivatives)
 		}
 	  }
@@ -75,6 +76,7 @@ object HyperParamsOptimization {
 			  case Some((gradient,value)) => gradient
 			  case None =>
 				val (logLikelihood,gradient) = computeValueAndGradient(optimizationInput,hyperParams)
+				apacheLogger.info(s"Current solution is = ${DenseVector(hyperParams)}, objective function value = ${logLikelihood}")
 				pointGradientMapping.put(hyperParams,(gradient,logLikelihood)); gradient
 			}
 		  }

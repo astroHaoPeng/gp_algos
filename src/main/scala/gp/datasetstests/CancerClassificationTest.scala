@@ -9,14 +9,17 @@ import gp.classification.MarginalLikelihoodEvaluator.HyperParameterOptimInput
 import gp.classification.HyperParamsOptimization.{ApacheCommonsOptimizer, BreezeLBFGSOptimizer}
 import gp.classification.EpParameterEstimator.AvgBasedStopCriterion
 import breeze.numerics.exp
+import org.slf4j.LoggerFactory
 
 /**
  * Created by mjamroz on 14/03/14.
  */
 class CancerClassificationTest {
 
-  //val initRbfParams = GaussianRbfParams(alpha = exp(4.34),gamma = exp(5.1))
-  val initRbfParams = GaussianRbfParams(alpha = 2.046,gamma = 164.021)
+  val logger = LoggerFactory.getLogger(CancerClassificationTest.getClass)
+
+  val initRbfParams = GaussianRbfParams(alpha = exp(4.34),gamma = exp(5.1))
+  //val initRbfParams = GaussianRbfParams(alpha = 13.436624999999998,gamma = 164.021)
   //2.046,164.021
   //val initRbfParams = GaussianRbfParams(alpha = 40887.67,gamma = 164.021)
 //  val initRbfParams = GaussianRbfParams(alpha = 1.,gamma = 1.)
@@ -37,6 +40,7 @@ class CancerClassificationTest {
 	val input:DenseMatrix[Double] = wholeDataSet(::,0 until (wholeDataSet.cols-1))
 	val targets:DenseVector[Int] = wholeDataSet(::,wholeDataSet.cols-1).mapValues(_.toInt)
 	val learnParams = gpClassfier.trainClassifier(ClassifierInput(trainInput = input,targets = targets,hyperParams = null))
+	logger.info(s"Marginal log likelihood = ${learnParams._1.marginalLogLikelihood.get}")
 	gpClassfier.classify(AfterEstimationClassifierInput(trainInput = input,testInput = input(5,::),
 	  targets = targets,learnParams = Some(learnParams),hyperParams = initRbfParams),None)
   }
@@ -50,7 +54,7 @@ class CancerClassificationTest {
 	val hyperParamOptimizer = new ApacheCommonsOptimizer(marginalEvaluator)
 	val optimizedParams = hyperParamOptimizer.optimizeHyperParams(
 	  ClassifierInput(trainInput = input,targets = targets,hyperParams = rbfKernel.rbfParams))
-	val newGpClassifier = new GpClassifier(optimizedParams.asInstanceOf[GaussianRbfKernel],stopCriterion)
+	val newGpClassifier = new GpClassifier(rbfKernel.changeHyperParams(optimizedParams.toDenseVector),stopCriterion)
 	val learnParams = newGpClassifier.trainClassifier(ClassifierInput(trainInput = input,targets = targets,hyperParams = null))
 	newGpClassifier.classify(AfterEstimationClassifierInput(trainInput = input,testInput = input(5,::),
 		targets = targets,learnParams = Some(learnParams),hyperParams = optimizedParams),None)
