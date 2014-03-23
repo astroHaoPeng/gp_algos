@@ -22,13 +22,29 @@ class CancerClassificationTest {
   //val initRbfParams = GaussianRbfParams(alpha = 13.436624999999998,gamma = 164.021)
   //2.046,164.021
   //val initRbfParams = GaussianRbfParams(alpha = 40887.67,gamma = 164.021)
-  val initRbfParams = GaussianRbfParams(alpha = 1.,gamma = 1.)
-  //val initRbfParams = GaussianRbfParams(alpha = 0.1,gamma = 0.3)
+  //val initRbfParams = GaussianRbfParams(alpha = 1.,gamma = 1.)
+  val initRbfParams = GaussianRbfParams(alpha = 0.1,gamma = 0.3)
 
   val eps = 0.01
   val stopCriterion:EpParameterEstimator.stopCriterionFunc = new AvgBasedStopCriterion(eps)
   val rbfKernel = GaussianRbfKernel(rbfParams = initRbfParams)
   val gpClassfier = new GpClassifier(rbfKernel,stopCriterion)
+
+  val probabsToClasses:DenseVector[Double] => DenseVector[Int] = {probabs =>
+	probabs.mapValues {probab => if (probab < 0.5) -1 else 1}
+  }
+
+  val compareTestTargetsWithRightLabels:(DenseVector[Int],DenseVector[Int]) => Int = {
+	(predicted,right) =>
+
+	  (0 until predicted.size).foldLeft(0){
+		case (errorNum,index) => if (predicted(index) != right(index)){
+		  errorNum + 1
+		} else {
+		  errorNum
+		}
+	  }
+  }
 
   def loadDataSet(limit:Option[Int] = None):DenseMatrix[Double] = {
 	val cancerMatrix:DenseMatrix[Double] = IOUtilities.csvFileToDenseMatrix("cancer.csv")
@@ -53,23 +69,35 @@ class CancerClassificationTest {
 	val wholeDataSet:DenseMatrix[Double] = loadDataSet(limit)
 	val input:DenseMatrix[Double] = wholeDataSet(::,0 until (wholeDataSet.cols-1))
 	val targets:DenseVector[Int] = wholeDataSet(::,wholeDataSet.cols-1).mapValues(_.toInt)
-	testWithTrainAndTestSet(input,targets,input(35,::))
+	testWithTrainAndTestSet(input,targets,input(1,::))
   }
 
-  def testTrainSet(limit:Option[Int]):(DenseVector[Int],Double) = {
+  def testTrainSet(limit:Option[Int]):(DenseVector[Double],DenseVector[Int],Double) = {
 	val wholeDataSet:DenseMatrix[Double] = loadDataSet(limit)
 	val input:DenseMatrix[Double] = wholeDataSet(::,0 until (wholeDataSet.cols-1))
 	val targets:DenseVector[Int] = wholeDataSet(::,wholeDataSet.cols-1).mapValues(_.toInt)
 	val probabs = testWithTrainAndTestSet(input,targets,input)
-	val predictedClasses = probabs.mapValues {probab => if (probab < 0.5) -1 else 1}
-	val numOfErrors = (0 until predictedClasses.size).foldLeft(0){
-	  case (errorNum,index) => if (predictedClasses(index) != targets(index)){
-		errorNum + 1
-	  } else {
-		errorNum
-	  }
-	}
-	(predictedClasses,numOfErrors.toDouble / targets.length)
+	val predictedClasses = probabsToClasses(probabs)
+	val numOfErrors = compareTestTargetsWithRightLabels(predictedClasses,targets)
+	(probabs,predictedClasses,numOfErrors.toDouble / targets.length)
+  }
+
+  def testSetWithRatio(limit:Option[Int],ratio:Double) = {
+	require(ratio > 0.0 && ratio <= 1.0)
+	val wholeDataSet:DenseMatrix[Double] = loadDataSet(limit)
+	val dsLength:Int = wholeDataSet.rows
+	val numOfTrainCases = (ratio * wholeDataSet.rows).toInt
+	val input:DenseMatrix[Double] = wholeDataSet(0 until numOfTrainCases,0 until (wholeDataSet.cols-1))
+	val tempTargets:DenseVector[Double] = wholeDataSet(::,wholeDataSet.cols-1)
+	val targets:DenseVector[Int] = (tempTargets(0 until numOfTrainCases)).mapValues(_.toInt)
+	assert(targets.forallValues{label => label == 1 || label == -1})
+	val testSet:DenseMatrix[Double] = wholeDataSet(numOfTrainCases until dsLength,0 until (wholeDataSet.cols-1))
+	val testTargets:DenseVector[Int] = tempTargets(numOfTrainCases until dsLength).mapValues(_.toInt)
+	assert(testTargets.forallValues{label => label == 1 || label == -1})
+	val probabs = testWithTrainAndTestSet(input,targets,testSet)
+	assert(probabs.length == dsLength - numOfTrainCases)
+	val numOfErrors = compareTestTargetsWithRightLabels(probabsToClasses(probabs),testTargets)
+	(probabs,testTargets,numOfErrors.toDouble / testTargets.length)
   }
 
   def testWithParamOptimization(limit:Option[Int]) = {
@@ -83,7 +111,7 @@ class CancerClassificationTest {
 	  ClassifierInput(trainInput = input,targets = targets,hyperParams = rbfKernel.rbfParams))
 	val newGpClassifier = new GpClassifier(rbfKernel.changeHyperParams(optimizedParams.toDenseVector),stopCriterion)
 	val learnParams = newGpClassifier.trainClassifier(ClassifierInput(trainInput = input,targets = targets,hyperParams = null))
-	newGpClassifier.classify(AfterEstimationClassifierInput(trainInput = input,testInput = input(5,::),
+	newGpClassifier.classify(AfterEstimationClassifierInput(trainInput = input,testInput = input(35,::),
 		targets = targets,learnParams = Some(learnParams),hyperParams = optimizedParams),None)
   }
 
@@ -93,7 +121,7 @@ class CancerClassificationTest {
 object CancerClassificationTest{
 
   def main(args:Array[String]):Unit = {
-	println(new CancerClassificationTest().test(Some(200)))
+	println(new CancerClassificationTest().testSetWithRatio(None,0.7))
   }
 
 }
