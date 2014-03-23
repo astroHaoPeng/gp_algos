@@ -15,7 +15,7 @@ object KernelRequisites {
   trait KernelFunc{
 	def apply(obj1:featureVector,obj2:featureVector):Double
 	def hyperParametersNum:Int
-	def derAfterHyperParam(paramNum:Int):(featureVector,featureVector,Double) => Double
+	def derAfterHyperParam(paramNum:Int):(featureVector,featureVector) => Double
 	def changeHyperParams(dv:DenseVector[Double]):KernelFunc
   }
 
@@ -41,27 +41,27 @@ object KernelRequisites {
 	  GaussianRbfParams(alpha = dv(0),gamma = dv(1))
 	}
   }
-  //function of form k(x,y) = alpha*exp(-0.5*gamma*t(x-y)*(x-y))
+  //function of form k(x,y) = alpha*exp(-0.5*(gamma^2)*t(x-y)*(x-y))
   case class GaussianRbfKernel(rbfParams:GaussianRbfParams) extends KernelFunc{
 
 	private val (alpha,gamma) = (rbfParams.alpha,rbfParams.gamma)
 
   	def apply(obj1:featureVector,obj2:featureVector):Double = {
 	  val diff = (obj1 - obj2)
-	  val retValue = alpha*exp(-0.5*gamma*(diff dot diff))
+	  val retValue = alpha*exp(-0.5*gamma*gamma*(diff dot diff))
 	  retValue
 	}
 
 	def hyperParametersNum: Int = 2
 
 	def derAfterHyperParam(paramNum: Int):
-		(KernelRequisites.featureVector, KernelRequisites.featureVector, Double) => Double = {
-	  		case (vec1,vec2,hyperParam) =>
+		(KernelRequisites.featureVector, KernelRequisites.featureVector) => Double = {
+	  		case (vec1,vec2) =>
 		val diff = (vec1 - vec2)
 		val prodOfDiffs = diff dot diff
 	    paramNum match {
-		  case 1 => exp(-0.5*gamma*prodOfDiffs)
-		  case 2 => alpha*exp(-0.5*hyperParam*prodOfDiffs)*(-0.5)*prodOfDiffs
+		  case 1 => exp(-0.5*gamma*gamma*prodOfDiffs)
+		  case 2 => alpha*exp(-0.5*gamma*prodOfDiffs)*(-1.)*gamma*prodOfDiffs
 		}
 	}
 

@@ -39,12 +39,13 @@ object HyperParamsOptimization {
 
 		  val (logLikelihood,derivatives) = marginalLikelihoodEvaluator.logLikelihood(trainData,targets,hyperParams)
 		  assert(hyperParams.length == derivatives.length)
-		  val evaluatedDerivatives:DenseVector[Double]  = (0 until derivatives.length).
-			foldLeft(DenseVector.zeros[Double](hyperParams.length)){
-				case (gradient,index) => gradient.update(index,-derivatives(index)(hyperParams(index))); gradient
-		  }
+//
+//		  val evaluatedDerivatives:DenseVector[Double]  = (0 until derivatives.length).
+//			foldLeft(DenseVector.zeros[Double](hyperParams.length)){
+//				case (gradient,index) => gradient.update(index,-derivatives(index)(hyperParams(index))); gradient
+//		  }
 		  apacheLogger.info(s"Current solution is = ${hyperParams}, objective function value = ${-logLikelihood}")
-		  (-logLikelihood,evaluatedDerivatives)
+		  (-logLikelihood,derivatives :* (-1.))
 		}
 	  }
 
@@ -129,12 +130,13 @@ object HyperParamsOptimization {
 
 	  val (trainData,targets) = (optimizationInput.trainInput,optimizationInput.targets)
 	  val (logLikelihood,derivatives) = marginalLikelihoodEvaluator.logLikelihood(trainData,targets,DenseVector(hyperParams))
-	  assert(hyperParams.length == derivatives.length)
+	  /*assert(hyperParams.length == derivatives.length)
 	  val evaluatedDerivatives:DenseVector[Double]  = (0 until derivatives.length).
 		foldLeft(DenseVector.zeros[Double](hyperParams.length)){
 		case (gradient,index) => gradient.update(index,derivatives(index)(hyperParams(index))); gradient
 	  }
-	  (logLikelihood,evaluatedDerivatives.data)
+	  (logLikelihood,evaluatedDerivatives.data)*/
+	  (logLikelihood,derivatives.data)
 	}
 
   }

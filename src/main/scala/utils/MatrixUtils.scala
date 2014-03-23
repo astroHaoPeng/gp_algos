@@ -113,7 +113,7 @@ object MatrixUtils {
 	def :* (m:DenseMatrix[Double]):DenseMatrix[Double] = {
 	  0.until(m.rows).foldLeft(DenseMatrix.zeros[Double](m.rows,m.cols)){
 		case (result,rowIndex) =>
-		  result(rowIndex,::) := m :* dv(rowIndex); result
+		  result(rowIndex,::) := m(rowIndex,::) :* dv(rowIndex); result
 	  }
 	}
 

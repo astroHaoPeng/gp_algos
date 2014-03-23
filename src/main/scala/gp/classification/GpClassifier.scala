@@ -1,6 +1,6 @@
 package gp.classification
 
-import breeze.linalg.{diag, DenseMatrix, DenseVector}
+import breeze.linalg.{*, diag, DenseMatrix, DenseVector}
 import gp.classification.EpParameterEstimator.{AvgBasedStopCriterion, SiteParams}
 import utils.KernelRequisites
 import utils.KernelRequisites.{KernelFuncHyperParams, kernelMatrixType, KernelFunc}
@@ -49,23 +49,20 @@ class GpClassifier(kernelFun:KernelFunc,stopCriterion:EpParameterEstimator.stopC
 	  trainClassifier(ClassifierInput(trainInput = trainInput,targets = targets,hyperParams = input.hyperParams)))
 	val testSetSize = testInput.rows
 	val kernelMatrix_ = kernelMatrix.getOrElse(buildKernelMatrix(kernelFun,trainInput))
-	val tauDiagVector:ElementWiseMultDenseVector = dvToElementWiseMultDenseVector(sqrt(siteParams.tauSiteParams))
-	val rhs:DenseVector[Double] = (tauDiagVector :* kernelMatrix_) * siteParams.tauSiteParams
+	val tauDiagVector:DenseVector[Double] = sqrt(siteParams.tauSiteParams)
+	val rhs:DenseVector[Double] = (kernelMatrix_(::,*) :* tauDiagVector) * siteParams.niSiteParams
 	val tempSol:DenseVector[Double] = forwardSolve(L = lowerTriangular,b = rhs)
-	val zVector:DenseVector[Double] = tauDiagVector.dv :* backSolve(R = lowerTriangular.t,b = tempSol)
+	val zVector:DenseVector[Double] = tauDiagVector :* backSolve(R = lowerTriangular.t,b = tempSol)
 	val testTrainCovMatrix:kernelMatrixType = buildKernelMatrix(kernelFun,testInput,trainInput)
 	assert(testTrainCovMatrix.rows == testInput.rows && testTrainCovMatrix.cols == trainInput.rows)
 	val fMean:DenseVector[Double] = testTrainCovMatrix * (siteParams.niSiteParams - zVector)
 	assert(fMean.length == testInput.rows)
-	val rhs1:DenseMatrix[Double] = tauDiagVector :* testTrainCovMatrix.t
+	val rhs1:DenseMatrix[Double] = (testTrainCovMatrix.t)(::,*) :* tauDiagVector
 	val vMatrix:DenseMatrix[Double] = forwardSolve(L = lowerTriangular,b = rhs1)
 	val fVariance:DenseMatrix[Double] = buildKernelMatrix(kernelFun,testInput) - (vMatrix.t * vMatrix)
 	assert(fVariance.rows == testInput.rows && fVariance.cols == testSetSize)
-	val fVariance1:DenseVector[Double] = (0 until fVariance.rows).foldLeft(DenseVector.zeros[Double](fVariance.rows)){
-	  case (resultArray,indx) => resultArray.update(indx,fVariance(indx,indx)); resultArray
-	}
 	val probabilitiesOfClass1 = (0 until testSetSize).foldLeft(DenseVector.zeros[Double](testSetSize)){
-	  case (probs,indx) => probs.update(indx,pnorm(fMean(indx)/sqrt(1+fVariance1(indx)))); probs
+	  case (probs,indx) => probs.update(indx,pnorm(fMean(indx)/sqrt(1+fVariance(indx,indx)))); probs
 	}
 	probabilitiesOfClass1
   }

@@ -113,17 +113,17 @@ class EpParameterEstimator(kernelMatrix:DenseMatrix[Double],targets:DenseVector[
 	val fifthAndSecondTermFirst:DenseVector[Double] = (siteParams.niSiteParams.t * temp2) * siteParams.niSiteParams
 	val temp3:DenseVector[Double] = ((cavityMiParams :* cavityTauParams) :* tauSiteCavityParamsSumDiagVec)
 	val temp4:DenseVector[Double] = ((tauSiteParams :* cavityMiParams) - (siteParams.niSiteParams :* 2.))
-	val fifthAndSecondTermSecond:Double = temp3 dot temp4
+	val fifthAndSecondTermSecond:Double = temp3.toDenseVector dot temp4
 
-	val (thirdTerm,fourthAndSecondTerm) = (0 until n).foldLeft((0.,0.)){
-	  case ((thirdTerm,forthAndSecondTerm),i) => 
+	val (thirdTerm,fourthAndFirstTerm) = (0 until n).foldLeft((0.,0.)){
+	  case ((thirdTerm,fourthAndFirstTerm),i) => 
 		val newThirdTerm = thirdTerm + 
 			log(pnorm(targets(i)*cavityMiParams(i)/sqrt(1 + 1/cavityParams.tauParams(i))))
-	  	val newFourthAndSecondTerm = forthAndSecondTerm 
+	  	val newFourthAndFirstTerm = fourthAndFirstTerm
 		+ 0.5*log(1+siteParams.tauSiteParams(i)/cavityParams.tauParams(i)) - log(lowerTriangular(i,i))
-		(newThirdTerm,newFourthAndSecondTerm)
+		(newThirdTerm,newFourthAndFirstTerm)
 	}
-	thirdTerm + fourthAndSecondTerm + 0.5*(fifthAndSecondTermFirst(0) + fifthAndSecondTermSecond)
+	thirdTerm + fourthAndFirstTerm + 0.5*(fifthAndSecondTermFirst(0) + fifthAndSecondTermSecond)
   }
 
   private def marginalMoments(cavDistrMiParam:Double,cavDistrSigmaParam:Double,target:Int)

@@ -3,7 +3,7 @@ package utils
 import org.scalatest.{WordSpec}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import breeze.linalg.{cholesky, DenseVector, DenseMatrix}
+import breeze.linalg.{*, cholesky, DenseVector, DenseMatrix}
 import breeze.numerics.abs
 import utils.KernelRequisites.{GaussianRbfParams, GaussianRbfKernel}
 
@@ -13,6 +13,8 @@ import utils.KernelRequisites.{GaussianRbfParams, GaussianRbfKernel}
 
 @RunWith(classOf[JUnitRunner])
 class MatrixUtilsTest extends WordSpec {
+
+  import MatrixUtils._
 
   val eps:Double = 0.001
   val lowerMatrix = DenseMatrix((0.3,0.,0.),(0.2,0.3,0.),(0.1,0.99,0.11))
@@ -61,10 +63,22 @@ class MatrixUtilsTest extends WordSpec {
   "vector by matrix elementwise multiplication" should {
 
 	"work properly" in {
-	  val vec = DenseVector(1.,2.,3.)
-	  val m = DenseMatrix((3.,3.,3.),(3.,3.,3.),(3.,3.,3.))
+	  val vec = DenseVector(2.,3.)
+	  val m = DenseMatrix((1.,2.),(4.,5.))
 	  val resultMatrix:DenseMatrix[Double] = MatrixUtils.dvToElementWiseMultDenseVector(vec) :* m
-	  assert(resultMatrix == DenseMatrix((3.,3.,3.),(6.,6.,6.),(9.,9.,9.)))
+	  assert(resultMatrix == DenseMatrix((2.,4.),(12.,15.)))
+	  assert(resultMatrix == (m(::,*) :* vec))
+	}
+
+  }
+
+  "division number by vector" should {
+
+	"work properly" in {
+
+	  val vec = DenseVector(1.,2.,4.)
+	  val divided = (1 / vec)
+	  assert(divided == DenseVector(1.,0.5,0.25))
 	}
 
   }

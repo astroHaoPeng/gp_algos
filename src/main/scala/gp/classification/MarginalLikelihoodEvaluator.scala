@@ -15,7 +15,7 @@ class MarginalLikelihoodEvaluator(stopCriterion:EpParameterEstimator.stopCriteri
   import MarginalLikelihoodEvaluator._
 
   def logLikelihood(trainData:DenseMatrix[Double],targets:DenseVector[Int],
-							   hyperParams:DenseVector[Double]):(Double,IndexedSeq[logLikelihoodAfterParamDerivative]) = {
+							   hyperParams:DenseVector[Double]):(Double,DenseVector[Double]) = {
 
 	val newKernelFunc = kernelFunc.changeHyperParams(hyperParams)
   	val kernelMatrix = buildKernelMatrix(newKernelFunc,trainData)
@@ -28,7 +28,7 @@ class MarginalLikelihoodEvaluator(stopCriterion:EpParameterEstimator.stopCriteri
   }
 
   def logLikelihoodDerivativesAfterHyperParams(optimInput:HyperParameterOptimInput,
-						  kernelFun:KernelFunc):IndexedSeq[logLikelihoodAfterParamDerivative] = {
+						  kernelFun:KernelFunc):DenseVector[Double] = {
 	val (siteParams,lowerTriangular,trainData) =
 	  (optimInput.siteParams,optimInput.lowerTriangular,optimInput.trainData)
 	val kernelMatrix:kernelMatrixType = optimInput.kernelMatrix
@@ -43,22 +43,28 @@ class MarginalLikelihoodEvaluator(stopCriterion:EpParameterEstimator.stopCriteri
 	val temp1:DenseMatrix[Double] = forwardSolve(L = lowerTriangular,b = tauDiagMatrix)
 	val rMatrix:DenseMatrix[Double] = (bVector * bVector.t)
 		- backSolve(R = tauDiagMatrix * lowerTriangular.t,b = temp1)
-	for (j <- (1 to kernelFun.hyperParametersNum)) yield {
+	(0 until kernelFun.hyperParametersNum).foldLeft(DenseVector.zeros[Double](kernelFun.hyperParametersNum)){
+	  case (gradient,index) =>
+		val cMatrix:DenseMatrix[Double] = buildKernelDerMatrixAfterHyperParam(trainData,index+1,kernelFun)
+		val logLikelihoodDerAfterParam:Double = 0.5*trace(rMatrix*cMatrix)
+	    gradient.update(index,logLikelihoodDerAfterParam); gradient
+	}
+	/*for (j <- (1 to kernelFun.hyperParametersNum)) yield {
 	  val logLikelihoodDerAfterParam: (Double) => Double = {
 		hyperParamJ =>
 		  val cMatrix:DenseMatrix[Double] = buildKernelDerMatrixAfterHyperParam(trainData,j,hyperParamJ,kernelFun)
 		  0.5*trace(rMatrix*cMatrix)
 	  }
 	  logLikelihoodDerAfterParam
-	}
+	}*/
   }
 
   private def buildKernelDerMatrixAfterHyperParam(trainInput:DenseMatrix[Double],hyperParameterNum:Int
-												  ,hyperParameterValue:Double,kernelFunc:KernelFunc
+												  ,kernelFunc:KernelFunc
 												  ):DenseMatrix[Double] = {
 
 	val func:(DenseVector[Double],DenseVector[Double]) => Double = {(vec1,vec2) =>
-	  kernelFunc.derAfterHyperParam(hyperParameterNum)(vec1,vec2,hyperParameterValue)
+	  kernelFunc.derAfterHyperParam(hyperParameterNum)(vec1,vec2)
 	}
 	buildKernelMatrix(trainInput)(func)
   }
