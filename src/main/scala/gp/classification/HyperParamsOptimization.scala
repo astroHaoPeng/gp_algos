@@ -39,19 +39,14 @@ object HyperParamsOptimization {
 
 		  val (logLikelihood,derivatives) = marginalLikelihoodEvaluator.logLikelihood(trainData,targets,hyperParams)
 		  assert(hyperParams.length == derivatives.length)
-//
-//		  val evaluatedDerivatives:DenseVector[Double]  = (0 until derivatives.length).
-//			foldLeft(DenseVector.zeros[Double](hyperParams.length)){
-//				case (gradient,index) => gradient.update(index,-derivatives(index)(hyperParams(index))); gradient
-//		  }
 		  apacheLogger.info(s"Current solution is = ${hyperParams}, objective function value = ${-logLikelihood}")
 		  (-logLikelihood,derivatives :* (-1.))
 		}
 	  }
 
 	  val lbfgs = new LBFGS[DenseVector[Double]](maxIter = 10,m = 3)
-	  val optimizedParams = lbfgs.minimize(diffFunction,optimizationInput.hyperParams.toDenseVector)
-	  optimizationInput.hyperParams.fromDenseVector(optimizedParams)
+	  val optimizedParams = lbfgs.minimize(diffFunction,optimizationInput.initHyperParams.toDenseVector)
+	  optimizationInput.initHyperParams.fromDenseVector(optimizedParams)
 	}
   }
 
@@ -118,11 +113,11 @@ object HyperParamsOptimization {
 		Formula.POLAK_RIBIERE,new IterationLimitConvergenceChecker(5))
 	  val pointValueOptimResult =
 		conjugateGradientOptimizer.optimize(new ObjectiveFunction(objectiveFunction),GoalType.MAXIMIZE
-		  ,new MaxIter(10),new MaxEval(20),new InitialGuess(optimizationInput.hyperParams.toDenseVector.data),
+		  ,new MaxIter(10),new MaxEval(20),new InitialGuess(optimizationInput.initHyperParams.toDenseVector.data),
 		new ObjectiveFunctionGradient(objectiveFunction.gradient()))   //optimizationInput.hyperParams.toDenseVector.data)
 
 	  apacheLogger.info(s"Optimal solution is = ${pointValueOptimResult.getPoint}, objective function value = ${pointValueOptimResult.getValue}")
-	  optimizationInput.hyperParams.fromDenseVector(DenseVector(pointValueOptimResult.getPoint))
+	  optimizationInput.initHyperParams.fromDenseVector(DenseVector(pointValueOptimResult.getPoint))
 	}
 
 	private def computeValueAndGradient(optimizationInput: ClassifierInput,hyperParams:Array[Double]):(Double,Array[Double])

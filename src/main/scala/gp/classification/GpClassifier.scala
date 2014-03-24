@@ -46,7 +46,7 @@ class GpClassifier(kernelFun:KernelFunc,stopCriterion:EpParameterEstimator.stopC
   def classify(input:AfterEstimationClassifierInput,kernelMatrix:Option[DenseMatrix[Double]]):classifyOut = {
 	val (trainInput,testInput,targets) = (input.trainInput,input.testInput,input.targets)
 	val (siteParams,lowerTriangular) = input.learnParams.getOrElse(
-	  trainClassifier(ClassifierInput(trainInput = trainInput,targets = targets,hyperParams = input.hyperParams)))
+	  trainClassifier(ClassifierInput(trainInput = trainInput,targets = targets,initHyperParams = input.hyperParams)))
 	val testSetSize = testInput.rows
 	val kernelMatrix_ = kernelMatrix.getOrElse(buildKernelMatrix(kernelFun,trainInput))
 	val tauDiagVector:DenseVector[Double] = sqrt(siteParams.tauSiteParams)
@@ -80,7 +80,6 @@ object GpClassifier {
 							 testInput:DenseMatrix[Double],targets:DenseVector[Int],
 							 learnParams:Option[learnParams],hyperParams:KernelFuncHyperParams)
 
-  case class ClassifierInput(trainInput:DenseMatrix[Double],targets:DenseVector[Int],
-							 hyperParams:KernelFuncHyperParams)
+  case class ClassifierInput(trainInput:DenseMatrix[Double],targets:DenseVector[Int],initHyperParams:KernelFuncHyperParams)
 
 }

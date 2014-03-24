@@ -23,7 +23,8 @@ class CancerClassificationTest {
   //2.046,164.021
   //val initRbfParams = GaussianRbfParams(alpha = 40887.67,gamma = 164.021)
   //val initRbfParams = GaussianRbfParams(alpha = 1.,gamma = 1.)
-  val initRbfParams = GaussianRbfParams(alpha = 0.1,gamma = 0.3)
+  //val initRbfParams = GaussianRbfParams(alpha = 0.1,gamma = 0.3)
+  val initRbfParams = GaussianRbfParams(alpha = 3.58,gamma = 0.07)
 
   val eps = 0.01
   val stopCriterion:EpParameterEstimator.stopCriterionFunc = new AvgBasedStopCriterion(eps)
@@ -58,7 +59,7 @@ class CancerClassificationTest {
 
   def testWithTrainAndTestSet(trainSet:DenseMatrix[Double],targets:DenseVector[Int],
 							  testSet:DenseMatrix[Double]):DenseVector[Double] = {
-	val learnParams = gpClassfier.trainClassifier(ClassifierInput(trainInput = trainSet,targets = targets,hyperParams = null))
+	val learnParams = gpClassfier.trainClassifier(ClassifierInput(trainInput = trainSet,targets = targets,initHyperParams = initRbfParams))
 	logger.info(s"Marginal log likelihood = ${learnParams._1.marginalLogLikelihood.get}")
 	val targetsForTestSet = gpClassfier.classify(AfterEstimationClassifierInput(trainInput = trainSet,testInput = testSet,
 	  targets = targets,learnParams = Some(learnParams),hyperParams = initRbfParams),None)
@@ -108,9 +109,9 @@ class CancerClassificationTest {
 	val hyperParamOptimizer = new BreezeLBFGSOptimizer(marginalEvaluator)
 	//val hyperParamOptimizer = new ApacheCommonsOptimizer(marginalEvaluator)
 	val optimizedParams = hyperParamOptimizer.optimizeHyperParams(
-	  ClassifierInput(trainInput = input,targets = targets,hyperParams = rbfKernel.rbfParams))
+	  ClassifierInput(trainInput = input,targets = targets,initHyperParams = rbfKernel.rbfParams))
 	val newGpClassifier = new GpClassifier(rbfKernel.changeHyperParams(optimizedParams.toDenseVector),stopCriterion)
-	val learnParams = newGpClassifier.trainClassifier(ClassifierInput(trainInput = input,targets = targets,hyperParams = null))
+	val learnParams = newGpClassifier.trainClassifier(ClassifierInput(trainInput = input,targets = targets,initHyperParams = optimizedParams))
 	newGpClassifier.classify(AfterEstimationClassifierInput(trainInput = input,testInput = input(35,::),
 		targets = targets,learnParams = Some(learnParams),hyperParams = optimizedParams),None)
   }
