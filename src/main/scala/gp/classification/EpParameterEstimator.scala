@@ -20,41 +20,11 @@ class EpParameterEstimator(kernelMatrix:DenseMatrix[Double],targets:DenseVector[
   require(kernelMatrix.rows == targets.length)
   val gaussianHelper = Gaussian(mu = 0,sigma = 1)
 
-  /** ni_site_param <- tau_site_param <- mi_param <- cavity_distr_tau_param <- cavity_distr_ni_param <- array(0,n)
-	sigma_param <- kernelMatrix
-	#for now - very straightforward convergence criterium
-	for (j in 1:5){
-	  cat(sprintf("iteration %d\n",j))
-	  for (i in 1:n){
-		cavity_distr_tau_param[i] <- 1/sigma_param[i,i]- tau_site_param[i]
-		cavity_distr_ni_param[i] <- mi_param[i]/sigma_param[i,i] - ni_site_param[i]
-		#tau_param = delta_param^(-1), mi_param = ni_param/tau_param
-		marginal_m <- marginal_moments(cavity_distr_ni_param[i]/cavity_distr_tau_param[i],cavity_distr_tau_param[i]^(-1),targets[i])
-		tau_site_param_diff <- marginal_m$marginal_sigma^(-1) - cavity_distr_tau_param[i] - tau_site_param[i]
-		tau_site_param[i] <- tau_site_param[i] + tau_site_param_diff
-		ni_site_param[i] <- marginal_m$marginal_mi/marginal_m$marginal_sigma - cavity_distr_ni_param[i]
-		sigma_param <- sigma_param - (1/(1/tau_site_param_diff + sigma_param[i,i]))*(sigma_param[,i] %*% t(sigma_param[,i]))
-		mi_param <- sigma_param %*% ni_site_param
-	  }
-	  tau_diag_vector <- as.numeric(sqrt(tau_site_param))
-	  low_triang <- t(chol(diag(n) + outer(tau_diag_vector,tau_diag_vector)*kernelMatrix))
-	  v_matrix <- forwardsolve(l=low_triang,x=tau_diag_vector * kernelMatrix)
-	  old_sigma <- sigma_param
-	  sigma_param <- kernelMatrix - (t(v_matrix) %*% v_matrix)
-	  mi_param <- sigma_param %*% ni_site_param
-
-	  marginal_likelihood <- ep_marginal_likelihood_appr(list(tau_param=tau_site_param,ni_param=ni_site_param),
-	  list(tau_param=cavity_distr_tau_param,mi_param=cavity_distr_ni_param/cavity_distr_tau_param),targets,
-	  list(chol_fact=low_triang,sigma_param=sigma_param))
-		  list(ni_site_param=as.vector(ni_site_param),tau_site_param=tau_site_param,marginal_likelihood=marginal_likelihood)
-
-	*/
-
 
   /**
    *
    * @return tuple containing estimated parameters and lower triangular matrix from cholesky decomposition.
-   *         This matrix is useful later in order to avoid abundant computations
+   *         This matrix is useful later - to avoid unnecessary computations
    */
   def estimateSiteParams:(SiteParams,DenseMatrix[Double]) = {
 

@@ -1,8 +1,7 @@
 package gp.classification
 
-import breeze.linalg.{*, diag, DenseMatrix, DenseVector}
-import gp.classification.EpParameterEstimator.{AvgBasedStopCriterion, SiteParams}
-import utils.KernelRequisites
+import breeze.linalg.{*, DenseMatrix, DenseVector}
+import gp.classification.EpParameterEstimator.SiteParams
 import utils.KernelRequisites.{KernelFuncHyperParams, kernelMatrixType, KernelFunc}
 import breeze.numerics.sqrt
 
@@ -22,26 +21,6 @@ class GpClassifier(kernelFun:KernelFunc,stopCriterion:EpParameterEstimator.stopC
 	val epParamEstimator:EpParameterEstimator = new EpParameterEstimator(kernelMatrix,targets,stopCriterion)
 	epParamEstimator.estimateSiteParams
   }
-
-  /*
-  ni_site_param <- site_params$ni_site_param
-  tau_site_param <- site_params$tau_site_param
-  inputs <- training_set$inputs
-  targets <- training_set$targets
-  n <- nrow(kernelMatrix)
-  ni_diag_vector <- as.numeric(sqrt(tau_site_param))
-  lower_triang <- t(chol(diag(n) + outer(ni_diag_vector,ni_diag_vector)*kernelMatrix))
-  temp <- forwardsolve(l=lower_triang,x=(ni_diag_vector * kernelMatrix) %*% ni_site_param)
-  z_vector <- ni_diag_vector * backsolve(r=t(lower_triang),x=temp)
-  test_train_cov_matrix <- covariance_matrix(test_set,inputs)
-  f_mean <- test_train_cov_matrix %*% (ni_site_param - z_vector)
-  v_vector <- forwardsolve(l=lower_triang,x=ni_diag_vector * t(test_train_cov_matrix))
-  f_variance <- covariance_matrix(test_set,test_set) - (t(v_vector) %*% v_vector)
-  f_variance1 <- Reduce(function(array,i){array[i] = f_variance[i,i]; array},1:nrow(test_set),array(NA,c(1,nrow(test_set))))
-  propability_of_class_1 <- pnorm(t(f_mean)/sqrt(1+f_variance1))
-  propability_of_class_1
-  
-   */
   
   def classify(input:AfterEstimationClassifierInput,kernelMatrix:Option[DenseMatrix[Double]]):classifyOut = {
 	val (trainInput,testInput,targets) = (input.trainInput,input.testInput,input.targets)
