@@ -3,6 +3,7 @@ package utils
 import breeze.stats.distributions.Gaussian
 import breeze.linalg.{DenseMatrix, DenseVector}
 import org.apache.commons.math3.distribution.MultivariateNormalDistribution
+import breeze.numerics.log
 
 /**
  * Created by mjamroz on 13/03/14.
@@ -31,6 +32,18 @@ object StatsUtils {
 	  multivariateSampler.sample()
 	}
 
+  }
+
+  def gaussianDensity(at:DenseVector[Double],means:DenseVector[Double],covs:DenseMatrix[Double]):Double = {
+
+	import NormalDistributionSampler._
+
+	val multiVariateNormalDistr = new MultivariateNormalDistribution(means,covs)
+	multiVariateNormalDistr.density(at.data)
+  }
+
+  def logGaussianDensity(at:DenseVector[Double],means:DenseVector[Double],covs:DenseMatrix[Double]):Double = {
+	log(gaussianDensity(at,means,covs))
   }
 
   object NormalDistributionSampler {
