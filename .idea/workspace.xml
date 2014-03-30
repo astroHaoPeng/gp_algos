@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="794477cd-1721-497f-8216-730639d3bdec" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/params_mesh/200.dat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/params_mesh/200_1.dat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/params_mesh/200_2.dat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/params_mesh/200_3.dat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/KalmanFilter.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/scala/utils/StatsUtilsTest.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" afterPath="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/mjamroz.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/mjamroz.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/ObjectTrackingTest.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/KalmanFilter.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/KalmanFilter.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="breeze_test.iws" />
@@ -164,12 +158,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KalmanFilter.scala" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="KalmanFilter.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/KalmanFilter.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="6" selection-start="1444" selection-end="1444" vertical-scroll-proportion="0.45045045" vertical-offset="240" max-vertical-offset="1485">
+            <state line="20" column="31" selection-start="662" selection-end="662" vertical-scroll-proportion="0.0" vertical-offset="98" max-vertical-offset="2190">
               <folding>
                 <element signature="e#157#178#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ObjectTrackingTest.scala" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/ObjectTrackingTest.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="37" column="52" selection-start="1493" selection-end="1493" vertical-scroll-proportion="0.6171171" vertical-offset="144" max-vertical-offset="855">
+              <folding>
+                <element signature="e#32#78#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -263,6 +268,7 @@
         <option value="$PROJECT_DIR$/src/test/scala/utils/StatsUtils$Test.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/utils/StatsUtilsTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/KalmanFilter.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/ObjectTrackingTest.scala" />
       </list>
     </option>
   </component>
@@ -441,6 +447,44 @@
               <option name="myItemId" value="scala" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breeze_test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breeze_test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datasetstests" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CancerClassificationTest.scala" />
+              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -465,6 +509,62 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="dynamicalsystems" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tests" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breeze_test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breeze_test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dynamicalsystems" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="filtering" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breeze_test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breeze_test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -557,7 +657,7 @@
       <recent name="utils" />
     </key>
   </component>
-  <component name="RunManager" selected="ScalaTest.StatsUtilsTest">
+  <component name="RunManager" selected="Application.objTracking">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
@@ -813,6 +913,29 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
+    <configuration default="false" name="objTracking" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" value="dynamicalsystems.tests.ObjectTrackingTest" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="breeze_test" />
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
     <configuration default="false" name="console" type="ScalaScriptConsoleRunConfiguration" factoryName="Scala Console">
       <module name="breeze_test" />
       <setting name="vmparams4" value="-Djline.terminal=NONE -Xmx2G" />
@@ -885,13 +1008,14 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <list size="6">
+    <list size="7">
       <item index="0" class="java.lang.String" itemvalue="Application.main" />
       <item index="1" class="java.lang.String" itemvalue="Application.cancer" />
-      <item index="2" class="java.lang.String" itemvalue="Scala Console.console" />
-      <item index="3" class="java.lang.String" itemvalue="ScalaTest.MatrixUtilsTest" />
-      <item index="4" class="java.lang.String" itemvalue="ScalaTest.KernelRequisitesTest" />
-      <item index="5" class="java.lang.String" itemvalue="ScalaTest.StatsUtilsTest" />
+      <item index="2" class="java.lang.String" itemvalue="Application.objTracking" />
+      <item index="3" class="java.lang.String" itemvalue="Scala Console.console" />
+      <item index="4" class="java.lang.String" itemvalue="ScalaTest.MatrixUtilsTest" />
+      <item index="5" class="java.lang.String" itemvalue="ScalaTest.KernelRequisitesTest" />
+      <item index="6" class="java.lang.String" itemvalue="ScalaTest.StatsUtilsTest" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -927,7 +1051,7 @@
       <workItem from="1395645749300" duration="2021000" />
       <workItem from="1395915544475" duration="8446000" />
       <workItem from="1395997998741" duration="67000" />
-      <workItem from="1396105125841" duration="9512000" />
+      <workItem from="1396105125841" duration="20053000" />
     </task>
     <task id="LOCAL-00001" summary="init&#10;">
       <created>1395063724264</created>
@@ -961,11 +1085,15 @@
       <created>1395998056160</created>
       <updated>1395998056160</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Some files with mesh evaluation added. Kalman filter implemented, not tested.">
+      <created>1396179234933</created>
+      <updated>1396179234933</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="155928000" />
+    <option name="totallyTimeSpent" value="166469000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1043,7 +1171,8 @@
     <MESSAGE value="Some new methods for the purpose of testing train and test sets." />
     <MESSAGE value="Little refactoring.&#10;" />
     <MESSAGE value="Evaluating mesh of hyper parameters implemented." />
-    <option name="LAST_COMMIT_MESSAGE" value="Evaluating mesh of hyper parameters implemented." />
+    <MESSAGE value="Some files with mesh evaluation added. Kalman filter implemented, not tested." />
+    <option name="LAST_COMMIT_MESSAGE" value="Some files with mesh evaluation added. Kalman filter implemented, not tested." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1053,11 +1182,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/scala/breeze/test/VectorTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="0" selection-start="404" selection-end="404" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435" />
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/scalanlp/breeze_2.10/0.6.1/breeze_2.10-0.6.1.jar!/breeze/linalg/NumericOps.class">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="12" selection-start="695" selection-end="695" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1170" />
@@ -1071,11 +1195,6 @@
     <entry file="jar://$MAVEN_REPOSITORY$/org/scalanlp/breeze_2.10/0.6.1/breeze_2.10-0.6.1-sources.jar!/breeze/linalg/NumericOps.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="29" column="18" selection-start="1101" selection-end="1101" vertical-scroll-proportion="-3.5405405" vertical-offset="2733" max-vertical-offset="5745" />
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/scalanlp/breeze_2.10/0.6.1/breeze_2.10-0.6.1-sources.jar!/breeze/linalg/diag.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="7" selection-start="247" selection-end="247" vertical-scroll-proportion="0.29812208" vertical-offset="23" max-vertical-offset="645" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/boston.csv">
@@ -1358,11 +1477,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/scalanlp/breeze_2.10/0.6.1/breeze_2.10-0.6.1-sources.jar!/breeze/linalg/diag.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="7" selection-start="247" selection-end="247" vertical-scroll-proportion="0.22522523" vertical-offset="0" max-vertical-offset="666">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/KalmanFilter.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="6" selection-start="1444" selection-end="1444" vertical-scroll-proportion="0.45045045" vertical-offset="240" max-vertical-offset="1485">
+        <state line="20" column="31" selection-start="662" selection-end="662" vertical-scroll-proportion="0.0" vertical-offset="98" max-vertical-offset="2190">
           <folding>
             <element signature="e#157#178#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/ObjectTrackingTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="52" selection-start="1493" selection-end="1493" vertical-scroll-proportion="0.6171171" vertical-offset="144" max-vertical-offset="855">
+          <folding>
+            <element signature="e#32#78#0" expanded="true" />
           </folding>
         </state>
       </provider>
