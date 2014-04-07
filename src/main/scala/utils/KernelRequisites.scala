@@ -70,7 +70,7 @@ object KernelRequisites {
 	}
   }
 
-  def buildKernelMatrix(kernelFun:KernelFunc,data:DenseMatrix[Double],beta:Double=3.45)
+  /*def buildKernelMatrix(kernelFun:KernelFunc,data:DenseMatrix[Double],beta:Double=3.45)
   					:kernelMatrixType = {
 	val rowSize:Int = data.rows
 	val result:kernelMatrixType = DenseMatrix.zeros[Double](rowSize,rowSize)
@@ -85,7 +85,7 @@ object KernelRequisites {
 	  }
 	}
 	result
-  }
+  } */
 
   def testTrainKernelMatrix(test:DenseMatrix[Double],train:DenseMatrix[Double],kernelFun:KernelFunc):kernelMatrixType = {
 	val result:kernelMatrixType = DenseMatrix.zeros[Double](test.rows,train.rows)

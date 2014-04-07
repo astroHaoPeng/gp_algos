@@ -4,7 +4,9 @@ import org.springframework.core.io.ClassPathResource
 import breeze.io.CSVReader
 import breeze.optimize.{StochasticDiffFunction, LBFGS, DiffFunction}
 import breeze.optimize.StochasticGradientDescent.SimpleSGD
-import utils.KernelRequisites
+import gp.regression.GpRegression.PredictionInput
+import utils.StatsUtils.GaussianDistribution
+import utils.KernelRequisites.{KernelFuncHyperParams, GaussianRbfKernel, GaussianRbfParams, KernelFunc}
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,16 +15,43 @@ import utils.KernelRequisites
  * Time: 16:31
  * To change this template use File | Settings | File Templates.
  */
-class GpRegression {
+class GpRegression(kernelFunc:KernelFunc) {
 
-  import KernelRequisites._
   import scala.math._
+  import utils.MatrixUtils._
 
-  val (alpha,gamma,beta) = (exp(4.1),exp(-5.),10.12)
-  val defaultRbfParams:GaussianRbfParams = GaussianRbfParams(alpha = alpha,gamma = gamma)
-  val gaussianKernel = GaussianRbfKernel(defaultRbfParams)
   type predictOutput = (DenseVector[Double],Double)
 
+  def predict(input:PredictionInput):(GaussianDistribution,Double) = {
+	val (trainingData,trainingDataDim,testData,testDataDim) =
+	  (input.trainingData,input.trainingData.rows,input.testData,input.testData.rows)
+	val kernelMatrixWithoutNoise = buildKernelMatrix(kernelFunc,trainingData)
+	val (kernelMatrixAfterOptionalNoiseAddition:DenseMatrix[Double],
+		noiseDiagMtx:Option[DenseMatrix[Double]]) = input.sigmaNoise match {
+	  case Some(sigmaNoise_) =>
+		val noiseDiagMtx:DenseMatrix[Double] = DenseMatrix.eye[Double](trainingDataDim) :* sigmaNoise_
+		(kernelMatrixWithoutNoise + noiseDiagMtx,Some(noiseDiagMtx))
+	  case None => (kernelMatrixWithoutNoise,None)
+	}
+	//val testTrainCovMatrix:DenseMatrix[Double] = testTrainKernelMatrix(testData,trainingData,kernelFunc)
+	val testTrainCovMatrix:DenseMatrix[Double] = buildKernelMatrix(kernelFunc,testData,trainingData)
+	assert(testTrainCovMatrix.rows == testDataDim && testTrainCovMatrix.cols == trainingDataDim)
+	val L = cholesky(kernelMatrixAfterOptionalNoiseAddition)
+	val temp:DenseVector[Double] = forwardSolve(L = L,b = input.targets)
+	val alphaVec:DenseVector[Double] = backSolve(R = L.t,b = temp)
+	val fMean:DenseVector[Double] = (testTrainCovMatrix * alphaVec).toDenseVector
+	val vMatrix:DenseMatrix[Double] = forwardSolve(L = L,b = testTrainCovMatrix.t)
+	assert(vMatrix.rows == trainingDataDim && vMatrix.cols == testDataDim)
+	val fVariance:DenseMatrix[Double] = buildKernelMatrix(kernelFunc,testData) - (vMatrix.t * vMatrix)
+	val fVarianceWithNoise:DenseMatrix[Double] = if (input.sigmaNoise.isDefined){
+	  fVariance + noiseDiagMtx.get
+	} else {fVariance}
+	assert(fMean.length == testDataDim && fVariance.rows == testDataDim && fVariance.cols == testDataDim)
+	val logLikelihoodVal:Double = logLikelihood(alphaVec,L,input.targets)
+	(GaussianDistribution(mean = fMean,sigma = fVarianceWithNoise),logLikelihoodVal)
+  }
+
+  /*
   def predict(example:DenseVector[Double],training:DenseMatrix[Double],targets:DenseVector[Double])
   	:(Double,Double) = {
   	val prediction = predict(example.toDenseMatrix,training,targets)
@@ -39,7 +68,9 @@ class GpRegression {
 	val alphaVector = (L.t \ (L \ targets))
 	((testTrainCov * alphaVector).toDenseVector,logLikelihood(alphaVector,L,targets))
   }
+    */
 
+  /*
   def predictWithOptimization(example:DenseVector[Double],training:DenseMatrix[Double],targets:DenseVector[Double],
 							  params:GaussianRbfParams=defaultRbfParams)
   	:(Double,Double) = {
@@ -56,7 +87,7 @@ class GpRegression {
 	val alphaVector = (L.t \ (L \ targets))
 	val rbfParams:GaussianRbfParams = optimizeParams(alphaVector,L,training,targets)
 	predict(testData,training,targets,rbfParams)
-  }
+  }  */
 
   private def logLikelihood(alphaVector:DenseVector[Double],L:DenseMatrix[Double],targets:DenseVector[Double]):Double = {
 	val n = L.rows
@@ -65,6 +96,7 @@ class GpRegression {
 	a1 - a2 - 0.5*n*log(2*Pi)
   }
 
+  /*
   private def optimizeParams(alphaVector:DenseVector[Double],L:DenseMatrix[Double],training:DenseMatrix[Double],
 							  targets:DenseVector[Double]):GaussianRbfParams = {
 	val n = L.rows
@@ -83,7 +115,7 @@ class GpRegression {
 	  def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
 		val (a,g,b) = (x(0),x(1),x(2))
 		val kernelFunc = GaussianRbfKernel(GaussianRbfParams(alpha = a,gamma = g))
-		val kernelMatrix = buildKernelMatrix(kernelFunc,training,beta=b)
+		val kernelMatrix = buildKernelMatrix(kernelFunc,training)
 		val L = cholesky(kernelMatrix)
 		val inversedK:DenseMatrix[Double] = (L.t \ (L \ DenseMatrix.eye[Double](n)))
 		val alphaVector = inversedK * targets
@@ -115,7 +147,15 @@ class GpRegression {
 	val sg = new SimpleSGD[DenseVector[Double]](maxIter = 3000)
 	val res = sg.minimize(objFunction,DenseVector(alpha,gamma,beta))
 	GaussianRbfParams(alpha = res(0),gamma = res(1))
-  }
+  } */
+}
+
+object GpRegression {
+
+  case class PredictionInput(trainingData:DenseMatrix[Double],testData:DenseMatrix[Double],
+							 sigmaNoise:Option[Double],targets:DenseVector[Double],
+									  initHyperParams:KernelFuncHyperParams)
+
 }
 
 
