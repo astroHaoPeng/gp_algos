@@ -16,6 +16,10 @@ object StatsUtils {
 
   def pnorm(x:Double) = gaussianHelper.cdf(x)
 
+  case class GaussianDistribution(mean:DenseVector[Double],sigma:DenseMatrix[Double]){
+	def dim:Int = mean.length
+  }
+
   class NormalDistributionSampler(means:DenseVector[Double],covs:DenseMatrix[Double]) {
 
 	import NormalDistributionSampler._

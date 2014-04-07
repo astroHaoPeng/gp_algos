@@ -2,7 +2,7 @@ package dynamicalsystems.tests
 
 import breeze.linalg.{DenseVector,DenseMatrix}
 import dynamicalsystems.filtering.KalmanFilter
-import dynamicalsystems.filtering.KalmanFilter.{StationaryTransitionMatrices, transitionMatrix, FilteringInput}
+import dynamicalsystems.filtering.KalmanFilter.{StationaryTransitionMatrices, FilteringInput}
 
 /**
  * Created by mjamroz on 30/03/14.
