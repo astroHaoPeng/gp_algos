@@ -34,8 +34,6 @@ class MarginalLikelihoodEvaluator(stopCriterion:EpParameterEstimator.stopCriteri
 	val kernelMatrix:kernelMatrixType = optimInput.kernelMatrix
 	val tauDiagVector:DenseVector[Double] = sqrt(siteParams.tauSiteParams)
 	val tauDiagMatrix:DenseMatrix[Double] = diag(tauDiagVector)
-	//val elementWiseDvVector = dvToElementWiseMultDenseVector(tauDiagVector)
-	//val temp2 = (diag(tauDiagVector) *  kernelMatrix) /** siteParams.niSiteParams*/
   	val temp:DenseVector[Double] = backSolve(R = lowerTriangular.t,
 	  b = (tauDiagMatrix *  kernelMatrix) * siteParams.niSiteParams)
 	val bVector:DenseVector[Double] =

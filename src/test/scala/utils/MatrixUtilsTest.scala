@@ -3,9 +3,12 @@ package utils
 import org.scalatest.{WordSpec}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import breeze.linalg.{*, cholesky, DenseVector, DenseMatrix}
+import breeze.linalg._
 import breeze.numerics.abs
 import utils.KernelRequisites.{GaussianRbfParams, GaussianRbfKernel}
+import utils.KernelRequisites.GaussianRbfParams
+import utils.KernelRequisites.GaussianRbfKernel
+import utils.NumericalUtils.Precision
 
 /**
  * Created by mjamroz on 13/03/14.
@@ -17,6 +20,7 @@ class MatrixUtilsTest extends WordSpec {
   import MatrixUtils._
 
   val eps:Double = 0.001
+  implicit val prec = Precision(p = eps)
   val lowerMatrix = DenseMatrix((0.3,0.,0.),(0.2,0.3,0.),(0.1,0.99,0.11))
   val upperMatrix = DenseMatrix((0.4,0.1,0.9),(0.,0.2,0.89),(0.,0.,.5))
 
@@ -94,6 +98,17 @@ class MatrixUtilsTest extends WordSpec {
 	  (0 until 3).foreach {index => assert(kernelMatrix(index,index) == 1.)}
 	  cholesky(kernelMatrix)
 	}
+  }
+
+  "function inverting triangular matrix" in {
+	val input = DenseMatrix((2.4,1.3,1.9),(2.1,0.99,3.1),(1.89,2.01,4.))
+	val kernelFun = GaussianRbfKernel(GaussianRbfParams(alpha = 1.,gamma = 1.))
+	val kernelMatrix = MatrixUtils.buildKernelMatrix(kernelFun,input)
+	val L:DenseMatrix[Double] = cholesky(kernelMatrix)
+	val inversedK = inv(kernelMatrix)
+	val inversedTriang = invTriangular(L,isUpper = false)
+	val inversedKWithCholDecomp:DenseMatrix[Double] = inversedTriang.t * inversedTriang
+	assert(inversedKWithCholDecomp ~= inversedK)
   }
 
   def compare2Vectors(vec1:DenseVector[Double],vec2:DenseVector[Double]):Unit = {

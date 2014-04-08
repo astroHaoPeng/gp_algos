@@ -8,6 +8,7 @@ import breeze.linalg.{DenseVector, DenseMatrix}
 object MatrixUtils {
 
   import KernelRequisites._
+  import NumericalUtils._
 
   type rowMatrixRange = Int => Range
 
@@ -80,6 +81,15 @@ object MatrixUtils {
 	result
   }
 
+  def invTriangular(matrix:DenseMatrix[Double],isUpper:Boolean):DenseMatrix[Double] = {
+  	val diagMtx = DenseMatrix.eye[Double](matrix.rows)
+	if (isUpper){
+	  backSolve(R = matrix,b = diagMtx)
+	} else {
+	  forwardSolve(L = matrix,b = diagMtx)
+	}
+  }
+
   private def solveTriangular(L:DenseMatrix[Double],b:DenseMatrix[Double],
 							  solvingFun:(DenseMatrix[Double],DenseVector[Double]) => DenseVector[Double]):DenseMatrix[Double] = {
 	(0 until b.cols).foldLeft(DenseMatrix.zeros[Double](L.rows,b.cols)){
@@ -119,8 +129,30 @@ object MatrixUtils {
 
   }
 
+  class ComparableMatrix(matrix:DenseMatrix[Double]){
+
+	def ~= (otherMatrix:DenseMatrix[Double])(implicit precision:Precision):Boolean = {
+		require(matrix.rows == otherMatrix.rows && matrix.cols == otherMatrix.cols)
+	  	try{
+		  for (row <- (0 until matrix.rows)){
+			for (col <- (0 until matrix.cols)){
+				if (!(matrix(row,col) ~= otherMatrix(row,col))){
+				  throw new IllegalArgumentException()
+				}
+			}
+		  }
+		}
+	  	catch {
+		  case e:IllegalArgumentException => return false
+		}
+	  	return true
+	}
+  }
+
   implicit def intToIntDividingVector(i:Int):IntDividingVector = new IntDividingVector(i)
 
   implicit def dvToElementWiseMultDenseVector(dv:DenseVector[Double]):ElementWiseMultDenseVector =
 	new ElementWiseMultDenseVector(dv)
+
+  implicit def matrixToCompMatrix(matrix:DenseMatrix[Double]):ComparableMatrix = new ComparableMatrix(matrix)
 }
