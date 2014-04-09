@@ -47,14 +47,6 @@ class MarginalLikelihoodEvaluator(stopCriterion:EpParameterEstimator.stopCriteri
 		val logLikelihoodDerAfterParam:Double = 0.5*trace(rMatrix*cMatrix)
 	    gradient.update(index,logLikelihoodDerAfterParam); gradient
 	}
-	/*for (j <- (1 to kernelFun.hyperParametersNum)) yield {
-	  val logLikelihoodDerAfterParam: (Double) => Double = {
-		hyperParamJ =>
-		  val cMatrix:DenseMatrix[Double] = buildKernelDerMatrixAfterHyperParam(trainData,j,hyperParamJ,kernelFun)
-		  0.5*trace(rMatrix*cMatrix)
-	  }
-	  logLikelihoodDerAfterParam
-	}*/
   }
 
   private def buildKernelDerMatrixAfterHyperParam(trainInput:DenseMatrix[Double],hyperParameterNum:Int

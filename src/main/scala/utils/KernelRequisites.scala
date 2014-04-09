@@ -61,7 +61,7 @@ object KernelRequisites {
 		val prodOfDiffs = diff dot diff
 	    paramNum match {
 		  case 1 => exp(-0.5*gamma*gamma*prodOfDiffs)
-		  case 2 => alpha*exp(-0.5*gamma*prodOfDiffs)*(-1.)*gamma*prodOfDiffs
+		  case 2 => alpha*exp(-0.5*gamma*gamma*prodOfDiffs)*(-1.)*gamma*prodOfDiffs
 		}
 	}
 

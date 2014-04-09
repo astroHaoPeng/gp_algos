@@ -17,7 +17,8 @@ class GpRegressionTest extends WordSpec with BeforeAndAfterAll{
   implicit val precision = Precision(p = 0.01)
 
   //val (alpha,gamma,beta) = (exp(4.1),exp(-5.),10.12)
-  val (alpha,gamma,beta) = (exp(4.1),0.1,10.12)
+  //val (alpha,gamma,beta) = (exp(4.1),0.1,10.12)
+  val (alpha,gamma,beta) = (1.,-1.,10.12)
   val defaultRbfParams:GaussianRbfParams = GaussianRbfParams(alpha = alpha,gamma = gamma)
   val gaussianKernel = GaussianRbfKernel(defaultRbfParams)
 
@@ -48,6 +49,14 @@ class GpRegressionTest extends WordSpec with BeforeAndAfterAll{
 	  	//assert(logLikelihood < 0)
 	  	//assert(distr.mean(0) ~= 27.10)
 	  	//assert(distr.sigma(0,0) ~= 0.0)
+	  	println(s"distr=$distr - ll=$logLikelihood")
+	}
+
+	"optimize hyper params and predict values at specified point" in {
+
+	  	val input = PredictionInput(trainingData = trainData,testData = testExample.toDenseMatrix,
+		  sigmaNoise = Some(0.00125),targets = targets,initHyperParams = defaultRbfParams)
+	  	val (distr,logLikelihood) = gpPredictor.predictWithParamsOptimization(input)
 	  	println(s"distr=$distr - ll=$logLikelihood")
 	}
 
