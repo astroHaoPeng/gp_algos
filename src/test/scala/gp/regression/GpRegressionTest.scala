@@ -1,7 +1,7 @@
 package gp.regression
 
 import org.scalatest.{BeforeAndAfterAll, WordSpec}
-import breeze.numerics.exp
+import breeze.numerics.{sqrt, exp}
 import utils.KernelRequisites.{GaussianRbfKernel, GaussianRbfParams}
 import breeze.linalg.{DenseVector, DenseMatrix}
 import utils.{NumericalUtils, IOUtilities}
@@ -18,8 +18,8 @@ class GpRegressionTest extends WordSpec with BeforeAndAfterAll{
 
   //val (alpha,gamma,beta) = (exp(4.1),exp(-5.),10.12)
   //val (alpha,gamma,beta) = (exp(4.1),0.1,10.12)
-  val (alpha,gamma,beta) = (1.,-1.,10.12)
-  val defaultRbfParams:GaussianRbfParams = GaussianRbfParams(alpha = alpha,gamma = gamma)
+  val (alpha,gamma,beta) = (1.,-1.,0.)
+  val defaultRbfParams:GaussianRbfParams = GaussianRbfParams(alpha = alpha,gamma = gamma,beta = beta)
   val gaussianKernel = GaussianRbfKernel(defaultRbfParams)
 
   var trainData:DenseMatrix[Double] = _
@@ -44,7 +44,7 @@ class GpRegressionTest extends WordSpec with BeforeAndAfterAll{
 	"predict the output of train example equal to the true value in noiseless case" in {
 
 	  	val input = PredictionInput(trainingData = trainData,testData = testExample.toDenseMatrix,
-		  sigmaNoise = Some(0.00125),targets = targets,initHyperParams = defaultRbfParams)
+		  sigmaNoise = None,targets = targets,initHyperParams = defaultRbfParams)
 	    val (distr,logLikelihood) = gpPredictor.predict(input)
 	  	//assert(logLikelihood < 0)
 	  	//assert(distr.mean(0) ~= 27.10)
@@ -55,7 +55,7 @@ class GpRegressionTest extends WordSpec with BeforeAndAfterAll{
 	"optimize hyper params and predict values at specified point" in {
 
 	  	val input = PredictionInput(trainingData = trainData,testData = testExample.toDenseMatrix,
-		  sigmaNoise = Some(0.00125),targets = targets,initHyperParams = defaultRbfParams)
+		  sigmaNoise = None,targets = targets,initHyperParams = defaultRbfParams)
 	  	val (distr,logLikelihood) = gpPredictor.predictWithParamsOptimization(input)
 	  	println(s"distr=$distr - ll=$logLikelihood")
 	}

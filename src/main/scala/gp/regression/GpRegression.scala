@@ -55,10 +55,10 @@ class GpRegression(kernelFunc:KernelFunc) {
 	val alphaSq:DenseMatrix[Double] = alphaVec * alphaVec.t
 	val gradient = (0 until newKernelFunc.hyperParametersNum).foldLeft(DenseVector.zeros[Double](newKernelFunc.hyperParametersNum)){
 	  case (gradient,index) =>
-		val func:(DenseVector[Double],DenseVector[Double]) => Double = {(vec1,vec2) =>
-		  newKernelFunc.derAfterHyperParam(index+1)(vec1,vec2)
+		val func:(DenseVector[Double],DenseVector[Double],Boolean) => Double = {(vec1,vec2,sameIndex) =>
+		  newKernelFunc.derAfterHyperParam(index+1)(vec1,vec2,sameIndex)
 		}
-		val derAfterKernelHyperParams:DenseMatrix[Double] = buildKernelMatrix(input.trainingData)(func)
+		val derAfterKernelHyperParams:DenseMatrix[Double] = buildMatrixWithFunc(input.trainingData)(func)
 		val logLikelihoodDerAfterParam:Double = 0.5*trace((alphaSq - inversedK) * derAfterKernelHyperParams)
 		gradient.update(index,logLikelihoodDerAfterParam); gradient
 	}
@@ -110,6 +110,7 @@ object GpRegression {
 	
   }
 
+  /*Noise can also be incorporated into kernel function, then sigmaNoise should be set to None*/
   case class PredictionInput(trainingData:DenseMatrix[Double],testData:DenseMatrix[Double],
 							 sigmaNoise:Option[Double],targets:DenseVector[Double],
 							 initHyperParams:KernelFuncHyperParams){

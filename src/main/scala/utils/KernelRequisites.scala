@@ -13,9 +13,9 @@ object KernelRequisites {
   type kernelMatrixType = DenseMatrix[Double]
 
   trait KernelFunc{
-	def apply(obj1:featureVector,obj2:featureVector):Double
+	def apply(obj1:featureVector,obj2:featureVector,sameIndex:Boolean):Double
 	def hyperParametersNum:Int
-	def derAfterHyperParam(paramNum:Int):(featureVector,featureVector) => Double
+	def derAfterHyperParam(paramNum:Int):(featureVector,featureVector,Boolean) => Double
 	def changeHyperParams(dv:DenseVector[Double]):KernelFunc
   }
 
@@ -25,73 +25,61 @@ object KernelRequisites {
 	def fromDenseVector(dv:DenseVector[Double]):KernelFuncHyperParams
   }
 
-  case class GaussianRbfParams(alpha:Double,gamma:Double) extends KernelFuncHyperParams{
+  case class GaussianRbfParams(alpha:Double,gamma:Double,beta:Double) extends KernelFuncHyperParams{
 	def getAtPosition(i: Int): Double = {
 	  i match {
 		case 1 => alpha
 		case 2 => gamma
+		case 3 => beta
 	  }
 	}
 
 	def toDenseVector: DenseVector[Double] = {
-	  DenseVector(alpha,gamma)
+	  DenseVector(alpha,gamma,beta)
 	}
 
 	def fromDenseVector(dv: DenseVector[Double]): KernelFuncHyperParams = {
-	  GaussianRbfParams(alpha = dv(0),gamma = dv(1))
+	  GaussianRbfParams(alpha = dv(0),gamma = dv(1),beta = dv(2))
 	}
   }
-  //function of form k(x,y) = alpha*exp(-0.5*(gamma^2)*t(x-y)*(x-y))
+  //function of form k(x_p,x_q) = alpha*exp(-0.5*(gamma^2)*t(x_p-x_q)*(x_p-x_q)) + (beta^2)*(p == q)
   case class GaussianRbfKernel(rbfParams:GaussianRbfParams) extends KernelFunc{
 
-	private val (alpha,gamma) = (rbfParams.alpha,rbfParams.gamma)
+	private val (alpha,gamma,beta) = (rbfParams.alpha,rbfParams.gamma,rbfParams.beta)
 
-  	def apply(obj1:featureVector,obj2:featureVector):Double = {
+  	def apply(obj1:featureVector,obj2:featureVector,sameIndex:Boolean):Double = {
 	  val diff = (obj1 - obj2)
-	  val retValue = alpha*exp(-0.5*gamma*gamma*(diff dot diff))
+	  val valWithoutNoise:Double = alpha*exp(-0.5*gamma*gamma*(diff dot diff))
+	  val retValue = if (!sameIndex){valWithoutNoise} else {
+		valWithoutNoise + beta*beta
+	  }
 	  retValue
 	}
 
-	def hyperParametersNum: Int = 2
+	def hyperParametersNum: Int = 3
 
 	def derAfterHyperParam(paramNum: Int):
-		(KernelRequisites.featureVector, KernelRequisites.featureVector) => Double = {
-	  		case (vec1,vec2) =>
+		(KernelRequisites.featureVector, KernelRequisites.featureVector,Boolean) => Double = {
+	  		case (vec1,vec2,sameIndex) =>
 		val diff = (vec1 - vec2)
 		val prodOfDiffs = diff dot diff
 	    paramNum match {
 		  case 1 => exp(-0.5*gamma*gamma*prodOfDiffs)
 		  case 2 => alpha*exp(-0.5*gamma*gamma*prodOfDiffs)*(-1.)*gamma*prodOfDiffs
+		  case 3 => if (sameIndex){2*beta} else {0.}
 		}
 	}
 
 	def changeHyperParams(dv: DenseVector[Double]): KernelFunc = {
-	  GaussianRbfKernel(GaussianRbfParams(alpha = dv(0),gamma = dv(1)))
+	  GaussianRbfKernel(GaussianRbfParams(alpha = dv(0),gamma = dv(1),beta = dv(2)))
 	}
   }
-
-  /*def buildKernelMatrix(kernelFun:KernelFunc,data:DenseMatrix[Double],beta:Double=3.45)
-  					:kernelMatrixType = {
-	val rowSize:Int = data.rows
-	val result:kernelMatrixType = DenseMatrix.zeros[Double](rowSize,rowSize)
-	for (i <- 0.until(rowSize)){
-	  for (j <- 0.to(i)){
-		val value = (i == j) match {
-		  case false => kernelFun(data(i,::).toDenseVector,data(j,::).toDenseVector)
-		  case true => kernelFun(data(i,::).toDenseVector,data(j,::).toDenseVector) + 1/beta
-		}
-		result(i until (i+1),j until (j+1)) := value
-		result(j until (j+1),i until (i+1)) := value
-	  }
-	}
-	result
-  } */
 
   def testTrainKernelMatrix(test:DenseMatrix[Double],train:DenseMatrix[Double],kernelFun:KernelFunc):kernelMatrixType = {
 	val result:kernelMatrixType = DenseMatrix.zeros[Double](test.rows,train.rows)
 	for (i <- 0.until(test.rows)){
 	  for (j <- 0.until(train.rows)){
-		result(i until (i+1),j until (j+1)) := kernelFun(test(i,::).toDenseVector,train(j,::).toDenseVector)
+		result(i until (i+1),j until (j+1)) := kernelFun(test(i,::).toDenseVector,train(j,::).toDenseVector,false)
 	  }
 	}
 	result

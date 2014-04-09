@@ -17,10 +17,10 @@ class KernelRequisitesTest extends WordSpec {
 
 	"update it's params"  in {
 
-	  val initKernelFunc = GaussianRbfKernel(GaussianRbfParams(alpha = 1.,gamma = 2.5))
-	  assert(initKernelFunc.rbfParams == GaussianRbfParams(alpha = 1.,gamma = 2.5))
-	  val updatedKernelFunc = initKernelFunc.changeHyperParams(DenseVector(2.,3.)).asInstanceOf[GaussianRbfKernel]
-	  assert(updatedKernelFunc.rbfParams == GaussianRbfParams(alpha = 2.,gamma = 3.))
+	  val initKernelFunc = GaussianRbfKernel(GaussianRbfParams(alpha = 1.,gamma = 2.5,beta = 0.))
+	  assert(initKernelFunc.rbfParams == GaussianRbfParams(alpha = 1.,gamma = 2.5,beta = 0.))
+	  val updatedKernelFunc = initKernelFunc.changeHyperParams(DenseVector(2.,3.,0.)).asInstanceOf[GaussianRbfKernel]
+	  assert(updatedKernelFunc.rbfParams == GaussianRbfParams(alpha = 2.,gamma = 3.,beta = 0.))
 
 	}
 

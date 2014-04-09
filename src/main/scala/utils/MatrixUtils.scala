@@ -45,7 +45,7 @@ object MatrixUtils {
 	val result:kernelMatrixType = DenseMatrix.zeros[Double](rowSize,colSize)
 	for (i <- 0.until(rowSize)){
 	  for (j <- 0.until(colSize)){
-		val value = kernelFun(input1(i,::).toDenseVector,input2(j,::).toDenseVector)
+		val value = kernelFun(input1(i,::).toDenseVector,input2(j,::).toDenseVector,false)
 		result.update(i,j,value)
 	  }
 	}
@@ -58,7 +58,7 @@ object MatrixUtils {
 	val result:kernelMatrixType = DenseMatrix.zeros[Double](rowSize,rowSize)
 	for (i <- 0.until(rowSize)){
 	  for (j <- 0.to(i)){
-		val value = kernelFun(data(i,::).toDenseVector,data(j,::).toDenseVector)
+		val value = kernelFun(data(i,::).toDenseVector,data(j,::).toDenseVector,i == j)
 		/*Assumption that kernel matrix is symmetric*/
 		result.update(i,j,value)
 		result.update(j,i,value)
@@ -67,13 +67,13 @@ object MatrixUtils {
 	result
   }
 
-  def buildKernelMatrix(data:DenseMatrix[Double])(f:(DenseVector[Double],DenseVector[Double]) => Double):kernelMatrixType = {
+  def buildMatrixWithFunc(data:DenseMatrix[Double])(f:(DenseVector[Double],DenseVector[Double],Boolean) => Double):kernelMatrixType = {
 	val rowSize:Int = data.rows
 	val result:kernelMatrixType = DenseMatrix.zeros[Double](rowSize,rowSize)
 	for (i <- 0.until(rowSize)){
 	  for (j <- 0.to(i)){
-		val value = f(data(i,::).toDenseVector,data(j,::).toDenseVector)
-		/*Assumption that kernel matrix is symmetric*/
+		val value = f(data(i,::).toDenseVector,data(j,::).toDenseVector,i == j)
+		/*Assumption that matrix is symmetric i.e f(data[i,],data[j,]) == f(data[j,],data[i,])*/
 		result.update(i,j,value)
 		result.update(j,i,value)
 	  }

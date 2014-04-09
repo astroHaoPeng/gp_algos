@@ -53,10 +53,10 @@ class MarginalLikelihoodEvaluator(stopCriterion:EpParameterEstimator.stopCriteri
 												  ,kernelFunc:KernelFunc
 												  ):DenseMatrix[Double] = {
 
-	val func:(DenseVector[Double],DenseVector[Double]) => Double = {(vec1,vec2) =>
-	  kernelFunc.derAfterHyperParam(hyperParameterNum)(vec1,vec2)
+	val func:(DenseVector[Double],DenseVector[Double],Boolean) => Double = {(vec1,vec2,sameIndex) =>
+	  kernelFunc.derAfterHyperParam(hyperParameterNum)(vec1,vec2,sameIndex)
 	}
-	buildKernelMatrix(trainInput)(func)
+	buildMatrixWithFunc(trainInput)(func)
   }
 
 }
