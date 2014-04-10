@@ -12,18 +12,21 @@ object KernelRequisites {
   type featureVector = DenseVector[Double]
   type kernelMatrixType = DenseMatrix[Double]
 
+  trait KernelFuncHyperParams{
+
+	def getAtPosition(i:Int):Double
+	def toDenseVector:DenseVector[Double]
+	def fromDenseVector(dv:DenseVector[Double]):KernelFuncHyperParams
+  }
+
   trait KernelFunc{
+
 	def apply(obj1:featureVector,obj2:featureVector,sameIndex:Boolean):Double
 	def hyperParametersNum:Int
 	def derAfterHyperParam(paramNum:Int):(featureVector,featureVector,Boolean) => Double
 	def changeHyperParams(dv:DenseVector[Double]):KernelFunc
   }
 
-  trait KernelFuncHyperParams {
-	def getAtPosition(i:Int):Double
-	def toDenseVector:DenseVector[Double]
-	def fromDenseVector(dv:DenseVector[Double]):KernelFuncHyperParams
-  }
 
   case class GaussianRbfParams(alpha:Double,gamma:Double,beta:Double) extends KernelFuncHyperParams{
 	def getAtPosition(i: Int): Double = {
@@ -34,16 +37,22 @@ object KernelRequisites {
 	  }
 	}
 
-	def toDenseVector: DenseVector[Double] = {
+	override def toDenseVector: DenseVector[Double] = {
 	  DenseVector(alpha,gamma,beta)
 	}
 
-	def fromDenseVector(dv: DenseVector[Double]): KernelFuncHyperParams = {
-	  GaussianRbfParams(alpha = dv(0),gamma = dv(1),beta = dv(2))
+	override def fromDenseVector(dv: DenseVector[Double]): GaussianRbfParams = {
+	  val (newAlpha,newBeta,newGamma) = dv.length match {
+		case 0 => (alpha,gamma,beta)
+		case 1 => (dv(0),gamma,beta)
+		case 2 => (dv(0),dv(1),beta)
+		case 3 => (dv(0),dv(1),dv(2))
+	  }
+	  this.copy(alpha = newAlpha,gamma = newGamma,beta = newBeta)
 	}
   }
   //function of form k(x_p,x_q) = alpha*exp(-0.5*(gamma^2)*t(x_p-x_q)*(x_p-x_q)) + (beta^2)*(p == q)
-  case class GaussianRbfKernel(rbfParams:GaussianRbfParams) extends KernelFunc{
+  case class GaussianRbfKernel(rbfParams:GaussianRbfParams) extends KernelFunc {
 
 	private val (alpha,gamma,beta) = (rbfParams.alpha,rbfParams.gamma,rbfParams.beta)
 
@@ -56,7 +65,7 @@ object KernelRequisites {
 	  retValue
 	}
 
-	def hyperParametersNum: Int = 3
+	def hyperParametersNum: Int = 2
 
 	def derAfterHyperParam(paramNum: Int):
 		(KernelRequisites.featureVector, KernelRequisites.featureVector,Boolean) => Double = {
@@ -70,12 +79,13 @@ object KernelRequisites {
 		}
 	}
 
-	def changeHyperParams(dv: DenseVector[Double]): KernelFunc = {
-	  GaussianRbfKernel(GaussianRbfParams(alpha = dv(0),gamma = dv(1),beta = dv(2)))
+	def changeHyperParams(dv: DenseVector[Double]): GaussianRbfKernel = {
+	  val newHyperParams = rbfParams.fromDenseVector(dv)
+	  GaussianRbfKernel(newHyperParams)
 	}
   }
 
-  def testTrainKernelMatrix(test:DenseMatrix[Double],train:DenseMatrix[Double],kernelFun:KernelFunc):kernelMatrixType = {
+  def testTrainKernelMatrix[T](test:DenseMatrix[Double],train:DenseMatrix[Double],kernelFun:KernelFunc):kernelMatrixType = {
 	val result:kernelMatrixType = DenseMatrix.zeros[Double](test.rows,train.rows)
 	for (i <- 0.until(test.rows)){
 	  for (j <- 0.until(train.rows)){

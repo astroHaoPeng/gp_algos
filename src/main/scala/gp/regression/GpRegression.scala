@@ -1,12 +1,9 @@
 package gp.regression
 import breeze.linalg._
-import org.springframework.core.io.ClassPathResource
-import breeze.io.CSVReader
-import breeze.optimize.{StochasticDiffFunction, LBFGS, DiffFunction}
-import breeze.optimize.StochasticGradientDescent.SimpleSGD
+import breeze.optimize.{LBFGS, DiffFunction}
 import gp.regression.GpRegression.{BreezeLBFGSPredictionOptimizer, PredictionTrainingInput, PredictionInput}
 import utils.StatsUtils.GaussianDistribution
-import utils.KernelRequisites.{KernelFuncHyperParams, GaussianRbfKernel, GaussianRbfParams, KernelFunc}
+import utils.KernelRequisites.{KernelFuncHyperParams, KernelFunc}
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
@@ -20,6 +17,7 @@ class GpRegression(kernelFunc:KernelFunc) {
 
   import scala.math._
   import utils.MatrixUtils._
+
 
   type predictOutput = (DenseVector[Double],Double)
 
@@ -44,16 +42,17 @@ class GpRegression(kernelFunc:KernelFunc) {
 	(GaussianDistribution(mean = fMean,sigma = fVarianceWithNoise),logLikelihoodVal)
   }
 
-  def logLikelihoodWithDerivatives(input:PredictionTrainingInput,hyperParams:KernelFuncHyperParams):
+  def logLikelihoodWithDerivatives(input:PredictionTrainingInput,hyperParams:KernelFuncHyperParams,
+								   optimizedParamsNum:Int):
   		(Double,DenseVector[Double]) = {
   	val (l:DenseMatrix[Double],alphaVec:DenseVector[Double],_) =
 	  preComputeComponents(input.trainingData,hyperParams,input.sigmaNoise,input.targets)
 	val ll = logLikelihood(alphaVec,l,input.targets)
 	val lInversed:DenseMatrix[Double] = invTriangular(l,isUpper = false)
 	val inversedK:DenseMatrix[Double] = lInversed.t * lInversed
-	val newKernelFunc = kernelFunc.changeHyperParams(hyperParams.toDenseVector)
+	val newKernelFunc:KernelFunc = kernelFunc.changeHyperParams(hyperParams.toDenseVector)
 	val alphaSq:DenseMatrix[Double] = alphaVec * alphaVec.t
-	val gradient = (0 until newKernelFunc.hyperParametersNum).foldLeft(DenseVector.zeros[Double](newKernelFunc.hyperParametersNum)){
+	val gradient = (0 until optimizedParamsNum).foldLeft(DenseVector.zeros[Double](optimizedParamsNum)){
 	  case (gradient,index) =>
 		val func:(DenseVector[Double],DenseVector[Double],Boolean) => Double = {(vec1,vec2,sameIndex) =>
 		  newKernelFunc.derAfterHyperParam(index+1)(vec1,vec2,sameIndex)
@@ -65,8 +64,8 @@ class GpRegression(kernelFunc:KernelFunc) {
 	(ll,gradient)
   }
 
-  def predictWithParamsOptimization(input:PredictionInput):(GaussianDistribution,Double) = {
-	val optimizer = new BreezeLBFGSPredictionOptimizer(this)
+  def predictWithParamsOptimization(input:PredictionInput,optimizeNoise:Boolean):(GaussianDistribution,Double) = {
+	val optimizer = new BreezeLBFGSPredictionOptimizer(this,optimizeNoise)
 	val optimizedParams:KernelFuncHyperParams = optimizer.optimizerHyperParams(input)
 	predict(input.copy(initHyperParams = optimizedParams))
   }
@@ -77,7 +76,7 @@ class GpRegression(kernelFunc:KernelFunc) {
 
 	val trainingDataDim = trainingData.rows
 	val newKernelFunc = kernelFunc.changeHyperParams(hyperParams.toDenseVector)
-	val kernelMatrixWithoutNoise = buildKernelMatrix(newKernelFunc,trainingData)
+	val kernelMatrixWithoutNoise:DenseMatrix[Double] = buildKernelMatrix(newKernelFunc,trainingData)
 	val (kernelMatrixAfterOptionalNoiseAddition:DenseMatrix[Double],
 		noiseDiagMtx:Option[DenseMatrix[Double]]) = sigmaNoise match {
 	  case Some(sigmaNoise_) =>
@@ -103,9 +102,9 @@ class GpRegression(kernelFunc:KernelFunc) {
 object GpRegression {
 
   val apacheLogger:Logger = LoggerFactory.getLogger(classOf[GpRegression])
-  
+
   trait PredictionHyperParamsOptimizer {
-	
+
 	def optimizerHyperParams(predictionInput:PredictionInput):KernelFuncHyperParams
 	
   }
@@ -113,7 +112,7 @@ object GpRegression {
   /*Noise can also be incorporated into kernel function, then sigmaNoise should be set to None*/
   case class PredictionInput(trainingData:DenseMatrix[Double],testData:DenseMatrix[Double],
 							 sigmaNoise:Option[Double],targets:DenseVector[Double],
-							 initHyperParams:KernelFuncHyperParams){
+							 initHyperParams:KernelFuncHyperParams) {
 
 	def toPredictionTrainingInput:PredictionTrainingInput = {
 		PredictionTrainingInput(trainingData = trainingData,sigmaNoise = sigmaNoise,
@@ -121,12 +120,13 @@ object GpRegression {
 	}
   }
 
-  case class PredictionTrainingInput(trainingData:DenseMatrix[Double],sigmaNoise:Option[Double],
+  case class PredictionTrainingInput (trainingData:DenseMatrix[Double],sigmaNoise:Option[Double],
 									  targets:DenseVector[Double],initHyperParams:KernelFuncHyperParams)
   
   //TODO - unify params optimization in classification and prediction problems
-  class BreezeLBFGSPredictionOptimizer(gpPredictor:GpRegression) extends PredictionHyperParamsOptimizer {
-	
+  class BreezeLBFGSPredictionOptimizer (gpPredictor:GpRegression,optimizeNoise:Boolean)
+	extends PredictionHyperParamsOptimizer{
+
 	def optimizerHyperParams(predictionInput: PredictionInput): KernelFuncHyperParams = {
 
 	  /*diffFunction will be minimized so it needs to be equal to -logLikelihood*/
@@ -135,7 +135,8 @@ object GpRegression {
 		def calculate(hyperParams: DenseVector[Double]): (Double, DenseVector[Double]) = {
 
 		  val (logLikelihood,derivatives) = gpPredictor.logLikelihoodWithDerivatives(
-			predictionInput.toPredictionTrainingInput,predictionInput.initHyperParams.fromDenseVector(hyperParams))
+			predictionInput.toPredictionTrainingInput,predictionInput.initHyperParams.fromDenseVector(hyperParams),
+		  	hyperParams.length)
 		  assert(hyperParams.length == derivatives.length)
 		  apacheLogger.info(s"Current solution is = ${hyperParams}, objective function value = ${-logLikelihood}")
 		  (-logLikelihood,derivatives :* (-1.))
@@ -143,7 +144,10 @@ object GpRegression {
 	  }
 
 	  val lbfgs = new LBFGS[DenseVector[Double]](maxIter = 30,m = 3)
-	  val optimizedParams = lbfgs.minimize(diffFunction,predictionInput.initHyperParams.toDenseVector)
+	  val initParams = if (optimizeNoise){predictionInput.initHyperParams.toDenseVector} else {
+		predictionInput.initHyperParams.toDenseVector(0 to -2)
+	  }
+	  val optimizedParams = lbfgs.minimize(diffFunction,initParams)
 	  predictionInput.initHyperParams.fromDenseVector(optimizedParams)
 	}
   }
