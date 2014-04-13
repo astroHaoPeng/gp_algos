@@ -16,9 +16,11 @@ class GpRegressionTest extends WordSpec with BeforeAndAfterAll{
 
   implicit val precision = Precision(p = 0.01)
 
-  //val (alpha,gamma,beta) = (exp(4.1),exp(-5.),10.12)
-  //val (alpha,gamma,beta) = (exp(4.1),0.1,10.12)
-  val (alpha,gamma,beta) = (1.,-1.,sqrt(0.0125))
+  //val (alpha,gamma,beta) = (exp(6.1),0.1,sqrt(0.0015))
+  //val (alpha,gamma,beta) = (228.1978744433493, 0.11759427535572213,sqrt(0.0015))
+  val (alpha,gamma,beta) = ( 1.3, 0.10111457140526733,sqrt(0.0015))
+  //val (alpha,gamma,beta) = (1.,1.,sqrt(0.00125))
+  //val (alpha,gamma,beta) = (164.52695987617062, 2.412787119003772, sqrt(0.00125))
   val defaultRbfParams:GaussianRbfParams = GaussianRbfParams(alpha = alpha,gamma = gamma,beta = beta)
   val gaussianKernel = GaussianRbfKernel(defaultRbfParams)
 
@@ -46,19 +48,25 @@ class GpRegressionTest extends WordSpec with BeforeAndAfterAll{
 	  	val input = PredictionInput(trainingData = trainData,testData = testExample.toDenseMatrix,
 		  sigmaNoise = None,targets = targets,initHyperParams = defaultRbfParams)
 	    val (distr,logLikelihood) = gpPredictor.predict(input)
+	  	val (testDistr,_) = gpPredictor.predict(
+		  input.copy(trainingData = trainData(0 to -3,::),testData = trainData(-2 to -1,::),targets = targets(0 to -3)))
 	  	//assert(logLikelihood < 0)
 	  	//assert(distr.mean(0) ~= 27.10)
 	  	//assert(distr.sigma(0,0) ~= 0.0)
 	  	println(s"distr=$distr - ll=$logLikelihood")
+	  	println(s"distr=$testDistr - ll=$logLikelihood")
 	}
 
-	"optimize hyper params and predict values at specified point" in {
+//	"optimize hyper params and predict values at specified point" in {
+//
+////	  	val input = PredictionInput(trainingData = trainData(0 to -3,::),testData = testExample.toDenseMatrix,
+////		  sigmaNoise = None,targets = targets,initHyperParams = defaultRbfParams)
+//	  val input = PredictionInput(trainingData = trainData(0 to -3,::),testData = trainData(-2 to -1,::),
+//		sigmaNoise = None,targets = targets(0 to -3),initHyperParams = defaultRbfParams)
+//	  	val (distr,logLikelihood) = gpPredictor.predictWithParamsOptimization(input,false)
+//	  	println(s"distr=$distr - ll=$logLikelihood")
+//	}
 
-	  	val input = PredictionInput(trainingData = trainData,testData = testExample.toDenseMatrix,
-		  sigmaNoise = None,targets = targets,initHyperParams = defaultRbfParams)
-	  	val (distr,logLikelihood) = gpPredictor.predictWithParamsOptimization(input,false)
-	  	println(s"distr=$distr - ll=$logLikelihood")
-	}
 
   }
 

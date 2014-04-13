@@ -20,14 +20,16 @@ object StatsUtils {
 	def dim:Int = mean.length
   }
 
-  class NormalDistributionSampler(means:DenseVector[Double],covs:DenseMatrix[Double]) {
+  class NormalDistributionSampler(normalDistr:GaussianDistribution) {
 
 	import NormalDistributionSampler._
 
-	assert(means.length == covs.rows)
-	assert(covs.cols == covs.rows)
+	val (mean,covs) = (normalDistr.mean,normalDistr.sigma)
+	
+	require(mean.length == covs.rows)
+	require(covs.cols == covs.rows)
 
-	private val meanAsJavaArray = denseVecToArray(means)
+	private val meanAsJavaArray = denseVecToArray(mean)
 	private val covAsJavaArray = denseMatrixTo2DimArray(covs)
 
 	val multivariateSampler = new MultivariateNormalDistribution(meanAsJavaArray,covAsJavaArray)

@@ -1,6 +1,7 @@
 package utils
 
 import breeze.linalg.{DenseVector, DenseMatrix}
+import scala.reflect.ClassTag
 
 /**
  * Created by mjamroz on 11/03/14.
@@ -80,6 +81,13 @@ object MatrixUtils {
 	}
 	result
   }
+
+  /*
+  def mapVector[B  <: AnyVal : ClassTag](vec:DenseVector[Double])(func:Double => B):DenseVector[B] = {
+	(0 until vec.length).foldLeft(DenseVector.zeros[B](vec.length)){
+	  case (mappedVec,index) => mappedVec.update(index,func(vec(index))); mappedVec
+	}
+  } */
 
   def invTriangular(matrix:DenseMatrix[Double],isUpper:Boolean):DenseMatrix[Double] = {
   	val diagMtx = DenseMatrix.eye[Double](matrix.rows)

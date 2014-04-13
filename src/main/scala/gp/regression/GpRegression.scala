@@ -134,8 +134,9 @@ object GpRegression {
 
 		def calculate(hyperParams: DenseVector[Double]): (Double, DenseVector[Double]) = {
 
+		  val hyperParamsVec:KernelFuncHyperParams = predictionInput.initHyperParams.fromDenseVector(hyperParams)
 		  val (logLikelihood,derivatives) = gpPredictor.logLikelihoodWithDerivatives(
-			predictionInput.toPredictionTrainingInput,predictionInput.initHyperParams.fromDenseVector(hyperParams),
+			predictionInput.toPredictionTrainingInput,hyperParamsVec,
 		  	hyperParams.length)
 		  assert(hyperParams.length == derivatives.length)
 		  apacheLogger.info(s"Current solution is = ${hyperParams}, objective function value = ${-logLikelihood}")

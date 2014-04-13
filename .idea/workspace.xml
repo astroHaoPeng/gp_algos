@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="794477cd-1721-497f-8216-730639d3bdec" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/gp/datasetstests/BostonPredictionDataSetTest.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/utils/DataSetsTestingUtils.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/gp/regression/GpRegression.scala" afterPath="$PROJECT_DIR$/src/main/scala/gp/regression/GpRegression.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/gp/regression/GpRegressionTest.scala" afterPath="$PROJECT_DIR$/src/test/scala/gp/regression/GpRegressionTest.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala" afterPath="$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/utils/MatrixUtils.scala" afterPath="$PROJECT_DIR$/src/main/scala/utils/MatrixUtils.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" afterPath="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="breeze_test.iws" />
@@ -136,6 +140,21 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/main/scala/gp/datasetstests/BostonPredictionDataSetTest.scala" line="54" class="gp.datasetstests.BostonPredictionDataSetTest" package="gp.datasetstests">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
     </line_breakpoints>
     <breakpoint_rules />
     <ui_properties />
@@ -153,55 +172,53 @@
       <file leaf-file-name="CancerClassificationTest.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/gp/datasetstests/CancerClassificationTest.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="73" selection-start="1064" selection-end="1064" vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="2295">
+            <state line="106" column="67" selection-start="5267" selection-end="5267" vertical-scroll-proportion="0.0" vertical-offset="1590" max-vertical-offset="2295">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MarginalLikelihoodEvaluator.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/gp/classification/MarginalLikelihoodEvaluator.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="15" selection-start="2871" selection-end="2871" vertical-scroll-proportion="0.0" vertical-offset="870" max-vertical-offset="1185">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GpRegression.scala" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="GpRegression.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/gp/regression/GpRegression.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="7" selection-start="29" selection-end="29" vertical-scroll-proportion="0.022522522" vertical-offset="0" max-vertical-offset="2385">
+            <state line="49" column="49" selection-start="2413" selection-end="2413" vertical-scroll-proportion="0.0" vertical-offset="735" max-vertical-offset="2490">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MatrixUtilsTest.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/utils/MatrixUtilsTest.scala">
+      <file leaf-file-name="IOUtilities.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/utils/IOUtilities.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="105" column="69" selection-start="3777" selection-end="3777" vertical-scroll-proportion="0.0" vertical-offset="1575" max-vertical-offset="1920">
+            <state line="11" column="49" selection-start="258" selection-end="258" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="525">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HyperParamsOptimization.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/gp/classification/HyperParamsOptimization.scala">
+      <file leaf-file-name="DataSetsTestingUtils.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/utils/DataSetsTestingUtils.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="126" column="32" selection-start="5352" selection-end="5352" vertical-scroll-proportion="0.0" vertical-offset="1404" max-vertical-offset="2070">
+            <state line="15" column="0" selection-start="460" selection-end="460" vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="630">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GpRegressionTest.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/gp/regression/GpRegressionTest.scala">
+      <file leaf-file-name="BostonPredictionDataSetTest.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/gp/datasetstests/BostonPredictionDataSetTest.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="51" selection-start="1610" selection-end="1610" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1065">
-              <folding>
-                <element signature="e#23#73#0" expanded="true" />
-              </folding>
+            <state line="54" column="0" selection-start="2135" selection-end="2135" vertical-scroll-proportion="0.0" vertical-offset="810" max-vertical-offset="1200">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StatsUtils.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="28" column="37" selection-start="738" selection-end="738" vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="1200">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -209,7 +226,27 @@
       <file leaf-file-name="KernelRequisites.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="87" column="102" selection-start="2630" selection-end="2630" vertical-scroll-proportion="0.0" vertical-offset="579" max-vertical-offset="1560">
+            <state line="60" column="8" selection-start="1716" selection-end="1716" vertical-scroll-proportion="0.0" vertical-offset="782" max-vertical-offset="1560">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GpRegressionTest.scala" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/gp/regression/GpRegressionTest.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="19" column="19" selection-start="579" selection-end="579" vertical-scroll-proportion="-0.3215859" vertical-offset="504" max-vertical-offset="1185">
+              <folding>
+                <element signature="e#23#73#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="boston.csv" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/boston.csv">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="98" column="96" selection-start="9602" selection-end="9602" vertical-scroll-proportion="0.0" vertical-offset="7224" max-vertical-offset="7665">
               <folding />
             </state>
           </provider>
@@ -218,7 +255,7 @@
       <file leaf-file-name="MatrixUtils.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/utils/MatrixUtils.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="54" column="23" selection-start="1657" selection-end="1657" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2445">
+            <state line="70" column="6" selection-start="2127" selection-end="2127" vertical-scroll-proportion="0.0" vertical-offset="1050" max-vertical-offset="2580">
               <folding />
             </state>
           </provider>
@@ -254,7 +291,6 @@
         <option value="$PROJECT_DIR$/src/test/scala/utils/StatsUtilsTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/KalmanFilter.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/ObjectTrackingTest.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/NumericalUtils.scala" />
@@ -263,10 +299,13 @@
         <option value="$PROJECT_DIR$/src/main/scala/gp/datasetstests/CancerClassificationTest.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/utils/MatrixUtilsTest.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/utils/KernelRequisitesTest.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/gp/regression/GpRegressionTest.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/MatrixUtils.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/utils/DataSetsTestingUtils.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/regression/GpRegression.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/gp/datasetstests/BostonPredictionDataSetTest.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/gp/regression/GpRegressionTest.scala" />
       </list>
     </option>
   </component>
@@ -340,6 +379,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -656,7 +696,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -984,6 +1023,29 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
+    <configuration default="false" name="boston" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" value="gp.datasetstests.BostonPredictionDataSetTest" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="breeze_test" />
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
     <configuration default="false" name="console" type="ScalaScriptConsoleRunConfiguration" factoryName="Scala Console">
       <module name="breeze_test" />
       <setting name="vmparams4" value="-Djline.terminal=NONE -Xmx2G" />
@@ -1102,16 +1164,17 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <list size="9">
+    <list size="10">
       <item index="0" class="java.lang.String" itemvalue="Application.main" />
       <item index="1" class="java.lang.String" itemvalue="Application.cancer" />
       <item index="2" class="java.lang.String" itemvalue="Application.objTracking" />
-      <item index="3" class="java.lang.String" itemvalue="Scala Console.console" />
-      <item index="4" class="java.lang.String" itemvalue="ScalaTest.MatrixUtilsTest" />
-      <item index="5" class="java.lang.String" itemvalue="ScalaTest.KernelRequisitesTest" />
-      <item index="6" class="java.lang.String" itemvalue="ScalaTest.StatsUtilsTest" />
-      <item index="7" class="java.lang.String" itemvalue="ScalaTest.UnscentedKalmanFilterTest" />
-      <item index="8" class="java.lang.String" itemvalue="ScalaTest.GpRegressionTest" />
+      <item index="3" class="java.lang.String" itemvalue="Application.boston" />
+      <item index="4" class="java.lang.String" itemvalue="Scala Console.console" />
+      <item index="5" class="java.lang.String" itemvalue="ScalaTest.MatrixUtilsTest" />
+      <item index="6" class="java.lang.String" itemvalue="ScalaTest.KernelRequisitesTest" />
+      <item index="7" class="java.lang.String" itemvalue="ScalaTest.StatsUtilsTest" />
+      <item index="8" class="java.lang.String" itemvalue="ScalaTest.UnscentedKalmanFilterTest" />
+      <item index="9" class="java.lang.String" itemvalue="ScalaTest.GpRegressionTest" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -1154,7 +1217,8 @@
       <workItem from="1396726554639" duration="7548000" />
       <workItem from="1396885922317" duration="12144000" />
       <workItem from="1397073826018" duration="9655000" />
-      <workItem from="1397151785155" duration="8776000" />
+      <workItem from="1397151785155" duration="20779000" />
+      <workItem from="1397426523967" duration="86000" />
     </task>
     <task id="LOCAL-00001" summary="init&#10;">
       <created>1395063724264</created>
@@ -1216,11 +1280,15 @@
       <created>1397084304087</created>
       <updated>1397084304087</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Since now, noise optimization can be turned off.">
+      <created>1397167390095</created>
+      <updated>1397167390095</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="211536000" />
+    <option name="totallyTimeSpent" value="223625000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1260,13 +1328,12 @@
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="ASM" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32739726" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32956383" sideWeight="0.6011396" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24555735" sideWeight="0.67094016" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24555735" sideWeight="0.67094016" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3260274" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="100" y="100" width="1080" height="600" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1275,6 +1342,7 @@
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32739726" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32739726" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1306,7 +1374,8 @@
     <MESSAGE value="Computing derivatives of log likelihood w.r.t hyperparams." />
     <MESSAGE value="Optimization of gp regression hyperparams." />
     <MESSAGE value="Changed kernel func definition." />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed kernel func definition." />
+    <MESSAGE value="Since now, noise optimization can be turned off." />
+    <option name="LAST_COMMIT_MESSAGE" value="Since now, noise optimization can be turned off." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1316,26 +1385,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/IOUtilities.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="13" selection-start="541" selection-end="541" vertical-scroll-proportion="0.38106796" vertical-offset="53" max-vertical-offset="495" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/log4j.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="91" selection-start="243" selection-end="243" vertical-scroll-proportion="0.09118541" vertical-offset="0" max-vertical-offset="658" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="64" selection-start="40" selection-end="40" vertical-scroll-proportion="0.047393367" vertical-offset="0" max-vertical-offset="633" />
-      </provider>
-    </entry>
-    <entry file="file://$MAVEN_REPOSITORY$/com/numericalmethod/suanshu/2.6.0/suanshu-2.6.0.pom">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="795" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="30" column="25" selection-start="1127" selection-end="1127" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1695" />
@@ -1431,43 +1480,43 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/cancer.csv">
-      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state line="133" column="27" selection-start="3844" selection-end="3844" vertical-scroll-proportion="0.0" vertical-offset="4141" max-vertical-offset="10560" />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/params_mesh/200.dat">
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/params_mesh/200.dat">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1290" />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/params_mesh/200_1.dat">
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/params_mesh/200_1.dat">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6390" />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/params_mesh/200_2.dat">
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/params_mesh/200_2.dat">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7965" />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/params_mesh/200_3.dat">
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/params_mesh/200_3.dat">
       <provider selected="true" editor-type-id="text-editor">
         <state line="34" column="20" selection-start="1021" selection-end="1021" vertical-scroll-proportion="-7.7777777" vertical-offset="300" max-vertical-offset="2235" />
+      </provider>
+      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+        <state />
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-math3/3.2/commons-math3-3.2-sources.jar!/org/apache/commons/math3/distribution/MultivariateNormalDistribution.java">
@@ -1490,13 +1539,6 @@
     <entry file="file://$PROJECT_DIR$/src/main/scala/gp/classification/MeshHyperParamsLogLikelihoodEvaluator.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="36" column="40" selection-start="1565" selection-end="1565" vertical-scroll-proportion="0.0" vertical-offset="30" max-vertical-offset="1740">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="59" selection-start="478" selection-end="478" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="1125">
           <folding />
         </state>
       </provider>
@@ -1526,11 +1568,6 @@
         <state line="22" column="53" selection-start="724" selection-end="724" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="660" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/boston.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="96" selection-start="9602" selection-end="9602" vertical-scroll-proportion="-13.047619" vertical-offset="7224" max-vertical-offset="7665" />
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/scalanlp/breeze_2.10/0.6.1/breeze_2.10-0.6.1-sources.jar!/breeze/optimize/LBFGS.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="39" column="14" selection-start="1416" selection-end="1416" vertical-scroll-proportion="0.8108108" vertical-offset="0" max-vertical-offset="2250" />
@@ -1557,13 +1594,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/utils/MatrixUtilsTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="105" column="69" selection-start="3777" selection-end="3777" vertical-scroll-proportion="0.0" vertical-offset="1167" max-vertical-offset="1800">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/utils/KernelRequisitesTest.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="21" column="51" selection-start="634" selection-end="634" vertical-scroll-proportion="0.0" vertical-offset="70" max-vertical-offset="465">
@@ -1571,25 +1601,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/gp/datasetstests/CancerClassificationTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="73" selection-start="1064" selection-end="1064" vertical-scroll-proportion="0.0" vertical-offset="91" max-vertical-offset="2070">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/breeze/test/Main.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="101" selection-start="593" selection-end="593" vertical-scroll-proportion="0.3153153" vertical-offset="0" max-vertical-offset="666">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/MatrixUtils.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="23" selection-start="1657" selection-end="1657" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2445">
-          <folding />
-        </state>
+        <state line="19" column="101" selection-start="593" selection-end="593" vertical-scroll-proportion="0.3153153" vertical-offset="0" max-vertical-offset="666" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/gp/classification/HyperParamsOptimization.scala">
@@ -1599,26 +1613,87 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/gp/regression/GpRegressionTest.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/log4j.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="51" selection-start="1610" selection-end="1610" vertical-scroll-proportion="0.0" vertical-offset="386" max-vertical-offset="1065">
-          <folding>
-            <element signature="e#23#73#0" expanded="true" />
-          </folding>
+        <state line="4" column="91" selection-start="243" selection-end="243" vertical-scroll-proportion="0.08836524" vertical-offset="0" max-vertical-offset="679" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/utils/MatrixUtilsTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="105" column="69" selection-start="3777" selection-end="3777" vertical-scroll-proportion="0.0" vertical-offset="1167" max-vertical-offset="1800">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/gp/datasetstests/CancerClassificationTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="106" column="67" selection-start="5267" selection-end="5267" vertical-scroll-proportion="0.0" vertical-offset="780" max-vertical-offset="2070">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="37" selection-start="738" selection-end="738" vertical-scroll-proportion="0.0" vertical-offset="75" max-vertical-offset="1155">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/IOUtilities.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="49" selection-start="258" selection-end="258" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/DataSetsTestingUtils.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="0" selection-start="460" selection-end="460" vertical-scroll-proportion="0.0" vertical-offset="87" max-vertical-offset="630">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/MatrixUtils.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="70" column="6" selection-start="2127" selection-end="2127" vertical-scroll-proportion="0.0" vertical-offset="878" max-vertical-offset="2565">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/gp/datasetstests/BostonPredictionDataSetTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="54" column="0" selection-start="2135" selection-end="2135" vertical-scroll-proportion="0.0" vertical-offset="534" max-vertical-offset="1200">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="87" column="102" selection-start="2630" selection-end="2630" vertical-scroll-proportion="0.0" vertical-offset="9" max-vertical-offset="1560">
+        <state line="60" column="8" selection-start="1716" selection-end="1716" vertical-scroll-proportion="0.0" vertical-offset="782" max-vertical-offset="1560">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/gp/regression/GpRegression.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="7" selection-start="29" selection-end="29" vertical-scroll-proportion="0.022522522" vertical-offset="0" max-vertical-offset="2385">
+        <state line="49" column="49" selection-start="2413" selection-end="2413" vertical-scroll-proportion="0.0" vertical-offset="512" max-vertical-offset="2400">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/boston.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="98" column="96" selection-start="9602" selection-end="9602" vertical-scroll-proportion="0.0" vertical-offset="7224" max-vertical-offset="7665">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/gp/regression/GpRegressionTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="19" selection-start="579" selection-end="579" vertical-scroll-proportion="-0.3215859" vertical-offset="504" max-vertical-offset="1185">
+          <folding>
+            <element signature="e#23#73#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

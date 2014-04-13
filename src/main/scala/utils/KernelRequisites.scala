@@ -42,7 +42,7 @@ object KernelRequisites {
 	}
 
 	override def fromDenseVector(dv: DenseVector[Double]): GaussianRbfParams = {
-	  val (newAlpha,newBeta,newGamma) = dv.length match {
+	  val (newAlpha,newGamma,newBeta) = dv.length match {
 		case 0 => (alpha,gamma,beta)
 		case 1 => (dv(0),gamma,beta)
 		case 2 => (dv(0),dv(1),beta)
@@ -65,7 +65,7 @@ object KernelRequisites {
 	  retValue
 	}
 
-	def hyperParametersNum: Int = 2
+	def hyperParametersNum: Int = 3
 
 	def derAfterHyperParam(paramNum: Int):
 		(KernelRequisites.featureVector, KernelRequisites.featureVector,Boolean) => Double = {
