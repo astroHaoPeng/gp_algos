@@ -1,7 +1,7 @@
 package gp.regression
 import breeze.linalg._
 import breeze.optimize.{LBFGS, DiffFunction}
-import gp.regression.GpRegression.{BreezeLBFGSPredictionOptimizer, PredictionTrainingInput, PredictionInput}
+import gp.regression.GpPredictor.{BreezeLBFGSPredictionOptimizer, PredictionTrainingInput, PredictionInput}
 import utils.StatsUtils.GaussianDistribution
 import utils.KernelRequisites.{KernelFuncHyperParams, KernelFunc}
 import org.slf4j.{Logger, LoggerFactory}
@@ -13,7 +13,7 @@ import org.slf4j.{Logger, LoggerFactory}
  * Time: 16:31
  * To change this template use File | Settings | File Templates.
  */
-class GpRegression(kernelFunc:KernelFunc) {
+class GpPredictor(val kernelFunc:KernelFunc) {
 
   import scala.math._
   import utils.MatrixUtils._
@@ -40,6 +40,16 @@ class GpRegression(kernelFunc:KernelFunc) {
 	assert(fMean.length == testDataDim && fVariance.rows == testDataDim && fVariance.cols == testDataDim)
 	val logLikelihoodVal:Double = logLikelihood(alphaVec,l,input.targets)
 	(GaussianDistribution(mean = fMean,sigma = fVarianceWithNoise),logLikelihoodVal)
+  }
+
+  def computePosterior(trainingData:DenseMatrix[Double],testData:DenseMatrix[Double],l:DenseMatrix[Double],
+					   alphaVec:DenseVector[Double],kernelFunc:KernelFunc):(GaussianDistribution,DenseMatrix[Double]) = {
+
+	val testTrainCovMatrix:DenseMatrix[Double] = buildKernelMatrix(kernelFunc,testData,trainingData)
+	val fMean:DenseVector[Double] = (testTrainCovMatrix * alphaVec).toDenseVector
+	val vMatrix:DenseMatrix[Double] = forwardSolve(L = l,b = testTrainCovMatrix.t)
+	val fVariance:DenseMatrix[Double] = buildKernelMatrix(kernelFunc,testData) - (vMatrix.t * vMatrix)
+	(GaussianDistribution(mean = fMean,sigma = fVariance), vMatrix)
   }
 
   def logLikelihoodWithDerivatives(input:PredictionTrainingInput,hyperParams:KernelFuncHyperParams,
@@ -70,7 +80,7 @@ class GpRegression(kernelFunc:KernelFunc) {
 	predict(input.copy(initHyperParams = optimizedParams))
   }
 
-  private def preComputeComponents(trainingData:DenseMatrix[Double],hyperParams:KernelFuncHyperParams,
+  def preComputeComponents(trainingData:DenseMatrix[Double],hyperParams:KernelFuncHyperParams,
 								   sigmaNoise:Option[Double],targets:DenseVector[Double]):
   	(DenseMatrix[Double],DenseVector[Double],Option[DenseMatrix[Double]]) = {
 
@@ -99,9 +109,9 @@ class GpRegression(kernelFunc:KernelFunc) {
 
 }
 
-object GpRegression {
+object GpPredictor {
 
-  val apacheLogger:Logger = LoggerFactory.getLogger(classOf[GpRegression])
+  val apacheLogger:Logger = LoggerFactory.getLogger(classOf[GpPredictor])
 
   trait PredictionHyperParamsOptimizer {
 
@@ -124,7 +134,7 @@ object GpRegression {
 									  targets:DenseVector[Double],initHyperParams:KernelFuncHyperParams)
   
   //TODO - unify params optimization in classification and prediction problems
-  class BreezeLBFGSPredictionOptimizer (gpPredictor:GpRegression,optimizeNoise:Boolean)
+  class BreezeLBFGSPredictionOptimizer (gpPredictor:GpPredictor,optimizeNoise:Boolean)
 	extends PredictionHyperParamsOptimizer{
 
 	def optimizerHyperParams(predictionInput: PredictionInput): KernelFuncHyperParams = {

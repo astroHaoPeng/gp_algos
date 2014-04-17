@@ -52,6 +52,20 @@ object StatsUtils {
 	log(gaussianDensity(at,means,covs))
   }
 
+  /*data(i,::) - ith sample*/
+  def meanAndVarOfData(data:DenseMatrix[Double]):(DenseVector[Double],DenseMatrix[Double]) = {
+	val sumOfSamples:DenseVector[Double] = (0 until data.rows).foldLeft(DenseVector.zeros[Double](data.cols)){
+	  case (mean,index) => mean + data(index,::).toDenseVector
+	}
+	val mean:DenseVector[Double] = sumOfSamples :/ data.rows.toDouble
+	val covMatrix:DenseMatrix[Double] = (0 until data.rows).foldLeft(DenseMatrix.zeros[Double](data.cols,data.cols)){
+	  case (cov,index) =>
+		val diff:DenseVector[Double] = (data(index,::).toDenseVector - mean)
+		cov :+ (diff * diff.t)
+	}
+	(mean,covMatrix :/ data.rows.toDouble)
+  }
+
   object NormalDistributionSampler {
 
 	implicit def denseVecToArray(vec:DenseVector[Double]):Array[Double] = {

@@ -5,12 +5,12 @@ import breeze.numerics.{sqrt, exp}
 import utils.KernelRequisites.{GaussianRbfKernel, GaussianRbfParams}
 import breeze.linalg.{DenseVector, DenseMatrix}
 import utils.{NumericalUtils, IOUtilities}
-import gp.regression.GpRegression.PredictionInput
+import gp.regression.GpPredictor.PredictionInput
 
 /**
  * Created by mjamroz on 07/04/14.
  */
-class GpRegressionTest extends WordSpec with BeforeAndAfterAll{
+class GpPredictorTest extends WordSpec with BeforeAndAfterAll{
 
   import NumericalUtils._
 
@@ -33,7 +33,7 @@ class GpRegressionTest extends WordSpec with BeforeAndAfterAll{
   //#99 example - 43.80
   val testExample1 = DenseVector( 0.08187,   0.00,   2.890,  0.,  0.4450,  7.8200,  36.90,  3.4952,   2.,  276.0,
 	18.00, 393.53,   3.57)
-  val gpPredictor = new GpRegression(gaussianKernel)
+  val gpPredictor = new GpPredictor(gaussianKernel)
 
   override def beforeAll = {
 	val data = IOUtilities.csvFileToDenseMatrix("boston.csv",sep=' ')

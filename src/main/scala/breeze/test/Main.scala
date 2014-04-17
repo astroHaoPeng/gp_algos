@@ -1,11 +1,11 @@
 package breeze.test
 
 import breeze.linalg.{DenseMatrix, DenseVector}
-import gp.regression.{GpRegression}
+import gp.regression.{GpPredictor}
 import utils.IOUtilities
 import scala.math._
 import utils.KernelRequisites.{GaussianRbfKernel, GaussianRbfParams}
-import gp.regression.GpRegression.PredictionInput
+import gp.regression.GpPredictor.PredictionInput
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,7 +32,7 @@ object Main {
 	val featureMatrix:DenseMatrix[Double] = data(::,0 until data.cols-1)
 	val input = PredictionInput(trainingData = featureMatrix,testData = testExample.toDenseMatrix,
 	  sigmaNoise = None,targets = targets,initHyperParams = defaultRbfParams)
-	println(new GpRegression(gaussianKernel).predict(input))
+	println(new GpPredictor(gaussianKernel).predict(input))
   }
 
 }

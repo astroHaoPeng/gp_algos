@@ -16,7 +16,7 @@ class UnscentedKalmanFilterTest extends WordSpec {
 
   "unscented transform" should {
 
-	"transform sigma points from 1d gaussian distribution" in {
+	"transform sigma pointSet from 1d gaussian distribution" in {
 
 	  val gaussian1d = GaussianDistribution(mean = DenseVector(2.),sigma = DenseMatrix((2.)))
 	  val ukf = new UnscentedKalmanFilter
@@ -26,7 +26,7 @@ class UnscentedKalmanFilterTest extends WordSpec {
 	  assert(transformedDistr.sigma(0,0) != 0.0)
 	}
 
-	"transform sigma points from 3d gaussian distribution" in {
+	"transform sigma pointSet from 3d gaussian distribution" in {
 
 	  val gaussian3d = GaussianDistribution(mean = DenseVector(1.,2.,3.),sigma = DenseMatrix((1.,0.,0.),(0.,1.,0.),(0.,0.,1.)))
 	  cholesky(gaussian3d.sigma)

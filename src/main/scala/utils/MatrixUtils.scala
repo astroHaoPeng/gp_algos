@@ -42,7 +42,7 @@ object MatrixUtils {
   }
 
   def buildKernelMatrix(kernelFun:KernelFunc,input1:DenseMatrix[Double],input2:DenseMatrix[Double]):kernelMatrixType = {
-	val (rowSize,colSize) = (input1.rows,input2.rows)
+	/*val (rowSize,colSize) = (input1.rows,input2.rows)
 	val result:kernelMatrixType = DenseMatrix.zeros[Double](rowSize,colSize)
 	for (i <- 0.until(rowSize)){
 	  for (j <- 0.until(colSize)){
@@ -50,7 +50,8 @@ object MatrixUtils {
 		result.update(i,j,value)
 	  }
 	}
-	result
+	result*/
+	buildMatrixWithFunc({(vec1,vec2) => kernelFun.apply(vec1,vec2,false)},input1,input2)
   }
 
   def buildKernelMatrix(kernelFun:KernelFunc,data:DenseMatrix[Double])
@@ -77,6 +78,19 @@ object MatrixUtils {
 		/*Assumption that matrix is symmetric i.e f(data[i,],data[j,]) == f(data[j,],data[i,])*/
 		result.update(i,j,value)
 		result.update(j,i,value)
+	  }
+	}
+	result
+  }
+
+  def buildMatrixWithFunc(func:(DenseVector[Double],DenseVector[Double]) => Double,input1:DenseMatrix[Double],
+						  input2:DenseMatrix[Double]):kernelMatrixType = {
+	val (rowSize,colSize) = (input1.rows,input2.rows)
+	val result:kernelMatrixType = DenseMatrix.zeros[Double](rowSize,colSize)
+	for (i <- 0.until(rowSize)){
+	  for (j <- 0.until(colSize)){
+		val value = func(input1(i,::).toDenseVector,input2(j,::).toDenseVector)
+		result.update(i,j,value)
 	  }
 	}
 	result

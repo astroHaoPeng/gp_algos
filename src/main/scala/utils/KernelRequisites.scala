@@ -11,6 +11,7 @@ object KernelRequisites {
 
   type featureVector = DenseVector[Double]
   type kernelMatrixType = DenseMatrix[Double]
+  type kernelDerivative = (featureVector,featureVector) => DenseVector[Double]
 
   trait KernelFuncHyperParams{
 
@@ -24,7 +25,10 @@ object KernelRequisites {
 	def apply(obj1:featureVector,obj2:featureVector,sameIndex:Boolean):Double
 	def hyperParametersNum:Int
 	def derAfterHyperParam(paramNum:Int):(featureVector,featureVector,Boolean) => Double
+	def gradient(afterFirstArg:Boolean):kernelDerivative
+	def gradientAt(afterFirstArg:Boolean,points:(DenseVector[Double],DenseVector[Double])):DenseVector[Double]
 	def changeHyperParams(dv:DenseVector[Double]):KernelFunc
+	def hyperParams:KernelFuncHyperParams
   }
 
 
@@ -82,6 +86,22 @@ object KernelRequisites {
 	def changeHyperParams(dv: DenseVector[Double]): GaussianRbfKernel = {
 	  val newHyperParams = rbfParams.fromDenseVector(dv)
 	  GaussianRbfKernel(newHyperParams)
+	}
+
+	def hyperParams: KernelFuncHyperParams = rbfParams
+
+	def gradientAt(afterFirstArg: Boolean, points: (DenseVector[Double], DenseVector[Double])): DenseVector[Double] = {
+	  gradient(afterFirstArg)(points._1,points._2)
+	}
+
+	def gradient(afterFirstArg: Boolean):
+		(KernelRequisites.featureVector, KernelRequisites.featureVector) => DenseVector[Double] = {
+	  {case (vec1,vec2) =>
+		val diff = (vec1 - vec2)
+		val prodOfDiffs = diff dot diff
+		val a1:Double = alpha*exp(-0.5*gamma*gamma*(prodOfDiffs))
+		if (afterFirstArg){diff :* (-1*gamma*gamma*a1)} else {diff :* (-1*gamma*gamma*a1)}
+	  }
 	}
   }
 
