@@ -2,20 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="794477cd-1721-497f-8216-730639d3bdec" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/gp/optimization/Optimization.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/hardware.csv" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/scala/gp/regression/GpRegression.scala" afterPath="$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/test/scala/gp/regression/GpRegressionTest.scala" afterPath="$PROJECT_DIR$/src/test/scala/gp/regression/GpPredictorTest.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/gp/datasetstests/BostonPredictionDataSetTest.scala" afterPath="$PROJECT_DIR$/src/main/scala/gp/datasetstests/BostonPredictionDataSetTest.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala" afterPath="$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala" afterPath="$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala" afterPath="$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/breeze/test/Main.scala" afterPath="$PROJECT_DIR$/src/main/scala/breeze/test/Main.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/utils/MatrixUtils.scala" afterPath="$PROJECT_DIR$/src/main/scala/utils/MatrixUtils.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/utils/NumericalUtils.scala" afterPath="$PROJECT_DIR$/src/main/scala/utils/NumericalUtils.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" afterPath="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/utils/StatsUtilsTest.scala" afterPath="$PROJECT_DIR$/src/test/scala/utils/StatsUtilsTest.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" afterPath="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="breeze_test.iws" />
@@ -162,21 +152,6 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala" line="35" class="gp.optimization.GPOptimizer" package="gp.optimization">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="REMOVE_AFTER_HIT" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
     </line_breakpoints>
     <breakpoint_rules />
     <ui_properties />
@@ -194,7 +169,7 @@
       <file leaf-file-name="GpPredictor.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="6" selection-start="511" selection-end="511" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2550">
+            <state line="50" column="103" selection-start="2617" selection-end="2617" vertical-scroll-proportion="0.0" vertical-offset="348" max-vertical-offset="2550">
               <folding />
             </state>
           </provider>
@@ -203,7 +178,7 @@
       <file leaf-file-name="KernelRequisites.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="56" selection-start="765" selection-end="765" vertical-scroll-proportion="0.0" vertical-offset="708" max-vertical-offset="1860">
+            <state line="108" column="41" selection-start="3568" selection-end="3568" vertical-scroll-proportion="0.0" vertical-offset="939" max-vertical-offset="1860">
               <folding />
             </state>
           </provider>
@@ -218,19 +193,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GPOptimizer.scala" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="GPOptimizer.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="51" selection-start="1441" selection-end="1441" vertical-scroll-proportion="-0.2837838" vertical-offset="639" max-vertical-offset="1980">
+            <state line="62" column="23" selection-start="2834" selection-end="2834" vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="2490">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GPOptimizerTest.scala" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="GPOptimizerTest.scala" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="0" selection-start="1562" selection-end="1562" vertical-scroll-proportion="0.0" vertical-offset="471" max-vertical-offset="885">
+            <state line="42" column="54" selection-start="1412" selection-end="1412" vertical-scroll-proportion="0.33726066" vertical-offset="401" max-vertical-offset="1080">
               <folding>
                 <element signature="e#25#54#0" expanded="true" />
               </folding>
@@ -267,19 +242,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Optimization.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/gp/optimization/Optimization.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="21" selection-start="89" selection-end="89" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="MatrixUtils.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/utils/MatrixUtils.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="130" column="0" selection-start="4503" selection-end="4503" vertical-scroll-proportion="0.0" vertical-offset="1787" max-vertical-offset="2760">
+            <state line="105" column="6" selection-start="3492" selection-end="3492" vertical-scroll-proportion="0.0" vertical-offset="1143" max-vertical-offset="2760">
               <folding />
             </state>
           </provider>
@@ -328,12 +294,12 @@
         <option value="$PROJECT_DIR$/src/main/scala/gp/regression/GpRegression.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/MatrixUtils.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/utils/StatsUtilsTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/NumericalUtils.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala" />
       </list>
     </option>
   </component>
@@ -668,40 +634,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="optimization" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GPOptimizer.scala" />
-              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="breeze_test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="breeze_test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="datasetstests" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -875,7 +807,7 @@
       <recent name="$PROJECT_DIR$/src/main/resources/params_mesh" />
     </key>
   </component>
-  <component name="RunManager" selected="Scala Console.console">
+  <component name="RunManager" selected="ScalaTest.GPOptimizerTest">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
@@ -1319,7 +1251,9 @@
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="true" />
       </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
     <list size="11">
@@ -1341,6 +1275,24 @@
     </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false" SSL_PROTOCOLS="sslv3">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="mySSHConnectionTimeout" value="30000" />
+    <option name="mySSHReadTimeout" value="30000" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
+    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
+    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+    <option name="FORCE_UPDATE" value="false" />
+    <option name="IGNORE_EXTERNALS" value="false" />
+    <configuration useDefault="true">$USER_HOME$/.subversion</configuration>
+    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="794477cd-1721-497f-8216-730639d3bdec" name="Default" comment="" />
@@ -1380,7 +1332,7 @@
       <workItem from="1397426523967" duration="4521000" />
       <workItem from="1397502896235" duration="5674000" />
       <workItem from="1397593315454" duration="6203000" />
-      <workItem from="1397772169733" duration="4856000" />
+      <workItem from="1397772169733" duration="15525000" />
     </task>
     <task id="LOCAL-00001" summary="init&#10;">
       <created>1395063724264</created>
@@ -1450,11 +1402,15 @@
       <created>1397426649555</created>
       <updated>1397426649555</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="GPOptimizer implemented - not tested, lot of code refactoring.">
+      <created>1397777229316</created>
+      <updated>1397777229316</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="244793000" />
+    <option name="totallyTimeSpent" value="255462000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1500,7 +1456,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32956383" sideWeight="0.6011396" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24555735" sideWeight="0.67094016" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24555735" sideWeight="0.67094016" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3260274" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="100" y="100" width="1080" height="600" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1542,7 +1498,8 @@
     <MESSAGE value="Changed kernel func definition." />
     <MESSAGE value="Since now, noise optimization can be turned off." />
     <MESSAGE value="Some refactoring, new dataset test for gp regression." />
-    <option name="LAST_COMMIT_MESSAGE" value="Some refactoring, new dataset test for gp regression." />
+    <MESSAGE value="GPOptimizer implemented - not tested, lot of code refactoring." />
+    <option name="LAST_COMMIT_MESSAGE" value="GPOptimizer implemented - not tested, lot of code refactoring." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1669,11 +1626,6 @@
         <state line="15" column="25" selection-start="432" selection-end="432" vertical-scroll-proportion="0.0" vertical-offset="157" max-vertical-offset="825" />
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/scalatest/scalatest_2.10/2.0/scalatest_2.10-2.0-sources.jar!/org/scalatest/OutcomeOf.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="0" selection-start="4229" selection-end="4229" vertical-scroll-proportion="0.33167082" vertical-offset="902" max-vertical-offset="1455" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="80" column="68" selection-start="4084" selection-end="4084" vertical-scroll-proportion="0.0" vertical-offset="938" max-vertical-offset="1845" />
@@ -1792,13 +1744,6 @@
         <state line="11" column="22" selection-start="529" selection-end="529" vertical-scroll-proportion="0.18018018" vertical-offset="0" max-vertical-offset="2880" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="56" selection-start="765" selection-end="765" vertical-scroll-proportion="0.0" vertical-offset="708" max-vertical-offset="1860">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/gp/optimization/Optimization.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="21" selection-start="89" selection-end="89" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
@@ -1836,33 +1781,47 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/MatrixUtils.scala">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/scalatest/scalatest_2.10/2.0/scalatest_2.10-2.0-sources.jar!/org/scalatest/OutcomeOf.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="130" column="0" selection-start="4503" selection-end="4503" vertical-scroll-proportion="0.0" vertical-offset="1787" max-vertical-offset="2760">
+        <state line="83" column="0" selection-start="4229" selection-end="4229" vertical-scroll-proportion="0.0" vertical-offset="902" max-vertical-offset="1455">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="0" selection-start="1562" selection-end="1562" vertical-scroll-proportion="0.0" vertical-offset="471" max-vertical-offset="885">
-          <folding>
-            <element signature="e#25#54#0" expanded="true" />
-          </folding>
+        <state line="108" column="41" selection-start="3568" selection-end="3568" vertical-scroll-proportion="0.0" vertical-offset="939" max-vertical-offset="1860">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="6" selection-start="511" selection-end="511" vertical-scroll-proportion="0.0" vertical-offset="1524" max-vertical-offset="2550">
+        <state line="50" column="103" selection-start="2617" selection-end="2617" vertical-scroll-proportion="0.0" vertical-offset="348" max-vertical-offset="2550">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/MatrixUtils.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="105" column="6" selection-start="3492" selection-end="3492" vertical-scroll-proportion="0.0" vertical-offset="1323" max-vertical-offset="2760">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="51" selection-start="1441" selection-end="1441" vertical-scroll-proportion="-0.2837838" vertical-offset="639" max-vertical-offset="1980">
+        <state line="62" column="23" selection-start="2834" selection-end="2834" vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="2490">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="54" selection-start="1412" selection-end="1412" vertical-scroll-proportion="0.33726066" vertical-offset="401" max-vertical-offset="1080">
+          <folding>
+            <element signature="e#25#54#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

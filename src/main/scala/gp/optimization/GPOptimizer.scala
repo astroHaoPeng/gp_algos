@@ -39,6 +39,7 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double]) extends Optimize
 	val (finalPointSet,finalEvaluatedPointSet) = (0 until m).foldLeft((pointGrid,evaluatedPointGrid)){
 
 	  case ((pointSet,evaluatedPointSet),iterNum) =>
+		assert(pointSet.rows == evaluatedPointSet.length)
 		val (l,alphaVec,_) = gpPredictor.preComputeComponents(pointSet,hyperParams,noise,evaluatedPointSet)
 		val (observedMean,observedCov) = meanAndVarOfData(pointSet)
 		val sampler = new NormalDistributionSampler(GaussianDistribution(mean = observedMean,sigma = observedCov))
@@ -52,15 +53,15 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double]) extends Optimize
 		}
 		logger.info(s"iteration = ${iterNum}, biggestUcb = ${biggestUcb}, biggestUcbPoint = ${biggestUcbPoint.get}")
 		(DenseMatrix.vertcat[Double](pointSet,biggestUcbPoint.get.toDenseMatrix),
-		  DenseVector.vertcat[Double](evaluatedPointGrid,DenseVector(func(biggestUcbPoint.get.data))))
+		  DenseVector.vertcat[Double](evaluatedPointSet,DenseVector(func(biggestUcbPoint.get.toArray))))
 	}
-	val (maxIndex,maxValue) = (0 until evaluatedPointGrid.length).foldLeft((0,Double.MinValue)){
+	val (maxIndex,maxValue) = (0 until finalEvaluatedPointSet.length).foldLeft((0,Double.MinValue)){
 	  case ((biggestIndex,currentBiggestValue),index) =>
-		if (finalEvaluatedPointSet(index) > currentBiggestValue){(index,currentBiggestValue)} else {
+		if (finalEvaluatedPointSet(index) > currentBiggestValue){(index,finalEvaluatedPointSet(index))} else {
 		  (biggestIndex,currentBiggestValue)
 		}
 	}
-	(finalPointSet(maxIndex,::).data,maxValue)
+	(finalPointSet(maxIndex,::).toDenseVector.toArray,maxValue)
   }
 
   private def maximizeUCB(ll:DenseMatrix[Double],targets:DenseVector[Double],pointSet:DenseMatrix[Double],
@@ -68,6 +69,8 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double]) extends Optimize
 
 	val inversedL:DenseMatrix[Double] = invTriangular(ll,isUpper = false)
 	val derAfterFirstArg:kernelDerivative = gpPredictor.kernelFunc.gradient(afterFirstArg = true)
+	val derAfterSecondArg:kernelDerivative = gpPredictor.kernelFunc.gradient(afterFirstArg = false)
+
 	val diffFunction = new DiffFunction[DenseVector[Double]] {
 	  override def calculate(testPoint: DenseVector[Double]): (Double, DenseVector[Double]) = {
 		val (gaussianPosteriorDistr,vMatrix) = gpPredictor.computePosterior(pointSet,testPoint.toDenseMatrix,ll,
@@ -76,31 +79,62 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double]) extends Optimize
 		require(gaussianPosteriorDistr.mean.length == 1 && gaussianPosteriorDistr.sigma.rows == 1 && gaussianPosteriorDistr.sigma.cols == 1)
 		val ucbObjFunctionValue = gaussianPosteriorDistr.mean(0) + kParam*sqrt(gaussianPosteriorDistr.sigma(0,0))
 		val testTrainDerMtx:DenseMatrix[Double] = testTrainDerMatrix(derAfterFirstArg,testPoint,pointSet)
+		val trainTestDerMtx:DenseMatrix[Double] = trainTestDerMatrix(derAfterSecondArg,testPoint,pointSet)
 		val derAfterMean = testTrainDerMtx * alphaVec
 		val derAfterVarFirst:DenseVector[Double] = derAfterFirstArg(testPoint,testPoint)
-		val vAfterXDerMatrix:DenseMatrix[Double] = testTrainDerMtx * inversedL
-		assert(vAfterXDerMatrix.rows == testPoint.length && vAfterXDerMatrix.cols == pointSet.rows)
-		val derAfterVar:DenseVector[Double] = derAfterVarFirst - ((vAfterXDerMatrix * vMatrix.toDenseVector) :* 2.)
-		val coeff:Double = (1/(2*sqrt(gaussianPosteriorDistr.sigma(0,0))))*kParam
+		val vAfterXDerMatrix:DenseMatrix[Double] = inversedL * trainTestDerMtx
+		assert(vAfterXDerMatrix.rows == pointSet.rows && vAfterXDerMatrix.cols == testPoint.length)
+		val derAfterVar:DenseVector[Double] = derAfterVarFirst - ((vAfterXDerMatrix.t * vMatrix.toDenseVector) :* 2.)
+		val coeff:Double = (kParam/(2*sqrt(gaussianPosteriorDistr.sigma(0,0))))
 		val ucbDer:DenseVector[Double] = derAfterMean + (derAfterVar :* coeff)
 		(-ucbObjFunctionValue,ucbDer :* (-1.))
 	  }
 	}
 	val lbfgs = new LBFGS[DenseVector[Double]](maxIter = 30,m = 3)
 	val optimalSolution = lbfgs.minimize(diffFunction,initPoint)
-	(diffFunction(optimalSolution),optimalSolution)
+	(-diffFunction(optimalSolution),optimalSolution)
+  }
+
+  private def buildKernelDerMatrix(kernelDer:kernelDerivative,input1:DenseVector[Double],
+								   input2:DenseMatrix[Double],testPointFirstArgToDer:Boolean):DenseMatrix[Double] = {
+	val dim = input1.length
+	val resultMatrix = if (testPointFirstArgToDer){DenseMatrix.zeros[Double](dim,input2.rows)} else {
+	  DenseMatrix.zeros[Double](input2.rows,dim)
+	}
+	for (index <- (0 until input2.rows)){
+	  if (testPointFirstArgToDer){
+		val elem = kernelDer(input1,input2(index,::).toDenseVector)
+		resultMatrix(::,index) := elem
+	  } else {
+		val elem = kernelDer(input2(index,::).toDenseVector,input1)
+		resultMatrix(index,::) := elem
+	  }
+	}
+	resultMatrix
   }
 
   private def testTrainDerMatrix(kernelDer:kernelDerivative,
 								 testPoint:DenseVector[Double],trainingPoints:DenseMatrix[Double]):DenseMatrix[Double] = {
-	val dim = testPoint.length
+	/*val dim = testPoint.length
 	val resultMatrix = DenseMatrix.zeros[Double](dim,trainingPoints.rows)
 	for (col <- (0 until trainingPoints.rows)){
 	  resultMatrix(::,col) := kernelDer(testPoint,trainingPoints(col,::).toDenseVector)
 	}
-	resultMatrix
+	resultMatrix*/
+	buildKernelDerMatrix(kernelDer,testPoint,trainingPoints,true)
   }
-  
+
+  private def trainTestDerMatrix(kernelDer:kernelDerivative,testPoint:DenseVector[Double],
+								 trainingPoints:DenseMatrix[Double]):DenseMatrix[Double] = {
+	/*val dim = testPoint.length
+	val resultMatrix = DenseMatrix.zeros[Double](trainingPoints.rows,dim)
+	for (row <- (0 until trainingPoints.rows)){
+	  resultMatrix(row,::) := kernelDer(trainingPoints(row,::).toDenseVector,testPoint)
+	}
+	resultMatrix */
+	buildKernelDerMatrix(kernelDer,testPoint,trainingPoints,false)
+  }
+
   /*grid(i,::) - i'th d-dimensional point*/
   def evaluateGridPoints(grid:DenseMatrix[Double],func:objectiveFunction):DenseVector[Double] = {
 	(0 until grid.rows).foldLeft(DenseVector.zeros[Double](grid.rows)){

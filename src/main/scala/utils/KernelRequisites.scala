@@ -98,9 +98,9 @@ object KernelRequisites {
 		(KernelRequisites.featureVector, KernelRequisites.featureVector) => DenseVector[Double] = {
 	  {case (vec1,vec2) =>
 		val diff = (vec1 - vec2)
-		val prodOfDiffs = diff dot diff
-		val a1:Double = alpha*exp(-0.5*gamma*gamma*(prodOfDiffs))
-		if (afterFirstArg){diff :* (-1*gamma*gamma*a1)} else {diff :* (-1*gamma*gamma*a1)}
+		val prodOfDiffs:Double = diff dot diff
+		val a1:Double = alpha*exp(-0.5*gamma*gamma*prodOfDiffs)
+		if (afterFirstArg){diff :* ((-1.)*gamma*gamma*a1)} else {diff :* gamma*gamma*a1}
 	  }
 	}
   }
