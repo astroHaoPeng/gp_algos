@@ -6,46 +6,34 @@ import gp.regression.GpPredictor
 import gp.optimization.GPOptimizer.GPOInput
 import breeze.linalg.DenseVector
 import utils.NumericalUtils.Precision
-import breeze.numerics.{sin, log, cos, sqrt}
+import breeze.numerics.sqrt
+import org.junit.runner.RunWith
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
+import org.springframework.test.context.{TestContextManager, ContextConfiguration}
+import org.springframework.beans.factory.annotation.Autowired
 
 /**
  * Created by mjamroz on 18/04/14.
  */
+
+@RunWith(classOf[SpringJUnit4ClassRunner])
+@ContextConfiguration(locations = Array("classpath:config/spring-context.xml"))
 class GPOptimizerTest extends WordSpec {
 
-  import Optimization._
+  import OptimizationUtils.Functions1D._
+  import OptimizationUtils.Functions2D._
 
   implicit val precision = Precision(p = 0.0001)
 
-  val quadraticFunction: objectiveFunction = {
-	point => -2 * point(0) * point(0) + 6 * point(0) + 5
-  }
+  new TestContextManager(this.getClass).prepareTestInstance(this)
 
-  val strangeFunc: objectiveFunction = {
-	point =>   cos(log(point(0)*point(0))) * sin(point(0)*point(0))
-  }
-
-  val xSinXFunc: objectiveFunction = {
-	point => point(0) + sin(point(0))
-  }
-
-  val strangeFunc1: objectiveFunction = {
-	point => val x = point(0); /*x + sin(x*x) - cos(x) */ x + sin(0.5*x) - cos(2.0*x)
-  }
-
-  //TODO - single kernel configuration in all tests
-  val (alpha, gamma, beta) = (1., 1., sqrt(0.00125))
-  //val (alpha,gamma,beta) = (1.,1.,sqrt(0.00125))
-  //val (alpha,gamma,beta) = (164.52695987617062, 2.412787119003772, sqrt(0.00125))
-  val defaultRbfParams: GaussianRbfParams = GaussianRbfParams(alpha = alpha, gamma = gamma, beta = beta)
-  val gaussianKernel = GaussianRbfKernel(defaultRbfParams)
-  val predictor = new GpPredictor(gaussianKernel)
-  val gpoInput = GPOInput(ranges = IndexedSeq(-6 to 6), mParam = 50, cParam = 5, kParam = 2.)
-  val gpOptimizer = new GPOptimizer(predictor, noise = None)
+  @Autowired
+  var gpOptimizer:GPOptimizer = _
 
   "GPOptimizer" should {
 
 	"create a properly bounded point grid and evaluate it at the beginning" in {
+	  val gpoInput = GPOInput(ranges = IndexedSeq(-6 to 6), mParam = 50, cParam = 5, kParam = 2.)
 	  val grid = gpOptimizer.prepareGrid(gpoInput.ranges)
 	  assert(grid.rows == 3)
 	  (0 until grid.rows).forall{
@@ -57,8 +45,15 @@ class GPOptimizerTest extends WordSpec {
 	}
 
 	"find the optimum of simple quadratic 1D function" in {
-	  val (optimalSolution, optimalValue) = gpOptimizer.maximize(strangeFunc1, gpoInput)
+	  val gpoInput = GPOInput(ranges = IndexedSeq(-6 to 6), mParam = 50, cParam = 5, kParam = 2.)
+	  val (optimalSolution, optimalValue) = gpOptimizer.minimize(strangeFunc1, gpoInput)
 	  println(s"optimal solution = ${DenseVector(optimalSolution)} , optimal value = ${optimalValue}")
+	}
+
+	"find the optimum of rastrigin 2D function" in {
+	  val gpoInput = GPOInput(ranges = IndexedSeq(-5 to 5,-5 to 5), mParam = 75, cParam = 10, kParam = 2.)
+	  val (optimalSolution, optimalValue) = gpOptimizer.minimize(rastriginFunc, gpoInput)
+	  println(s"Rastr - optimal solution = ${DenseVector(optimalSolution)} , optimal value = ${optimalValue}")
 	}
 
   }

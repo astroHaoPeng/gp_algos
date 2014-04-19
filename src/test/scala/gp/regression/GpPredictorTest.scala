@@ -6,16 +6,26 @@ import utils.KernelRequisites.{GaussianRbfKernel, GaussianRbfParams}
 import breeze.linalg.{DenseVector, DenseMatrix}
 import utils.{NumericalUtils, IOUtilities}
 import gp.regression.GpPredictor.PredictionInput
+import org.junit.runner.RunWith
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
+import org.springframework.test.context.{TestContextManager, ContextConfiguration}
+import org.springframework.beans.factory.annotation.Autowired
 
 /**
  * Created by mjamroz on 07/04/14.
  */
+
+@RunWith(classOf[SpringJUnit4ClassRunner])
+@ContextConfiguration(locations = Array("classpath:config/spring-context.xml"))
 class GpPredictorTest extends WordSpec with BeforeAndAfterAll{
 
   import NumericalUtils._
 
+  new TestContextManager(this.getClass).prepareTestInstance(this)
+
   implicit val precision = Precision(p = 0.01)
 
+  /*
   //val (alpha,gamma,beta) = (exp(6.1),0.1,sqrt(0.0015))
   //val (alpha,gamma,beta) = (228.1978744433493, 0.11759427535572213,sqrt(0.0015))
   val (alpha,gamma,beta) = ( 1.3, 0.10111457140526733,sqrt(0.0015))
@@ -23,6 +33,7 @@ class GpPredictorTest extends WordSpec with BeforeAndAfterAll{
   //val (alpha,gamma,beta) = (164.52695987617062, 2.412787119003772, sqrt(0.00125))
   val defaultRbfParams:GaussianRbfParams = GaussianRbfParams(alpha = alpha,gamma = gamma,beta = beta)
   val gaussianKernel = GaussianRbfKernel(defaultRbfParams)
+  */
 
   var trainData:DenseMatrix[Double] = _
   var targets:DenseVector[Double] = _
@@ -33,7 +44,9 @@ class GpPredictorTest extends WordSpec with BeforeAndAfterAll{
   //#99 example - 43.80
   val testExample1 = DenseVector( 0.08187,   0.00,   2.890,  0.,  0.4450,  7.8200,  36.90,  3.4952,   2.,  276.0,
 	18.00, 393.53,   3.57)
-  val gpPredictor = new GpPredictor(gaussianKernel)
+
+  @Autowired
+  var gpPredictor:GpPredictor = _
 
   override def beforeAll = {
 	val data = IOUtilities.csvFileToDenseMatrix("boston.csv",sep=' ')
@@ -46,7 +59,7 @@ class GpPredictorTest extends WordSpec with BeforeAndAfterAll{
 	"predict the output of train example equal to the true value in noiseless case" in {
 
 	  	val input = PredictionInput(trainingData = trainData,testData = testExample.toDenseMatrix,
-		  sigmaNoise = None,targets = targets,initHyperParams = defaultRbfParams)
+		  sigmaNoise = None,targets = targets,initHyperParams = gpPredictor.kernelFunc.hyperParams)
 	    val (distr,logLikelihood) = gpPredictor.predict(input)
 	  	val (testDistr,_) = gpPredictor.predict(
 		  input.copy(trainingData = trainData(0 to -3,::),testData = trainData(-2 to -1,::),targets = targets(0 to -3)))

@@ -26,7 +26,11 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double]) extends Optimize
 
   val hyperParams = gpPredictor.kernelFunc.hyperParams
 
-  def minimize(objFunc:objectiveFunction, params: GPOInput): (Array[Double], Double) = ???
+  def minimize(objFunc:objectiveFunction, params: GPOInput): (Array[Double], Double) = {
+	val funcToMaximize:objectiveFunction = {point => -objFunc(point)}
+	val (optimum,optimumValue) = maximize(funcToMaximize,params)
+	(optimum,-optimumValue)
+  }
 
   def maximize(func:objectiveFunction, params: GPOInput): (Array[Double], Double) = {
 
