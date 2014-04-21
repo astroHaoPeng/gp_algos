@@ -18,22 +18,26 @@ import gp.classification.GpClassifier.ClassifierInput
  */
 object HyperParamsOptimization {
 
+  import optimization.Optimization._
+
   val apacheLogger = LoggerFactory.getLogger(classOf[HyperParamsOptimization.HyperParameterOptimizer])
 
   trait HyperParameterOptimizer {
 
-	def optimizeHyperParams(optimizationInput:ClassifierInput):KernelFuncHyperParams
-
+	def optimizeHyperParams(optimizationInput:ClassifierInput): KernelFuncHyperParams
   }
 
-  class BreezeLBFGSOptimizer(marginalLikelihoodEvaluator:MarginalLikelihoodEvaluator) extends HyperParameterOptimizer{
+
+  class GradientHyperParamsOptimizer(marginalLikelihoodEvaluator:MarginalLikelihoodEvaluator,
+									 gradOptimizer:GradientBasedOptimizer)
+		extends HyperParameterOptimizer {
 
 	def optimizeHyperParams(optimizationInput:ClassifierInput): KernelFuncHyperParams = {
 
 	  val (trainData,targets) = (optimizationInput.trainInput,optimizationInput.targets)
 
 	  /*diffFunction will be minimized so it needs to be equal to -logLikelihood*/
-	  val diffFunction = new DiffFunction[DenseVector[Double]] {
+	  /*val diffFunction = new DiffFunction[DenseVector[Double]] {
 
 		def calculate(hyperParams: DenseVector[Double]): (Double, DenseVector[Double]) = {
 
@@ -42,12 +46,24 @@ object HyperParamsOptimization {
 		  apacheLogger.info(s"Current solution is = ${hyperParams}, objective function value = ${-logLikelihood}")
 		  (-logLikelihood,derivatives :* (-1.))
 		}
-	  }
+	  } */
 
+	  val funcWithGradient:objectiveFunctionWithGradient = {hyperParams:Array[Double] =>
+		val (logLikelihood,derivatives) = marginalLikelihoodEvaluator.logLikelihood(trainData,targets,
+		  DenseVector(hyperParams))
+		assert(hyperParams.length == derivatives.length)
+		apacheLogger.info(s"Current solution is = ${hyperParams}, objective function value = ${-logLikelihood}")
+		(logLikelihood,derivatives.toArray)
+	  }
+	  /*
 	  val lbfgs = new LBFGS[DenseVector[Double]](maxIter = 10,m = 3)
-	  val optimizedParams = lbfgs.minimize(diffFunction,optimizationInput.initHyperParams.toDenseVector)
-	  optimizationInput.initHyperParams.fromDenseVector(optimizedParams)
+	  val optimizedParams = lbfgs.minimize(diffFunction,optimizationInput.initHyperParams.toDenseVector) */
+	  val optimizedParams = gradOptimizer.maximize(funcWithGradient,
+		optimizationInput.initHyperParams.toDenseVector.toArray)
+
+	  optimizationInput.initHyperParams.fromDenseVector(DenseVector(optimizedParams))
 	}
+
   }
 
   class ApacheCommonsOptimizer(marginalLikelihoodEvaluator:MarginalLikelihoodEvaluator) extends HyperParameterOptimizer{

@@ -1,12 +1,12 @@
 package gp.optimization
 
+import optimization.Optimization
 import Optimization._
-import GPOptimizer._
-import breeze.linalg.{max, DenseVector, DenseMatrix}
+import breeze.linalg.{DenseVector, DenseMatrix}
 import scala.util.Random
 import gp.regression.GpPredictor
 import breeze.numerics.sqrt
-import breeze.optimize.{LBFGS, DiffFunction}
+import breeze.optimize.DiffFunction
 import utils.MatrixUtils._
 import gp.optimization.GPOptimizer.GPOInput
 import scala.Some
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory
 /**
  * Created by mjamroz on 14/04/14.
  */
-class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double]) extends Optimizer[(Array[Double],Double),GPOInput]{
+class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer:GradientBasedOptimizer) {
 
   val logger = LoggerFactory.getLogger(classOf[GPOptimizer])
 
@@ -75,28 +75,26 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double]) extends Optimize
 	val derAfterFirstArg:kernelDerivative = gpPredictor.kernelFunc.gradient(afterFirstArg = true)
 	val derAfterSecondArg:kernelDerivative = gpPredictor.kernelFunc.gradient(afterFirstArg = false)
 
-	val diffFunction = new DiffFunction[DenseVector[Double]] {
-	  override def calculate(testPoint: DenseVector[Double]): (Double, DenseVector[Double]) = {
-		val (gaussianPosteriorDistr,vMatrix) = gpPredictor.computePosterior(pointSet,testPoint.toDenseMatrix,ll,
-		  alphaVec,gpPredictor.kernelFunc)
-		assert(vMatrix.cols == 1)
-		require(gaussianPosteriorDistr.mean.length == 1 && gaussianPosteriorDistr.sigma.rows == 1 && gaussianPosteriorDistr.sigma.cols == 1)
-		val ucbObjFunctionValue = gaussianPosteriorDistr.mean(0) + kParam*sqrt(gaussianPosteriorDistr.sigma(0,0))
-		val testTrainDerMtx:DenseMatrix[Double] = testTrainDerMatrix(derAfterFirstArg,testPoint,pointSet)
-		val trainTestDerMtx:DenseMatrix[Double] = trainTestDerMatrix(derAfterSecondArg,testPoint,pointSet)
-		val derAfterMean = testTrainDerMtx * alphaVec
-		val derAfterVarFirst:DenseVector[Double] = derAfterFirstArg(testPoint,testPoint)
-		val vAfterXDerMatrix:DenseMatrix[Double] = inversedL * trainTestDerMtx
-		assert(vAfterXDerMatrix.rows == pointSet.rows && vAfterXDerMatrix.cols == testPoint.length)
-		val derAfterVar:DenseVector[Double] = derAfterVarFirst - ((vAfterXDerMatrix.t * vMatrix.toDenseVector) :* 2.)
-		val coeff:Double = (kParam/(2*sqrt(gaussianPosteriorDistr.sigma(0,0))))
-		val ucbDer:DenseVector[Double] = derAfterMean + (derAfterVar :* coeff)
-		(-ucbObjFunctionValue,ucbDer :* (-1.))
-	  }
+	val funcForOptimizer:objectiveFunctionWithGradient = {testPoint =>
+	  val pointAsDv:DenseVector[Double] = DenseVector(testPoint)
+	  val (gaussianPosteriorDistr,vMatrix) = gpPredictor.computePosterior(pointSet,pointAsDv.toDenseMatrix,ll,
+		alphaVec,gpPredictor.kernelFunc)
+	  assert(vMatrix.cols == 1)
+	  require(gaussianPosteriorDistr.mean.length == 1 && gaussianPosteriorDistr.sigma.rows == 1 && gaussianPosteriorDistr.sigma.cols == 1)
+	  val ucbObjFunctionValue = gaussianPosteriorDistr.mean(0) + kParam*sqrt(gaussianPosteriorDistr.sigma(0,0))
+	  val testTrainDerMtx:DenseMatrix[Double] = testTrainDerMatrix(derAfterFirstArg,pointAsDv,pointSet)
+	  val trainTestDerMtx:DenseMatrix[Double] = trainTestDerMatrix(derAfterSecondArg,pointAsDv,pointSet)
+	  val derAfterMean = testTrainDerMtx * alphaVec
+	  val derAfterVarFirst:DenseVector[Double] = derAfterFirstArg(pointAsDv,pointAsDv)
+	  val vAfterXDerMatrix:DenseMatrix[Double] = inversedL * trainTestDerMtx
+	  assert(vAfterXDerMatrix.rows == pointSet.rows && vAfterXDerMatrix.cols == pointAsDv.length)
+	  val derAfterVar:DenseVector[Double] = derAfterVarFirst - ((vAfterXDerMatrix.t * vMatrix.toDenseVector) :* 2.)
+	  val coeff:Double = (kParam/(2*sqrt(gaussianPosteriorDistr.sigma(0,0))))
+	  val ucbDer:DenseVector[Double] = derAfterMean + (derAfterVar :* coeff)
+	  (ucbObjFunctionValue,ucbDer.toArray)
 	}
-	val lbfgs = new LBFGS[DenseVector[Double]](maxIter = 30,m = 3)
-	val optimalSolution = lbfgs.minimize(diffFunction,initPoint)
-	(-diffFunction(optimalSolution),optimalSolution)
+	val optimalSolution = gradientOptimizer.maximize(funcForOptimizer,initPoint.toArray)
+	(funcForOptimizer(optimalSolution)._1,DenseVector(optimalSolution))
   }
 
   private def buildKernelDerMatrix(kernelDer:kernelDerivative,input1:DenseVector[Double],
@@ -119,23 +117,13 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double]) extends Optimize
 
   private def testTrainDerMatrix(kernelDer:kernelDerivative,
 								 testPoint:DenseVector[Double],trainingPoints:DenseMatrix[Double]):DenseMatrix[Double] = {
-	/*val dim = testPoint.length
-	val resultMatrix = DenseMatrix.zeros[Double](dim,trainingPoints.rows)
-	for (col <- (0 until trainingPoints.rows)){
-	  resultMatrix(::,col) := kernelDer(testPoint,trainingPoints(col,::).toDenseVector)
-	}
-	resultMatrix*/
+
 	buildKernelDerMatrix(kernelDer,testPoint,trainingPoints,true)
   }
 
   private def trainTestDerMatrix(kernelDer:kernelDerivative,testPoint:DenseVector[Double],
 								 trainingPoints:DenseMatrix[Double]):DenseMatrix[Double] = {
-	/*val dim = testPoint.length
-	val resultMatrix = DenseMatrix.zeros[Double](trainingPoints.rows,dim)
-	for (row <- (0 until trainingPoints.rows)){
-	  resultMatrix(row,::) := kernelDer(trainingPoints(row,::).toDenseVector,testPoint)
-	}
-	resultMatrix */
+
 	buildKernelDerMatrix(kernelDer,testPoint,trainingPoints,false)
   }
 

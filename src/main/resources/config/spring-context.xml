@@ -19,8 +19,20 @@
         <constructor-arg name="kernelFunc" ref="rbfKernel" />
     </bean>
 
+    <bean id="stopCriterion" class="gp.classification.EpParameterEstimator$AvgBasedStopCriterion">
+        <constructor-arg name="eps" value="0.01" />
+    </bean>
+
+    <bean id="gpClassifier" class="gp.classification.GpClassifier">
+        <constructor-arg name="kernelFun" ref="rbfKernel" />
+        <constructor-arg name="stopCriterion" ref="stopCriterion" />
+    </bean>
+
+    <bean id="breezeLbfgsOptimizer" class="optimization.Optimization$BreezeLbfgsOptimizer" />
+
     <bean id="gpOptimizer" class="gp.optimization.GPOptimizer">
         <constructor-arg name="gpPredictor" ref="gpPredictor" />
         <constructor-arg name="noise" value="#{objectCreator.none()}" />
+        <constructor-arg name="gradientOptimizer" ref="breezeLbfgsOptimizer" />
     </bean>
 </beans>

@@ -1,6 +1,7 @@
 package gp.optimization
 
-import gp.optimization.Optimization._
+import optimization.Optimization
+import Optimization._
 import breeze.numerics._
 
 /**

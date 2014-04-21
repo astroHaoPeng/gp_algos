@@ -3,12 +3,11 @@ package gp.datasetstests
 import breeze.linalg.{DenseVector, DenseMatrix}
 import utils.IOUtilities
 import gp.classification._
-import utils.KernelRequisites.{GaussianRbfParams, GaussianRbfKernel}
-import gp.classification.GpClassifier.{ClassifierInput, AfterEstimationClassifierInput}
-import gp.classification.MarginalLikelihoodEvaluator.HyperParameterOptimInput
-import gp.classification.HyperParamsOptimization.{ApacheCommonsOptimizer, BreezeLBFGSOptimizer}
+import utils.KernelRequisites.GaussianRbfParams
+import gp.classification.GpClassifier.ClassifierInput
+import gp.classification.HyperParamsOptimization.{ApacheCommonsOptimizer, GradientHyperParamsOptimizer}
 import gp.classification.EpParameterEstimator.AvgBasedStopCriterion
-import breeze.numerics.{sqrt, exp}
+import breeze.numerics.exp
 import org.slf4j.LoggerFactory
 import scala.Some
 import gp.classification.GpClassifier.AfterEstimationClassifierInput
@@ -16,6 +15,7 @@ import utils.KernelRequisites.GaussianRbfParams
 import gp.classification.GpClassifier.ClassifierInput
 import utils.KernelRequisites.GaussianRbfKernel
 import gp.classification.MeshHyperParamsLogLikelihoodEvaluator.HyperParamsMeshValues
+import optimization.Optimization.BreezeLbfgsOptimizer
 
 /**
  * Created by mjamroz on 14/03/14.
@@ -112,7 +112,7 @@ class CancerClassificationTest {
 	val input:DenseMatrix[Double] = wholeDataSet(::,0 until (wholeDataSet.cols-1))
 	val targets:DenseVector[Int] = wholeDataSet(::,wholeDataSet.cols-1).mapValues(_.toInt)
 	val marginalEvaluator = new MarginalLikelihoodEvaluator(stopCriterion,rbfKernel)
-	val hyperParamOptimizer = new BreezeLBFGSOptimizer(marginalEvaluator)
+	val hyperParamOptimizer = new GradientHyperParamsOptimizer(marginalEvaluator,new BreezeLbfgsOptimizer)
 	//val hyperParamOptimizer = new ApacheCommonsOptimizer(marginalEvaluator)
 	val optimizedParams = hyperParamOptimizer.optimizeHyperParams(
 	  ClassifierInput(trainInput = input,targets = targets,initHyperParams = rbfKernel.rbfParams))

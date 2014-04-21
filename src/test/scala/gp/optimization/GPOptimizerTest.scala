@@ -51,7 +51,7 @@ class GPOptimizerTest extends WordSpec {
 	}
 
 	"find the optimum of rastrigin 2D function" in {
-	  val gpoInput = GPOInput(ranges = IndexedSeq(-5 to 5,-5 to 5), mParam = 75, cParam = 10, kParam = 2.)
+	  val gpoInput = GPOInput(ranges = IndexedSeq(-5 to 5,-5 to 5), mParam = 100, cParam = 10, kParam = 2.)
 	  val (optimalSolution, optimalValue) = gpOptimizer.minimize(rastriginFunc, gpoInput)
 	  println(s"Rastr - optimal solution = ${DenseVector(optimalSolution)} , optimal value = ${optimalValue}")
 	}
