@@ -20,6 +20,10 @@ object StatsUtils {
 	def dim:Int = mean.length
   }
 
+  object GaussianDistribution {
+	def standard = GaussianDistribution(mean = DenseVector(0.),sigma = DenseMatrix((1.)))
+  }
+
   class NormalDistributionSampler(normalDistr:GaussianDistribution) {
 
 	import NormalDistributionSampler._
@@ -45,7 +49,8 @@ object StatsUtils {
 	import NormalDistributionSampler._
 
 	val multiVariateNormalDistr = new MultivariateNormalDistribution(means,covs)
-	multiVariateNormalDistr.density(at.data)
+	val density = multiVariateNormalDistr.density(at.toArray)
+	density
   }
 
   def logGaussianDensity(at:DenseVector[Double],means:DenseVector[Double],covs:DenseMatrix[Double]):Double = {
@@ -81,6 +86,10 @@ object StatsUtils {
 
 	implicit def arrayToDenseVector(arr:Array[Double]):DenseVector[Double] = {
 	  DenseVector(arr)
+	}
+
+	def sample(gaussianDistribution:GaussianDistribution):DenseVector[Double] = {
+	  new NormalDistributionSampler(gaussianDistribution).sample
 	}
 
   }

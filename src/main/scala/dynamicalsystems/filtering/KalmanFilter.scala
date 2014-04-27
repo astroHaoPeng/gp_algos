@@ -9,6 +9,7 @@ class KalmanFilter {
 
   import KalmanFilter._
   import utils.StatsUtils._
+  import SsmTypeDefinitions._
 
   def inferHiddenState(filteringInput:FilteringInput,
 					   optionalInput:Option[OptionalInput],computeLL:Boolean):FilteringOutput = {
@@ -110,7 +111,7 @@ class KalmanFilter {
 
 object KalmanFilter{
 
-  type transitionMatrix = DenseMatrix[Double]
+  import SsmTypeDefinitions._
 
   /*
    * Z_t = A*Z_(t-1) + B*u_t + Q_t

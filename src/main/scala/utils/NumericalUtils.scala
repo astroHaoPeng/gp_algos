@@ -19,4 +19,20 @@ object NumericalUtils {
 	}
   }
 
+  trait vectorFunc {
+
+	def apply[T <: (Double) => Double](dv:DenseVector[Double])(func:T):DenseVector[Double] = {
+	  dv.map(func(_))
+	}
+
+  }
+
+  object sin extends vectorFunc {
+
+	def apply(dv:DenseVector[Double]):DenseVector[Double] = {
+		super.apply(dv){value:Double => math.sin(value)}
+	}
+
+  }
+
 }
