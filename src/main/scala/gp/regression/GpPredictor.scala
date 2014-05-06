@@ -17,7 +17,7 @@ class GpPredictor(val kernelFunc:KernelFunc) {
 
   import scala.math._
   import utils.MatrixUtils._
-
+  import GpPredictor._
 
   type predictOutput = (DenseVector[Double],Double)
 
@@ -40,6 +40,11 @@ class GpPredictor(val kernelFunc:KernelFunc) {
 	assert(fMean.length == testDataDim && fVariance.rows == testDataDim && fVariance.cols == testDataDim)
 	val logLikelihoodVal:Double = logLikelihood(alphaVec,l,input.targets)
 	(GaussianDistribution(mean = fMean,sigma = fVarianceWithNoise),logLikelihoodVal)
+  }
+
+  def computePosterior(trainingData:DenseMatrix[Double],testData:DenseMatrix[Double],l:DenseMatrix[Double],
+					   alphaVec:DenseVector[Double]):(GaussianDistribution,DenseMatrix[Double]) = {
+	computePosterior(trainingData,testData,l,alphaVec,kernelFunc)
   }
 
   def computePosterior(trainingData:DenseMatrix[Double],testData:DenseMatrix[Double],l:DenseMatrix[Double],
@@ -80,10 +85,20 @@ class GpPredictor(val kernelFunc:KernelFunc) {
 	predict(input.copy(initHyperParams = optimizedParams))
   }
 
+  def preComputeComponents(trainingData:DenseMatrix[Double],
+						   sigmaNoise:Option[Double],targets:DenseVector[Double]):
+  afterLearningComponents = {
+
+	preComputeComponents(trainingData,kernelFunc.hyperParams,sigmaNoise,targets)
+  }
+
+
   def preComputeComponents(trainingData:DenseMatrix[Double],hyperParams:KernelFuncHyperParams,
 								   sigmaNoise:Option[Double],targets:DenseVector[Double]):
-  	(DenseMatrix[Double],DenseVector[Double],Option[DenseMatrix[Double]]) = {
+  	afterLearningComponents = {
 
+	require(trainingData.rows == targets.length,
+	  "Number of objects in training data matrix should be equal to targets vector length")
 	val trainingDataDim = trainingData.rows
 	val newKernelFunc = kernelFunc.changeHyperParams(hyperParams.toDenseVector)
 	val kernelMatrixWithoutNoise:DenseMatrix[Double] = buildKernelMatrix(newKernelFunc,trainingData)
@@ -110,6 +125,10 @@ class GpPredictor(val kernelFunc:KernelFunc) {
 }
 
 object GpPredictor {
+
+  /*_1 - L - cholesky decomposition of kernel matrix, _2 - alphaVector = L.t \ (L \ targets),
+  _3 - noise diag matrix = noise * I*/
+  type afterLearningComponents = (DenseMatrix[Double],DenseVector[Double],Option[DenseMatrix[Double]])
 
   val apacheLogger:Logger = LoggerFactory.getLogger(classOf[GpPredictor])
 

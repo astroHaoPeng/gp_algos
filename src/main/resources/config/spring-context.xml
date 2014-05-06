@@ -6,8 +6,8 @@
     <bean id="objectCreator" class="utils.TestingUtils$ScalaObjectsCreator" />
 
     <bean id="defaultRbfParams" class="utils.KernelRequisites$GaussianRbfParams">
-        <constructor-arg name="alpha" value="1.0" />
-        <constructor-arg name="gamma" value="1.0" />
+        <constructor-arg name="alpha" value="1.3" />
+        <constructor-arg name="gamma" value="0.1011" />
         <constructor-arg name="beta" value="#{ T(java.lang.Math).sqrt(0.00125) }" />
     </bean>
 

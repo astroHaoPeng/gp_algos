@@ -3,11 +3,13 @@ package dynamicalsystems.filtering
 import breeze.linalg.{cholesky, inv, DenseMatrix, DenseVector}
 import breeze.numerics.sqrt
 import utils.StatsUtils.GaussianDistribution
+import gp.optimization.GPOptimizer
+import gp.optimization.GPOptimizer.GPOInput
 
 /**
  * Created by mjamroz on 01/04/14.
  */
-class UnscentedKalmanFilter {
+class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
 
   import utils.StatsUtils._
   import UnscentedKalmanFilter._
@@ -23,8 +25,10 @@ class UnscentedKalmanFilter {
 	var ll:Option[Double] = if (computeLL){Some(0.)} else {None}
 	val optionalInput = input.u.getOrElse(DenseMatrix.zeros[Double](1, tMax))
 	val (hiddenMeans, hiddenCovs) = (DenseMatrix.zeros[Double](hiddenSpaceSize, tMax), new Array[transitionMatrix](tMax))
-	hiddenMeans(::, 0) := input.initMean;
+	hiddenMeans(::, 0) := input.initMean
 	hiddenCovs(0) = input.initCov
+	val inferenceContext = UkfInferenceContext(iteration = 0,hiddenMeans = hiddenMeans,
+	  hiddenCovs = hiddenCovs,firstTransformFromIteration = null,secondTransformFromIteration = null)
 
 	for (t <- (1 until tMax).toStream) {
 
@@ -34,15 +38,18 @@ class UnscentedKalmanFilter {
 	  }
 	  val prevGaussianDistr = GaussianDistribution(mean = hiddenMeans(::, t - 1), sigma = hiddenCovs(t - 1))
 	  val firstUTransformOut: UnscentedTransformOutput = unscentedTransform(prevGaussianDistr, unscentedParams)(hiddenMappingFunc)
+	  val qNoise = input.qNoise(inferenceContext.copy(iteration = t,firstTransformFromIteration = firstUTransformOut))
 	  val probab_z_t_given_prev_y: GaussianDistribution = firstUTransformOut.
-		distribution.copy(sigma = firstUTransformOut.distribution.sigma + input.qNoise(t))
+		distribution.copy(sigma = firstUTransformOut.distribution.sigma + qNoise)
 	  val obsMappingFunc: DenseVector[Double] => DenseVector[Double] = {
 		point => input.ssmModel.observationFuncImpl(point, t)
 	  }
 	  val secondUTransformOut = unscentedTransform(probab_z_t_given_prev_y, unscentedParams)(obsMappingFunc)
 	  val distrAfterTransform = secondUTransformOut.distribution
+	  val rNoise = input.rNoise(inferenceContext.copy(iteration = t,
+		firstTransformFromIteration = firstUTransformOut,secondTransformFromIteration = secondUTransformOut))
 	  val probab_y_t_given_z_t: GaussianDistribution = GaussianDistribution(mean = distrAfterTransform.mean,
-		sigma = distrAfterTransform.sigma + input.rNoise(t))
+		sigma = distrAfterTransform.sigma + rNoise)
 
 	  val (zTransformed,yTransformed,weights) =
 		(firstUTransformOut.transformedSigmaPoints,secondUTransformOut.transformedSigmaPoints,firstUTransformOut.weights)
@@ -79,10 +86,10 @@ class UnscentedKalmanFilter {
 	val dim = normalDistribution.dim
 	val (sigmaPoints, lambda) = (DenseMatrix.zeros[Double](2 * dim + 1, dim), params.alpha * params.alpha * (d + params.kappa) - d)
 	sigmaPoints(0, ::) := mean
-	for (row <- (0 until dim)) {
-	  val sqrtCoeff: DenseVector[Double] = lowerTriangular(::, row) :* math.sqrt(d + lambda)
-	  sigmaPoints(row + 1, ::) := mean + sqrtCoeff
-	  sigmaPoints(row + 1 + dim, ::) := mean - sqrtCoeff
+	for (col <- (0 until dim)) {
+	  val sqrtCoeff: DenseVector[Double] = lowerTriangular(::, col) :* math.sqrt(d + lambda)
+	  sigmaPoints(col + 1, ::) := mean + sqrtCoeff
+	  sigmaPoints(col + 1 + dim, ::) := mean - sqrtCoeff
 	}
 
 	val (w_0_m, w_0_c, w_i_c) = (lambda / (d + lambda),
@@ -104,12 +111,29 @@ class UnscentedKalmanFilter {
 		val diff: DenseVector[Double] = transformedSigmaPoints(index, ::).toDenseVector - finalMean
 		tempCov :+ ((diff * diff.t) :* w_i_c)
 	}
-	val distr = GaussianDistribution(mean = finalMean.toDenseVector, sigma = finalCovMatrix)
+	val distr = GaussianDistribution(mean = finalMean, sigma = finalCovMatrix)
 	UnscentedTransformOutput(distribution = distr, weights = (w_0_m, w_0_c, w_i_c),
 	  sigmaPoints = sigmaPoints, transformedSigmaPoints = transformedSigmaPoints)
   }
 
-  def logLikelihood(y_t:DenseVector[Double],probab_y_t_given_z_t:GaussianDistribution):Double = {
+  def inferWithParamOptimization(input:UnscentedFilteringInput,
+								 initParams:Option[UnscentedTransformParams]):FilteringOutput = {
+
+	val objFunction:optimization.Optimization.objectiveFunction = {
+	  point:Array[Double] =>
+		val unscentedParams = UnscentedTransformParams.fromVector(point)
+		val out = inferHiddenState(input,Some(unscentedParams),true)
+	  	/*We want to maximize log likelihood */
+		out.logLikelihood.get
+	}
+	val rangeForParam = 0 to 5
+	val gpoInput = GPOInput(mParam = 50,cParam = 10,kParam = 2.,
+	  ranges = IndexedSeq(rangeForParam,rangeForParam,rangeForParam))
+	val (optimizedParams,_) = gpOptimizer.maximize(objFunction,gpoInput)
+	inferHiddenState(input,Some(UnscentedTransformParams.fromVector(optimizedParams)),true)
+  }
+
+  private def logLikelihood(y_t:DenseVector[Double],probab_y_t_given_z_t:GaussianDistribution):Double = {
 	val returnVal = logGaussianDensity(at = y_t,means = probab_y_t_given_z_t.mean,covs = probab_y_t_given_z_t.sigma)
 	returnVal
   }
@@ -121,7 +145,11 @@ object UnscentedKalmanFilter {
 
   import SsmTypeDefinitions._
 
-  case class UnscentedTransformParams(alpha: Double, beta: Double, kappa: Double)
+  case class UnscentedTransformParams(alpha: Double, beta: Double, kappa: Double){
+
+	def toVector:Array[Double] = Array[Double](alpha,beta,kappa)
+
+  }
 
   object UnscentedTransformParams {
 
@@ -129,6 +157,8 @@ object UnscentedKalmanFilter {
 
 	def defaultParams: UnscentedTransformParams = UnscentedTransformParams(alpha = 1., beta = 0., kappa = 2.)
 
+	def fromVector(arr:Array[Double]):UnscentedTransformParams =
+	  UnscentedTransformParams(alpha = arr(0),beta = arr(1),kappa = arr(2))
   }
 
   /*weights - (w_0_m,w_0_c,w_i_c)*/
@@ -140,6 +170,27 @@ object UnscentedKalmanFilter {
 									 observations: DenseMatrix[Double],
 									 u: Option[DenseMatrix[Double]],
 									 initMean: DenseVector[Double], initCov: DenseMatrix[Double],
-									 qNoise: Array[transitionMatrix], rNoise: Array[transitionMatrix])
+									 qNoise: noiseComputationFunc, rNoise: noiseComputationFunc )
+
+  object UnscentedFilteringInput {
+
+	def classicUkfNoise(qNoise:Array[transitionMatrix],rNoise:Array[transitionMatrix]):
+		(noiseComputationFunc,noiseComputationFunc) = {
+	  val qNoiseFunc:noiseComputationFunc = {context => qNoise(context.iteration)}
+	  val rNoiseFunc:noiseComputationFunc = {context => rNoise(context.iteration)}
+	  (qNoiseFunc,rNoiseFunc)
+	}
+
+  }
+
+
+  case class UkfInferenceContext(iteration:Int,hiddenMeans:DenseMatrix[Double],
+								 hiddenCovs:Array[SsmTypeDefinitions.transitionMatrix],
+								 firstTransformFromIteration:UnscentedTransformOutput,
+								 secondTransformFromIteration:UnscentedTransformOutput)
+
+  type noiseComputationFunc = UkfInferenceContext => DenseMatrix[Double]
+
+  type noiseObtainingMethod = Either[Array[transitionMatrix],noiseComputationFunc]
 
 }
