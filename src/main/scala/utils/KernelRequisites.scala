@@ -62,7 +62,7 @@ object KernelRequisites {
 
   	def apply(obj1:featureVector,obj2:featureVector,sameIndex:Boolean):Double = {
 	  val diff = (obj1 - obj2)
-	  val valWithoutNoise:Double = alpha*exp(-0.5*gamma*gamma*(diff dot diff))
+	  val valWithoutNoise:Double = alpha*alpha*exp(-0.5*gamma*gamma*(diff dot diff))
 	  val retValue = if (!sameIndex){valWithoutNoise} else {
 		valWithoutNoise + beta*beta
 	  }
@@ -77,8 +77,8 @@ object KernelRequisites {
 		val diff = (vec1 - vec2)
 		val prodOfDiffs = diff dot diff
 	    paramNum match {
-		  case 1 => exp(-0.5*gamma*gamma*prodOfDiffs)
-		  case 2 => alpha*exp(-0.5*gamma*gamma*prodOfDiffs)*(-1.)*gamma*prodOfDiffs
+		  case 1 => 2*alpha*exp(-0.5*gamma*gamma*prodOfDiffs)
+		  case 2 => alpha*alpha*exp(-0.5*gamma*gamma*prodOfDiffs)*(-1.)*gamma*prodOfDiffs
 		  case 3 => if (sameIndex){2*beta} else {0.}
 		}
 	}

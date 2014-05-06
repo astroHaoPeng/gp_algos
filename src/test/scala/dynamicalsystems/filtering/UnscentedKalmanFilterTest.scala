@@ -102,11 +102,13 @@ class UnscentedKalmanFilterTest extends WordSpec with SsmTestingUtils{
 	  val (hidden,obs) = generateSamples(seqLength)
 	  val gpUkf = new GPUnscentedKalmanFilter(gpOptimizer,gpPredictor)
 	  val ukfInput = ukfSinInput(obs,seqLength)
-	  val out =  gpUkf.inferHiddenState(ukfInput,None,hidden,true)
+	  val out =  gpUkf.inferHiddenState(ukfInput,None,hidden,true,false)
 	  assert(out.hiddenMeans.cols == seqLength)
 	  assert(out.hiddenMeans.rows == hidden.rows)
 	  assert(out.hiddenCovs.length == seqLength)
+	  val optimizedOut = gpUkf.inferHiddenState(ukfInput,None,hidden,true,true)
 	  println(s"Log likelihood = ${out.logLikelihood}")
+	  println(s"Log likelihood = ${optimizedOut.logLikelihood}")
 	}
 
   }

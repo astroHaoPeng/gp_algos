@@ -5,6 +5,7 @@ import gp.regression.GpPredictor.{BreezeLBFGSPredictionOptimizer, PredictionTrai
 import utils.StatsUtils.GaussianDistribution
 import utils.KernelRequisites.{KernelFuncHyperParams, KernelFunc}
 import org.slf4j.{Logger, LoggerFactory}
+import optimization.Optimization.BreezeLbfgsOptimizer
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,6 +19,7 @@ class GpPredictor(val kernelFunc:KernelFunc) {
   import scala.math._
   import utils.MatrixUtils._
   import GpPredictor._
+  import optimization._
 
   type predictOutput = (DenseVector[Double],Double)
 
@@ -79,6 +81,7 @@ class GpPredictor(val kernelFunc:KernelFunc) {
 	(ll,gradient)
   }
 
+  //TODO - use obtainOptimalHyperParams method
   def predictWithParamsOptimization(input:PredictionInput,optimizeNoise:Boolean):(GaussianDistribution,Double) = {
 	val optimizer = new BreezeLBFGSPredictionOptimizer(this,optimizeNoise)
 	val optimizedParams:KernelFuncHyperParams = optimizer.optimizerHyperParams(input)
@@ -90,6 +93,13 @@ class GpPredictor(val kernelFunc:KernelFunc) {
   afterLearningComponents = {
 
 	preComputeComponents(trainingData,kernelFunc.hyperParams,sigmaNoise,targets)
+  }
+
+  def preComputeComponentsWithHpOptimization(trainingData:DenseMatrix[Double],sigmaNoise:Option[Double],
+											 targets:DenseVector[Double]):
+  			(afterLearningComponents,KernelFuncHyperParams) = {
+	val optimalHyperParams:KernelFuncHyperParams = obtainOptimalHyperParams(trainingData,sigmaNoise,targets,false)
+	(preComputeComponents(trainingData,optimalHyperParams,sigmaNoise,targets),optimalHyperParams)
   }
 
 
@@ -120,6 +130,24 @@ class GpPredictor(val kernelFunc:KernelFunc) {
 	val a1 = -0.5*(targets dot alphaVector)
 	val a2 = 0.to(n-1).foldLeft[Double](0.){case (sum,indx) => sum + log(L(indx,indx))}
 	a1 - a2 - 0.5*n*log(2*Pi)
+  }
+
+  private def obtainOptimalHyperParams(trainingData:DenseMatrix[Double],sigmaNoise:Option[Double],
+									   targets:DenseVector[Double],optimizeNoise:Boolean):KernelFuncHyperParams = {
+
+	val breezeOptimizer = new BreezeLbfgsOptimizer
+	val initPoint:DenseVector[Double] = if (optimizeNoise){kernelFunc.hyperParams.toDenseVector} else{
+	  kernelFunc.hyperParams.toDenseVector(0 to -2)
+	}
+	val llObjFunction:Optimization.objectiveFunctionWithGradient = { currentParams =>
+	  	val hyperParams:KernelFuncHyperParams = kernelFunc.hyperParams.fromDenseVector(DenseVector(currentParams))
+		val ptInput = PredictionTrainingInput(trainingData = trainingData,targets = targets,
+			sigmaNoise = sigmaNoise,initHyperParams = kernelFunc.hyperParams)
+	  	val (value,gradient) = logLikelihoodWithDerivatives(ptInput,hyperParams,currentParams.length)
+	  	(value,gradient.toArray)
+	}
+	val optimalHyperParams = breezeOptimizer.maximize(llObjFunction,initPoint.toArray)
+	kernelFunc.hyperParams.fromDenseVector(DenseVector(optimalHyperParams))
   }
 
 }
@@ -158,6 +186,9 @@ object GpPredictor {
 
 	def optimizerHyperParams(predictionInput: PredictionInput): KernelFuncHyperParams = {
 
+	  val initPoint = predictionInput.initHyperParams.toDenseVector
+	  var (maximumPoint:DenseVector[Double],maximumVal) = (initPoint,Double.MinValue)
+
 	  /*diffFunction will be minimized so it needs to be equal to -logLikelihood*/
 	  val diffFunction = new DiffFunction[DenseVector[Double]] {
 
@@ -169,16 +200,20 @@ object GpPredictor {
 		  	hyperParams.length)
 		  assert(hyperParams.length == derivatives.length)
 		  apacheLogger.info(s"Current solution is = ${hyperParams}, objective function value = ${-logLikelihood}")
+		  if (logLikelihood > maximumVal){
+			maximumPoint = hyperParams; maximumVal = logLikelihood
+		  }
 		  (-logLikelihood,derivatives :* (-1.))
 		}
 	  }
 
 	  val lbfgs = new LBFGS[DenseVector[Double]](maxIter = 30,m = 3)
-	  val initParams = if (optimizeNoise){predictionInput.initHyperParams.toDenseVector} else {
+	  val initParams = if (optimizeNoise){initPoint} else {
 		predictionInput.initHyperParams.toDenseVector(0 to -2)
 	  }
 	  val optimizedParams = lbfgs.minimize(diffFunction,initParams)
-	  predictionInput.initHyperParams.fromDenseVector(optimizedParams)
+	  val returnedVal = if (diffFunction.calculate(optimizedParams)._1 < maximumVal){maximumPoint} else {optimizedParams}
+	  predictionInput.initHyperParams.fromDenseVector(returnedVal)
 	}
   }
 

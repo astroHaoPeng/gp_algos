@@ -34,18 +34,25 @@ object Optimization {
 
 	override def minimize(func:objectiveFunctionWithGradient,initPoint:Array[Double]) = {
 
+	  var (minimumPoint:DenseVector[Double],minimumVal) = (DenseVector(initPoint),Double.MaxValue)
 	  val diffFunction = new DiffFunction[DenseVector[Double]] {
 		override def calculate(point: DenseVector[Double]): (Double, DenseVector[Double]) = {
 		  val (value,gradient) = func(point.toArray)
+		  if (value < minimumVal){
+			minimumPoint = point; minimumVal = value
+		  }
 		  (value,DenseVector(gradient))
 		}
 	  }
 	  val optimizer = lbfgsFactory()
-	  optimizer.minimize(diffFunction,DenseVector(initPoint)).toArray
+	  val optimalPoint = optimizer.minimize(diffFunction,DenseVector(initPoint)).toArray
+	  if (func(optimalPoint)._1 < minimumVal){optimalPoint} else {
+		minimumPoint.toArray
+	  }
 	}
 
 	override def maximize(func:objectiveFunctionWithGradient,initPoint:Array[Double]) = {
-	  val minusFunc:objectiveFunctionWithGradient = {point => val (value,grad) = func(point); (-value,grad.map(-1*_))}
+	  val minusFunc:objectiveFunctionWithGradient = {point => val (value,grad) = func(point); (-value,grad.map((-1.)*_))}
 	  minimize(minusFunc,initPoint)
 	}
 

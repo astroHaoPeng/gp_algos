@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="794477cd-1721-497f-8216-730639d3bdec" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala" afterPath="$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala" afterPath="$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/optimization/Optimization.scala" afterPath="$PROJECT_DIR$/src/main/scala/optimization/Optimization.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" afterPath="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/config/spring-context.xml" afterPath="$PROJECT_DIR$/src/main/resources/config/spring-context.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
@@ -123,7 +124,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" line="105" class="dynamicalsystems.filtering.UnscentedKalmanFilterTest" package="dynamicalsystems.filtering">
+      <breakpoint url="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" line="110" class="dynamicalsystems.filtering.UnscentedKalmanFilterTest" package="dynamicalsystems.filtering">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -152,19 +153,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="GpPredictorTest.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/gp/regression/GpPredictorTest.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="53" selection-start="1138" selection-end="1138" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1245">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="UnscentedKalmanFilter.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="104" column="28" selection-start="5706" selection-end="5706" vertical-scroll-proportion="0.0" vertical-offset="1112" max-vertical-offset="2910">
+            <state line="46" column="0" selection-start="2169" selection-end="2169" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2910">
               <folding />
             </state>
           </provider>
@@ -173,16 +165,25 @@
       <file leaf-file-name="GPUnscentedKalmanFilter.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="25" selection-start="1447" selection-end="1447" vertical-scroll-proportion="0.0" vertical-offset="159" max-vertical-offset="1500">
+            <state line="47" column="82" selection-start="2047" selection-end="2047" vertical-scroll-proportion="0.0" vertical-offset="234" max-vertical-offset="1710">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GpPredictor.scala" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="GpPredictor.scala" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="54" column="11" selection-start="2729" selection-end="2729" vertical-scroll-proportion="0.0" vertical-offset="810" max-vertical-offset="2925">
+            <state line="46" column="6" selection-start="2151" selection-end="2151" vertical-scroll-proportion="-0.6081081" vertical-offset="960" max-vertical-offset="3315">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KernelRequisites.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="15" column="8" selection-start="334" selection-end="334" vertical-scroll-proportion="0.0" vertical-offset="3" max-vertical-offset="1860">
               <folding />
             </state>
           </provider>
@@ -191,7 +192,7 @@
       <file leaf-file-name="GPOptimizer.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="37" column="78" selection-start="1249" selection-end="1249" vertical-scroll-proportion="0.0" vertical-offset="555" max-vertical-offset="2535">
+            <state line="37" column="78" selection-start="1249" selection-end="1249" vertical-scroll-proportion="0.0" vertical-offset="555" max-vertical-offset="2370">
               <folding />
             </state>
           </provider>
@@ -200,25 +201,25 @@
       <file leaf-file-name="spring-context.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/config/spring-context.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="13" selection-start="661" selection-end="661" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
+            <state line="9" column="64" selection-start="558" selection-end="558" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="675">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UnscentedKalmanFilterTest.scala" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Optimization.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/optimization/Optimization.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="48" column="66" selection-start="1566" selection-end="1566" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="975">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UnscentedKalmanFilterTest.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="98" column="52" selection-start="3911" selection-end="3911" vertical-scroll-proportion="0.12162162" vertical-offset="1209" max-vertical-offset="1875">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SsmModel.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmModel.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="6" selection-start="237" selection-end="237" vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="945">
+            <state line="101" column="52" selection-start="3983" selection-end="3983" vertical-scroll-proportion="0.0" vertical-offset="1239" max-vertical-offset="1905">
               <folding />
             </state>
           </provider>
@@ -227,16 +228,7 @@
       <file leaf-file-name="SsmExamples.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="17" selection-start="371" selection-end="371" vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="450">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StatsUtils.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="51" column="61" selection-start="1464" selection-end="1464" vertical-scroll-proportion="0.0" vertical-offset="765" max-vertical-offset="1545">
+            <state line="18" column="17" selection-start="371" selection-end="371" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
               <folding />
             </state>
           </provider>
@@ -278,13 +270,11 @@
         <option value="$PROJECT_DIR$/src/main/scala/gp/regression/GpRegression.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/MatrixUtils.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/utils/StatsUtilsTest.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/gp/optimization/OptimizationUtils.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/optimization/Optimization.scala" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/TestingUtils.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/gp/regression/GpPredictorTest.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/optimization/Optimization.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/classification/HyperParamsOptimization.scala" />
@@ -300,8 +290,10 @@
         <option value="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/optimization/Optimization.scala" />
         <option value="$PROJECT_DIR$/src/main/resources/config/spring-context.xml" />
+        <option value="$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala" />
       </list>
     </option>
@@ -1408,7 +1400,7 @@
       <workItem from="1398799392999" duration="783000" />
       <workItem from="1399234433014" duration="5087000" />
       <workItem from="1399311073346" duration="6827000" />
-      <workItem from="1399364529054" duration="2293000" />
+      <workItem from="1399364529054" duration="9968000" />
     </task>
     <task id="LOCAL-00001" summary="init&#10;">
       <created>1395063724264</created>
@@ -1498,11 +1490,15 @@
       <created>1398620164267</created>
       <updated>1398620164267</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="GP UnscentedKalmanFilter implemented.">
+      <created>1399400622626</created>
+      <updated>1399400622626</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="308535000" />
+    <option name="totallyTimeSpent" value="316210000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1549,7 +1545,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32956383" sideWeight="0.6011396" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28271407" sideWeight="0.67094016" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25686592" sideWeight="0.67094016" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3260274" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="100" y="100" width="1080" height="600" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1596,7 +1592,8 @@
     <MESSAGE value="Added spring IoC container for testing purposes." />
     <MESSAGE value="Some code refactoring involved with optimization." />
     <MESSAGE value="Many improvements in ukf algorithm." />
-    <option name="LAST_COMMIT_MESSAGE" value="Many improvements in ukf algorithm." />
+    <MESSAGE value="GP UnscentedKalmanFilter implemented." />
+    <option name="LAST_COMMIT_MESSAGE" value="GP UnscentedKalmanFilter implemented." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1676,16 +1673,6 @@
     <entry file="file://$PROJECT_DIR$/src/test/scala/utils/StatsUtilsTest.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="33" column="21" selection-start="775" selection-end="775" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645" />
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/scalatest/scalatest_2.10/2.0/scalatest_2.10-2.0-sources.jar!/org/scalatest/OutcomeOf.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="0" selection-start="4229" selection-end="4229" vertical-scroll-proportion="0.0" vertical-offset="902" max-vertical-offset="1455" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="13" selection-start="1729" selection-end="1729" vertical-scroll-proportion="0.0" vertical-offset="648" max-vertical-offset="1860" />
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.10.3/scala-library-2.10.3.jar!/scala/math/package.class">
@@ -1788,11 +1775,6 @@
         <state line="24" column="21" selection-start="869" selection-end="869" vertical-scroll-proportion="0.0" vertical-offset="75" max-vertical-offset="1620" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/optimization/Optimization.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="60" selection-start="761" selection-end="761" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="885" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="53" column="80" selection-start="1934" selection-end="1934" vertical-scroll-proportion="0.0" vertical-offset="437" max-vertical-offset="855">
@@ -1833,13 +1815,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="17" selection-start="371" selection-end="371" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="37" column="78" selection-start="1249" selection-end="1249" vertical-scroll-proportion="0.0" vertical-offset="272" max-vertical-offset="2370">
@@ -1847,44 +1822,72 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="11" selection-start="2729" selection-end="2729" vertical-scroll-proportion="0.0" vertical-offset="542" max-vertical-offset="2820">
+        <state line="18" column="17" selection-start="371" selection-end="371" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/gp/regression/GpPredictorTest.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="53" selection-start="1138" selection-end="1138" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1245">
+        <state line="30" column="53" selection-start="1138" selection-end="1138" vertical-scroll-proportion="-0.036036037" vertical-offset="339" max-vertical-offset="1245">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/config/spring-context.xml">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/scalatest/scalatest_2.10/2.0/scalatest_2.10-2.0-sources.jar!/org/scalatest/OutcomeOf.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="13" selection-start="661" selection-end="661" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
+        <state line="83" column="0" selection-start="4229" selection-end="4229" vertical-scroll-proportion="0.36936936" vertical-offset="789" max-vertical-offset="1455">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="104" column="28" selection-start="5706" selection-end="5706" vertical-scroll-proportion="0.0" vertical-offset="1112" max-vertical-offset="2910">
+        <state line="46" column="0" selection-start="2169" selection-end="2169" vertical-scroll-proportion="0.0" vertical-offset="452" max-vertical-offset="2910">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/optimization/Optimization.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="25" selection-start="1447" selection-end="1447" vertical-scroll-proportion="0.0" vertical-offset="159" max-vertical-offset="1500">
+        <state line="48" column="66" selection-start="1566" selection-end="1566" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="975">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/config/spring-context.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="64" selection-start="558" selection-end="558" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="675">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="52" selection-start="3911" selection-end="3911" vertical-scroll-proportion="0.12162162" vertical-offset="1209" max-vertical-offset="1875">
+        <state line="101" column="52" selection-start="3983" selection-end="3983" vertical-scroll-proportion="0.0" vertical-offset="1239" max-vertical-offset="1905">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="8" selection-start="334" selection-end="334" vertical-scroll-proportion="0.0" vertical-offset="3" max-vertical-offset="1860">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="82" selection-start="2047" selection-end="2047" vertical-scroll-proportion="0.0" vertical-offset="234" max-vertical-offset="1710">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="6" selection-start="2151" selection-end="2151" vertical-scroll-proportion="-0.6081081" vertical-offset="960" max-vertical-offset="3315">
           <folding />
         </state>
       </provider>

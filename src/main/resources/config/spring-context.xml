@@ -5,9 +5,11 @@
 
     <bean id="objectCreator" class="utils.TestingUtils$ScalaObjectsCreator" />
 
+     <!-- GaussianRbfParams(-0.03672911112580335,-0.8027556425944483,0.035355339059327376) -->
+    <!-- 1.3, 0.1011 -->
     <bean id="defaultRbfParams" class="utils.KernelRequisites$GaussianRbfParams">
-        <constructor-arg name="alpha" value="1.3" />
-        <constructor-arg name="gamma" value="0.1011" />
+        <constructor-arg name="alpha" value="-0.0367" />
+        <constructor-arg name="gamma" value="-0.80275" />
         <constructor-arg name="beta" value="#{ T(java.lang.Math).sqrt(0.00125) }" />
     </bean>
 
