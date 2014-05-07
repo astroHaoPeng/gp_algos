@@ -5,6 +5,7 @@ import dynamicalsystems.filtering.SsmExamples.SinusoidalSsm
 import dynamicalsystems.filtering.SsmTypeDefinitions.SeriesGenerationData
 import breeze.linalg.DenseMatrix
 import utils.StatsUtils.GaussianDistribution
+import dynamicalsystems.tests.SsmTestingUtils
 
 /**
  * Created by mjamroz on 25/04/14.

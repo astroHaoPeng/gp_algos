@@ -1,4 +1,4 @@
-package dynamicalsystems.filtering
+package dynamicalsystems.tests
 
 import breeze.linalg.DenseMatrix
 

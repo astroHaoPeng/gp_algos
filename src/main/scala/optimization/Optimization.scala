@@ -46,7 +46,8 @@ object Optimization {
 	  }
 	  val optimizer = lbfgsFactory()
 	  val optimalPoint = optimizer.minimize(diffFunction,DenseVector(initPoint)).toArray
-	  if (func(optimalPoint)._1 < minimumVal){optimalPoint} else {
+	  val optimalVal = func(optimalPoint)._1
+	  if (optimalVal < minimumVal){optimalPoint} else {
 		minimumPoint.toArray
 	  }
 	}

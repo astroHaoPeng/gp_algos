@@ -13,6 +13,7 @@ import org.springframework.test.context.{TestContextManager, ContextConfiguratio
 import gp.optimization.GPOptimizer
 import org.springframework.beans.factory.annotation.Autowired
 import gp.regression.GpPredictor
+import dynamicalsystems.tests.SsmTestingUtils
 
 /**
  * Created by mjamroz on 05/04/14.
@@ -83,14 +84,16 @@ class UnscentedKalmanFilterTest extends WordSpec with SsmTestingUtils{
 	  assert(out.hiddenCovs.length == seqLength)
 	}
 
-	/*"infer hidden state with unscented transform params optimization in sinusoidal problem" in {
+	"infer hidden state with unscented transform params optimization in sinusoidal problem" in {
 	  val seqLength = 200
 	  val (hidden,obs) = generateSamples(seqLength)
 	  val ukf = new UnscentedKalmanFilter(gpOptimizer)
 	  val ukfInput = ukfSinInput(obs,seqLength)
 	  val out = ukf.inferWithParamOptimization(ukfInput,None)
-	  println(s"Log likelihood = ${out.logLikelihood}")
-	} */
+	  val optimizedOut = ukf.inferHiddenState(ukfInput,None,true)
+	  println(s"UKF - Log likelihood = ${out.logLikelihood}")
+	  println(s"UKF-L - Log likelihood = ${optimizedOut.logLikelihood}")
+	}
 
   }
 
@@ -107,8 +110,8 @@ class UnscentedKalmanFilterTest extends WordSpec with SsmTestingUtils{
 	  assert(out.hiddenMeans.rows == hidden.rows)
 	  assert(out.hiddenCovs.length == seqLength)
 	  val optimizedOut = gpUkf.inferHiddenState(ukfInput,None,hidden,true,true)
-	  println(s"Log likelihood = ${out.logLikelihood}")
-	  println(s"Log likelihood = ${optimizedOut.logLikelihood}")
+	  println(s"GP-UKF Log likelihood = ${out.logLikelihood}")
+	  println(s"GP-UKF-HPO Log likelihood = ${optimizedOut.logLikelihood}")
 	}
 
   }

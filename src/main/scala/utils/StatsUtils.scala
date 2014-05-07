@@ -71,6 +71,22 @@ object StatsUtils {
 	(mean,covMatrix :/ data.rows.toDouble)
   }
 
+  /*matrix(i,::) - i'th sample*/
+  def mse(estimate:DenseMatrix[Double],trueValues:DenseMatrix[Double],horSample:Boolean=true):Double = {
+	require(estimate.rows == trueValues.rows && estimate.cols == trueValues.cols,
+	  "Both matrices must have identical dimensions")
+	val numOfSamples = if (horSample) {estimate.rows} else {estimate.cols}
+	(0 until numOfSamples).foldLeft(0.){
+	  case (acc,index) =>
+		val diff:DenseVector[Double] = if (horSample) {
+		  (estimate(index,::) - trueValues(index,::)).toDenseVector
+		} else {
+		  (estimate(::,index) - trueValues(::,index)).toDenseVector
+		}
+		acc + (diff dot diff)
+	}
+  }
+
   object NormalDistributionSampler {
 
 	implicit def denseVecToArray(vec:DenseVector[Double]):Array[Double] = {
