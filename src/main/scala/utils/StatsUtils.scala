@@ -76,7 +76,7 @@ object StatsUtils {
 	require(estimate.rows == trueValues.rows && estimate.cols == trueValues.cols,
 	  "Both matrices must have identical dimensions")
 	val numOfSamples = if (horSample) {estimate.rows} else {estimate.cols}
-	(0 until numOfSamples).foldLeft(0.){
+	val squaredSum:Double = (0 until numOfSamples).foldLeft(0.){
 	  case (acc,index) =>
 		val diff:DenseVector[Double] = if (horSample) {
 		  (estimate(index,::) - trueValues(index,::)).toDenseVector
@@ -85,6 +85,7 @@ object StatsUtils {
 		}
 		acc + (diff dot diff)
 	}
+	squaredSum / estimate.rows
   }
 
   object NormalDistributionSampler {

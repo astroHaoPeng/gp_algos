@@ -1,6 +1,6 @@
 package dynamicalsystems.tests
 
-import breeze.linalg.DenseMatrix
+import breeze.linalg.{DenseVector, DenseMatrix}
 import utils.StatsUtils.GaussianDistribution
 import org.springframework.context.support.GenericXmlApplicationContext
 import gp.regression.GpPredictor
@@ -11,6 +11,9 @@ import dynamicalsystems.filtering.UnscentedKalmanFilter.{UnscentedTransformParam
 import dynamicalsystems.filtering.UnscentedKalmanFilter
 import dynamicalsystems.tests.SinusoidalSsmTest.SsmTestingResult
 import dynamicalsystems.filtering.KalmanFilter.FilteringOutput
+import java.io.File
+import org.springframework.core.io.ClassPathResource
+import utils.IOUtilities
 
 /**
  * Created by mjamroz on 07/05/14.
@@ -42,11 +45,20 @@ class SinusoidalSsmTest extends SsmTestingUtils{
 	require(out.logLikelihood.isDefined,"Log likelihood must be computed")
 	val gaussianSeq = filteringOutputToNormDistr(out)
 	val mseVal:Double = mse(out.hiddenMeans,hidden,horSample = false)
+	writeToFile(out,hidden)
 	SsmTestingResult(hiddenStates = gaussianSeq,ll = out.logLikelihood.get,mse = mseVal)
   }
 
   def writeToFile(out:FilteringOutput,trueHiddenStates:DenseMatrix[Double]) = {
-
+	require(out.hiddenMeans.rows == 1,
+	  "Hidden state space dimensionality should be equal to 1 in order to write it to a file")
+  	val (trueHiddenFile:File,predictedFile:File) = (new File(s"$resourcePathPrefix/ssm/ukf/true.dat"),
+	  new File(s"$resourcePathPrefix/ssm/ukf/predicted.dat"))
+	val timeSeries = DenseVector((1 to out.hiddenMeans.cols).toArray)
+	val (predicted,trueHidden) = (out.hiddenMeans(0,::).toDenseVector,trueHiddenStates(0,::).toDenseVector)
+	val covs = DenseVector(out.hiddenCovs.map(_(0,0)))
+	IOUtilities.writeVectorsToFile(trueHiddenFile,timeSeries,trueHidden)
+	IOUtilities.writeVectorsToFile(predictedFile,timeSeries,predicted,covs)
   }
 
   private def filteringOutputToNormDistr(out:FilteringOutput):Seq[GaussianDistribution] = {
@@ -80,5 +92,12 @@ object SinusoidalSsmTest {
 
   case class SsmTestingResult(hiddenStates:Seq[GaussianDistribution],ll:Double,mse:Double)
 
+  def main(args:Array[String]) = {
+
+	val ssmTest = new SinusoidalSsmTest
+	val ssmResult = ssmTest.doTheTestWithUkf(1000)
+	println(s"Sinusoidal-UKF-Test: Log likelihood = ${ssmResult.ll}, MSE = ${ssmResult.mse}")
+
+  }
 
 }

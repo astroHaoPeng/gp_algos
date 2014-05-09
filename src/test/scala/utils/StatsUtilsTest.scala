@@ -35,4 +35,15 @@ class StatsUtilsTest extends WordSpec {
 	}
   }
 
+  "mean squared error" should {
+
+	"return proper value" in {
+
+	  val (estimate,trueVals) = (DenseMatrix((1.,2.),(3.,4.),(5.,6.)),DenseMatrix((1.1,2.1),(3.1,4.1),(5.1,6.1)))
+	  val mseVal = mse(estimate,trueVals)
+	  assert(mseVal ~= 0.02)
+	}
+
+  }
+
 }

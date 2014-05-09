@@ -28,14 +28,15 @@ object IOUtilities {
 	result
   }
 
-  def writeVectorsToFile(vec1:DenseVector[Double],vec2:DenseVector[Double],fileName:String) = {
-	require(vec1.length == vec2.length,"Two vectors should have the same size")
+  def writeVectorsToFile(file:File,vecs:DenseVector[_]*) = {
+	require(vecs.forall(_.length == vecs(0).length),"Vectors should have the same size")
 	var printWriter:PrintWriter = null
 	try{
-	  printWriter = new PrintWriter(new File(fileName))
-	  val strToWrite = (0 until vec1.length).foldLeft(new StringBuffer("")){
+	  printWriter = new PrintWriter(file)
+	  val strToWrite = (0 until vecs(0).length).foldLeft(new StringBuffer("")){
 		case (buffer,index) =>
-			buffer.append(s"${vec1(index)}\t${vec2(index)}\n")
+		  	val newBuff = vecs.foldLeft(buffer){case (buffer,vec) => buffer.append(s"${vec(index)}\t")}
+			newBuff.append('\n')
 	  }.toString
 	  printWriter.write(strToWrite)
 	} catch {
