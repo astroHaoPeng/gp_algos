@@ -17,7 +17,7 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
   import SsmTypeDefinitions._
 
   def inferHiddenState(input: UnscentedFilteringInput, params: Option[UnscentedTransformParams],
-					   computeLL: Boolean): FilteringOutput = {
+					   computeLL: Boolean = true): FilteringOutput = {
 
 	val unscentedParams = params.getOrElse(UnscentedTransformParams())
 	val y: DenseMatrix[Double] = input.observations
@@ -117,7 +117,7 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
   }
 
   def inferWithParamOptimization(input:UnscentedFilteringInput,
-								 initParams:Option[UnscentedTransformParams]):FilteringOutput = {
+								 initParams:Option[UnscentedTransformParams],rangeForParam:Range=0 to 5):FilteringOutput = {
 
 	val objFunction:optimization.Optimization.objectiveFunction = {
 	  point:Array[Double] =>
@@ -126,7 +126,6 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
 	  	/*We want to maximize log likelihood */
 		out.logLikelihood.get
 	}
-	val rangeForParam = 0 to 5
 	val gpoInput = GPOInput(mParam = 50,cParam = 10,kParam = 2.,
 	  ranges = IndexedSeq(rangeForParam,rangeForParam,rangeForParam))
 	val (optimizedParams,_) = gpOptimizer.maximize(objFunction,gpoInput)

@@ -1,6 +1,7 @@
 package dynamicalsystems.tests
 
 import breeze.linalg.DenseMatrix
+import utils.StatsUtils.GaussianDistribution
 
 /**
  * Created by mjamroz on 25/04/14.
@@ -13,5 +14,7 @@ trait SsmTestingUtils {
 	(0 until howMany).foreach(indx => resultArr(indx) = matrix)
 	resultArr
   }
+
+  case class SsmTestingResult(hiddenStates:Seq[GaussianDistribution],ll:Double,mse:Double)
 
 }
