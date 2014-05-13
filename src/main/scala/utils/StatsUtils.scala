@@ -98,10 +98,22 @@ object StatsUtils {
 	}
   }
 
+  def nllOfHiddenData(trueHiddenStates:DenseMatrix[Double],hiddenMeans:DenseMatrix[Double],
+					  hiddenCovs:Array[DenseMatrix[Double]]):Double = {
+
+	require(hiddenMeans.cols == hiddenCovs.length,
+	  "Number of hidden means should be equal to number of hidden covariances")
+	(0 until trueHiddenStates.cols).foldLeft(0.){
+	  case (nll,index) =>
+	  	nll - logGaussianDensity(trueHiddenStates(::,index),hiddenMeans(::,index),hiddenCovs(index))
+	}
+
+  }
+
   object NormalDistributionSampler {
 
 	implicit def denseVecToArray(vec:DenseVector[Double]):Array[Double] = {
-	  vec.data
+	  vec.toArray
 	}
 
 	implicit def denseMatrixTo2DimArray(m:DenseMatrix[Double]):Array[Array[Double]] = {

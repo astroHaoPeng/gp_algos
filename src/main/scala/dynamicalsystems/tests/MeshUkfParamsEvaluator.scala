@@ -14,7 +14,7 @@ class MeshUkfParamsEvaluator {
   val logger = LoggerFactory.getLogger(this.getClass)
 
   def evaluate(ukfParamsRanges: IndexedSeq[NumericRange[Double]])(ukfEvalFunction: UnscentedTransformParams => Double)
-  : HyperParamsMeshValues = {
+  	:HyperParamsMeshValues = {
 
 	require(ukfParamsRanges.length == 3, "Exactly three ranges are required")
 	val result = new HyperParamsMeshValues

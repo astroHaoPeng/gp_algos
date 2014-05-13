@@ -15,6 +15,6 @@ trait SsmTestingUtils {
 	resultArr
   }
 
-  case class SsmTestingResult(hiddenStates:Seq[GaussianDistribution],ll:Double,mse:Double)
+  case class SsmTestingResult(hiddenStates:Seq[GaussianDistribution],ll:Double,mse:Double,nll:Double)
 
 }

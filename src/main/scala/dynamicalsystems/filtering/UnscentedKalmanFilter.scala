@@ -5,6 +5,7 @@ import breeze.numerics.sqrt
 import utils.StatsUtils.GaussianDistribution
 import gp.optimization.GPOptimizer
 import gp.optimization.GPOptimizer.GPOInput
+import utils.StatsUtils
 
 /**
  * Created by mjamroz on 01/04/14.
@@ -15,6 +16,8 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
   import UnscentedKalmanFilter._
   import KalmanFilter._
   import SsmTypeDefinitions._
+
+  val ukfParamRange = 0 to 10
 
   def inferHiddenState(input: UnscentedFilteringInput, params: Option[UnscentedTransformParams],
 					   computeLL: Boolean = true): FilteringOutput = {
@@ -116,14 +119,14 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
 	  sigmaPoints = sigmaPoints, transformedSigmaPoints = transformedSigmaPoints)
   }
 
-  def inferWithParamOptimization(input:UnscentedFilteringInput,
-								 initParams:Option[UnscentedTransformParams],rangeForParam:Range=0 to 5):FilteringOutput = {
+  def inferWithUkfOptimWrtToMarginall(input:UnscentedFilteringInput,
+								 initParams:Option[UnscentedTransformParams],rangeForParam:Range=ukfParamRange):FilteringOutput = {
 
 	val objFunction:optimization.Optimization.objectiveFunction = {
 	  point:Array[Double] =>
 		val unscentedParams = UnscentedTransformParams.fromVector(point)
 		val out = inferHiddenState(input,Some(unscentedParams),true)
-	  	/*We want to maximize log likelihood */
+	  	/*We want to minimize negative log likelihood */
 	  	if (out.logLikelihood.get == Double.NegativeInfinity){Double.MinValue}
 	  	else if (out.logLikelihood.get == Double.PositiveInfinity){Double.MaxValue}
 	  	else {out.logLikelihood.get}
@@ -131,6 +134,25 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
 	val gpoInput = GPOInput(mParam = 50,cParam = 10,kParam = 2.,
 	  ranges = IndexedSeq(rangeForParam,rangeForParam,rangeForParam))
 	val (optimizedParams,_) = gpOptimizer.maximize(objFunction,gpoInput)
+	inferHiddenState(input,Some(UnscentedTransformParams.fromVector(optimizedParams)),true)
+  }
+  
+  def inferWithUkfOptimWrtToNll(input:UnscentedFilteringInput,
+								initParams:Option[UnscentedTransformParams],hidden:DenseMatrix[Double],rangeForParam:Range=ukfParamRange) = {
+	val objFunction:optimization.Optimization.objectiveFunction = {
+	  point:Array[Double] =>
+		val unscentedParams = UnscentedTransformParams.fromVector(point)
+		val out = inferHiddenState(input,Some(unscentedParams),true)
+	  	val nll = nllOfHiddenData(trueHiddenStates = hidden,
+		  hiddenMeans = out.hiddenMeans,hiddenCovs = out.hiddenCovs)
+		/*We want to minimize negative log likelihood */
+		if (nll == Double.NegativeInfinity){Double.MinValue}
+		else if (nll == Double.PositiveInfinity){Double.MaxValue}
+		else {nll}
+	}
+	val gpoInput = GPOInput(mParam = 50,cParam = 10,kParam = 2.,
+	  ranges = IndexedSeq(rangeForParam,rangeForParam,rangeForParam))
+	val (optimizedParams,_) = gpOptimizer.minimize(objFunction,gpoInput)
 	inferHiddenState(input,Some(UnscentedTransformParams.fromVector(optimizedParams)),true)
   }
 

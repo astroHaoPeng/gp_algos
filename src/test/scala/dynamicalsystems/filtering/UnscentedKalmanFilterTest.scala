@@ -106,7 +106,7 @@ class UnscentedKalmanFilterTest extends WordSpec with SsmTestingUtils{
 	  val (hidden,obs) = generateSinSamples(seqLength)
 	  val ukf = new UnscentedKalmanFilter(gpOptimizer)
 	  val ukfInput = ukfSinInput(obs,seqLength)
-	  val optimizedOut = ukf.inferWithParamOptimization(ukfInput,None)
+	  val optimizedOut = ukf.inferWithUkfOptimWrtToMarginall(ukfInput,None)
 	  val out = ukf.inferHiddenState(ukfInput,None,true)
 	  println(s"UKF - Log likelihood = ${out.logLikelihood}")
 	  println(s"UKF-L - Log likelihood = ${optimizedOut.logLikelihood}")
@@ -119,7 +119,7 @@ class UnscentedKalmanFilterTest extends WordSpec with SsmTestingUtils{
 	  val ukfInput = ukfKitInput(obs,seqLength)
 	  val bestParamsForKit = UnscentedTransformParams(alpha = 0.38,beta = 1.276,kappa = 2.58)
 	  val out = ukf.inferHiddenState(ukfInput,Some(bestParamsForKit),true)
-	  val optimizedOut = ukf.inferWithParamOptimization(ukfInput,None)
+	  val optimizedOut = ukf.inferWithUkfOptimWrtToMarginall(ukfInput,None)
 	  println(s"Kit:UKF - Log likelihood = ${out.logLikelihood}")
 	  println(s"Kit:UKF-L - Log likelihood = ${optimizedOut.logLikelihood}")
 	}

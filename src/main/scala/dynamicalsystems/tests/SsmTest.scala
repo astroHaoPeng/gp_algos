@@ -36,13 +36,13 @@ trait SsmTest extends SsmTestingUtils{
   def run(seqLength:Int) = {
 	val ssmResult = doTheTestWithUkf(seqLength)
 	val optimSsmResult = doTheTestWithUkfParamsOptim(seqLength)
-	println(s"${this}-UKF-Test: Log likelihood = ${ssmResult.ll}, MSE = ${ssmResult.mse}")
-	println(s"${this}-UKF-L-Test: Log likelihood = ${optimSsmResult.ll}, MSE = ${optimSsmResult.mse}")
+	println(s"${this}-UKF-Test: Log likelihood = ${ssmResult.ll}, MSE = ${ssmResult.mse}, NLL = ${ssmResult.nll}")
+	println(s"${this}-UKF-L-Test: Log likelihood = ${optimSsmResult.ll}, MSE = ${optimSsmResult.mse}, NLL = ${optimSsmResult.nll}")
   }
 
   def doTheTestWithUkfParamsOptim(seqLength:Int):SsmTestingResult = {
-	val func:(UnscentedKalmanFilter,UnscentedFilteringInput) => FilteringOutput = {
-	  (ukf,ukfInput) => ukf.inferWithParamOptimization(ukfInput,None)
+	val func:(UnscentedKalmanFilter,UnscentedFilteringInput,DenseMatrix[Double]) => FilteringOutput = {
+	  (ukf,ukfInput,hidden) => ukf.inferWithUkfOptimWrtToNll(ukfInput,None,hidden)
 	}
 	testWithUkf(seqLength,("true_optim.dat","predicted_optim.dat"))(func)
   }
@@ -50,8 +50,8 @@ trait SsmTest extends SsmTestingUtils{
   def doTheTestWithUkf(seqLength:Int,
 					   params:UnscentedTransformParams = UnscentedTransformParams.defaultParams):SsmTestingResult = {
 
-	val func:(UnscentedKalmanFilter,UnscentedFilteringInput) => FilteringOutput = {
-	  (ukf,ukfInput) => ukf.inferHiddenState(ukfInput,Some(params),true)
+	val func:(UnscentedKalmanFilter,UnscentedFilteringInput,DenseMatrix[Double]) => FilteringOutput = {
+	  (ukf,ukfInput,_) => ukf.inferHiddenState(ukfInput,Some(params),true)
 	}
 	testWithUkf(seqLength,("true.dat","predicted.dat"))(func)
   }
@@ -70,17 +70,19 @@ trait SsmTest extends SsmTestingUtils{
 	meshValues.writeToFile(file)
   }
 
-  def testWithUkf(seqLength:Int,paths:(String,String))(func:(UnscentedKalmanFilter,UnscentedFilteringInput) => FilteringOutput) = {
+  def testWithUkf(seqLength:Int,paths:(String,String))(
+	func:(UnscentedKalmanFilter,UnscentedFilteringInput,DenseMatrix[Double]) => FilteringOutput) = {
 	val (hidden,obs) = generateSamples(seqLength)
 	val ukf = new UnscentedKalmanFilter(gpOptimizer)
 	val ukfInput = ukfInputGen(obs,seqLength)
 
-	val out = func(ukf,ukfInput)
+	val out = func(ukf,ukfInput,hidden)
 	require(out.logLikelihood.isDefined,"Log likelihood must be computed")
 	val gaussianSeq = filteringOutputToNormDistr(out)
 	val mseVal:Double = mse(out.hiddenMeans,hidden,horSample = false)
 	writeToFile(out,hidden,(paths._1,paths._2))
-	SsmTestingResult(hiddenStates = gaussianSeq,ll = out.logLikelihood.get,mse = mseVal)
+	val nll = nllOfHiddenData(hidden,gaussianSeq.toArray)
+	SsmTestingResult(hiddenStates = gaussianSeq,ll = out.logLikelihood.get,mse = mseVal,nll = nll)
   }
 
   def writeToFile(out:FilteringOutput,trueHiddenStates:DenseMatrix[Double],paths:(String,String)) = {
