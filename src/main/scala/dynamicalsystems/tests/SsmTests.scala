@@ -28,9 +28,10 @@ object SsmTests {
 
   def main(args:Array[String]) = {
 
-	val seqLength = 1000
-	(new SinusoidalSsmTest).run(seqLength)
-	(new KitagawaSsmTest).run(seqLength)
+	val seqLength = 200
+	val (sinusoidalSsmTest,kitSsmTest) = (new SinusoidalSsmTest,new KitagawaSsmTest)
+	sinusoidalSsmTest.evaluateUkfParamsMesh(seqLength)
+	kitSsmTest.evaluateUkfParamsMesh(seqLength)
   }
 
 }

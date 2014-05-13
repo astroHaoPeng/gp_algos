@@ -56,6 +56,20 @@ trait SsmTest extends SsmTestingUtils{
 	testWithUkf(seqLength,("true.dat","predicted.dat"))(func)
   }
 
+  def evaluateUkfParamsMesh(seqLength:Int):Unit = {
+	val (hidden,obs) = generateSamples(seqLength)
+	val evaluator = new MeshUkfParamsEvaluator
+	val range = Range.Double(0.1,10.,0.5)
+	val ranges = IndexedSeq(range,range,range)
+	val (ukf,ukfInput) = (new UnscentedKalmanFilter(gpOptimizer),ukfInputGen(obs,seqLength))
+	val meshEvalFunction = { ukfParams:UnscentedTransformParams =>
+		ukf.inferHiddenState(ukfInput,Some(ukfParams),true).logLikelihood.get
+	}
+	val meshValues = evaluator.evaluate(ranges)(meshEvalFunction)
+	val file = new File(s"$resourcePathPrefix/$resultFilePath/mesh.dat")
+	meshValues.writeToFile(file)
+  }
+
   def testWithUkf(seqLength:Int,paths:(String,String))(func:(UnscentedKalmanFilter,UnscentedFilteringInput) => FilteringOutput) = {
 	val (hidden,obs) = generateSamples(seqLength)
 	val ukf = new UnscentedKalmanFilter(gpOptimizer)
@@ -65,7 +79,7 @@ trait SsmTest extends SsmTestingUtils{
 	require(out.logLikelihood.isDefined,"Log likelihood must be computed")
 	val gaussianSeq = filteringOutputToNormDistr(out)
 	val mseVal:Double = mse(out.hiddenMeans,hidden,horSample = false)
-	writeToFile(out,hidden,("true.dat","predicted.dat"))
+	writeToFile(out,hidden,(paths._1,paths._2))
 	SsmTestingResult(hiddenStates = gaussianSeq,ll = out.logLikelihood.get,mse = mseVal)
   }
 

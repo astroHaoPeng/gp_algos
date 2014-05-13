@@ -87,6 +87,16 @@ object StatsUtils {
 	}
 	squaredSum / estimate.rows
   }
+  
+  def nllOfHiddenData(trueHiddenStates:DenseMatrix[Double],inferredDistr:Array[GaussianDistribution]):Double = {
+  	require(trueHiddenStates.cols == inferredDistr.length,
+	  "Hidden states number must be equal to iferred states number")
+	(0 until trueHiddenStates.cols).foldLeft(0.){
+	  case (nll,index) =>
+		val normalDistr = inferredDistr(index)
+	  	nll - logGaussianDensity(trueHiddenStates(::,index),normalDistr.mean,normalDistr.sigma)
+	}
+  }
 
   object NormalDistributionSampler {
 

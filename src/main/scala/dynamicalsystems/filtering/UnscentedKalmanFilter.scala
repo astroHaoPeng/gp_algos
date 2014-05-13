@@ -73,7 +73,7 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
 		((kalmanGainMatrix * sMatrix) * kalmanGainMatrix.t)
 	  hiddenMeans(::, t) := hiddenMean
 	  hiddenCovs(t) = hiddenCov
-	  ll = ll.map(_ + logLikelihood(y(::, t),probab_y_t_given_z_t))
+	  ll = ll.map(_ + marginalLogLikelihood(y(::, t),probab_y_t_given_z_t))
 	}
 	FilteringOutput(hiddenMeans = hiddenMeans, hiddenCovs = hiddenCovs, logLikelihood = ll)
   }
@@ -124,7 +124,9 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
 		val unscentedParams = UnscentedTransformParams.fromVector(point)
 		val out = inferHiddenState(input,Some(unscentedParams),true)
 	  	/*We want to maximize log likelihood */
-		out.logLikelihood.get
+	  	if (out.logLikelihood.get == Double.NegativeInfinity){Double.MinValue}
+	  	else if (out.logLikelihood.get == Double.PositiveInfinity){Double.MaxValue}
+	  	else {out.logLikelihood.get}
 	}
 	val gpoInput = GPOInput(mParam = 50,cParam = 10,kParam = 2.,
 	  ranges = IndexedSeq(rangeForParam,rangeForParam,rangeForParam))
@@ -132,9 +134,9 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
 	inferHiddenState(input,Some(UnscentedTransformParams.fromVector(optimizedParams)),true)
   }
 
-  private def logLikelihood(y_t:DenseVector[Double],probab_y_t_given_z_t:GaussianDistribution):Double = {
+  private def marginalLogLikelihood(y_t:DenseVector[Double],probab_y_t_given_z_t:GaussianDistribution):Double = {
 	val returnVal = logGaussianDensity(at = y_t,means = probab_y_t_given_z_t.mean,covs = probab_y_t_given_z_t.sigma)
-	returnVal
+  	returnVal
   }
 
 }
@@ -190,6 +192,5 @@ object UnscentedKalmanFilter {
 
   type noiseComputationFunc = UkfInferenceContext => DenseMatrix[Double]
 
-  type noiseObtainingMethod = Either[Array[transitionMatrix],noiseComputationFunc]
 
 }

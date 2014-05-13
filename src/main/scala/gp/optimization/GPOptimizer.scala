@@ -47,7 +47,7 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer
 		val (l,alphaVec,_) = gpPredictor.preComputeComponents(pointSet,hyperParams,noise,evaluatedPointSet)
 		val (observedMean,observedCov) = meanAndVarOfData(pointSet)
 		val sampler = new NormalDistributionSampler(GaussianDistribution(mean = observedMean,sigma = observedCov))
-	    val (biggestUcbPoint,biggestUcb) = (0 until c).foldLeft[(Option[DenseVector[Double]],Double)](None,Double.MinValue){
+	    var (biggestUcbPoint,biggestUcb) = (0 until c).foldLeft[(Option[DenseVector[Double]],Double)](None,Double.MinValue){
 		  	case ((currentBiggestUcbPoint,currentBiggestUcb),_) =>
 			  val initRandomPoint:DenseVector[Double] = sampler.sample
 			  val (ucbValue:Double,pointWithBiggestUCB:DenseVector[Double]) =
@@ -55,9 +55,16 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer
 			  if (ucbValue > currentBiggestUcb){(Some(pointWithBiggestUCB),ucbValue)}
 			  else {(currentBiggestUcbPoint,currentBiggestUcb)}
 		}
+		if (biggestUcbPoint.isEmpty){biggestUcbPoint = Some(sampler.sample)}
 		logger.info(s"iteration = ${iterNum}, biggestUcb = ${biggestUcb}, biggestUcbPoint = ${biggestUcbPoint.get}")
-		(DenseMatrix.vertcat[Double](pointSet,biggestUcbPoint.get.toDenseMatrix),
-		  DenseVector.vertcat[Double](evaluatedPointSet,DenseVector(func(biggestUcbPoint.get.toArray))))
+		val (newPointSet,newEvaluatedPointSet) = try{
+			val evaluatedBiggestUcbPoint = func(biggestUcbPoint.get.toArray)
+			(DenseMatrix.vertcat[Double](pointSet,biggestUcbPoint.get.toDenseMatrix),
+			  DenseVector.vertcat[Double](evaluatedPointSet,DenseVector(evaluatedBiggestUcbPoint)))
+		} catch {
+		  case _:Exception => (pointSet,evaluatedPointSet)
+		}
+		(newPointSet,newEvaluatedPointSet)
 	}
 	val (maxIndex,maxValue) = (0 until finalEvaluatedPointSet.length).foldLeft((0,Double.MinValue)){
 	  case ((biggestIndex,currentBiggestValue),index) =>

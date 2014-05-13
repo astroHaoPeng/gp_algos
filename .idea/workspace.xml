@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="794477cd-1721-497f-8216-730639d3bdec" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTests.scala" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SinusoidalSsmTest.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTestingUtils.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTestingUtils.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/MeshUkfParamsEvaluator.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala" afterPath="$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/gp/classification/MeshHyperParamsLogLikelihoodEvaluator.scala" afterPath="$PROJECT_DIR$/src/main/scala/gp/classification/MeshHyperParamsLogLikelihoodEvaluator.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTests.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTests.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" afterPath="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" afterPath="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
@@ -124,21 +126,6 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" line="96" class="dynamicalsystems.filtering.UnscentedKalmanFilterTest" package="dynamicalsystems.filtering">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="REMOVE_AFTER_HIT" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
     </line_breakpoints>
     <breakpoint_rules />
     <ui_properties />
@@ -156,39 +143,26 @@
       <file leaf-file-name="UnscentedKalmanFilter.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="49" selection-start="598" selection-end="598" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2895">
+            <state line="139" column="3" selection-start="7540" selection-end="7540" vertical-scroll-proportion="0.0" vertical-offset="1545" max-vertical-offset="2910">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SsmTest.scala" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="SsmTest.scala" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="20" selection-start="1406" selection-end="1406" vertical-scroll-proportion="0.0" vertical-offset="188" max-vertical-offset="1560">
+            <state line="61" column="40" selection-start="2331" selection-end="2331" vertical-scroll-proportion="0.5720721" vertical-offset="399" max-vertical-offset="1770">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SsmTests.scala" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="SsmTests.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTests.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="49" selection-start="774" selection-end="774" vertical-scroll-proportion="0.55228275" vertical-offset="0" max-vertical-offset="679">
-              <folding>
-                <element signature="e#32#74#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SsmTestingUtils.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTestingUtils.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="90" selection-start="540" selection-end="540" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="390">
-              <folding>
-                <element signature="e#32#64#0" expanded="true" />
-              </folding>
+            <state line="33" column="37" selection-start="1009" selection-end="1009" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -196,34 +170,16 @@
       <file leaf-file-name="GPOptimizer.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="9" selection-start="2387" selection-end="2387" vertical-scroll-proportion="0.0" vertical-offset="548" max-vertical-offset="2370">
+            <state line="18" column="2" selection-start="521" selection-end="521" vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="2640">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StatsUtilsTest.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/utils/StatsUtilsTest.scala">
+      <file leaf-file-name="GpPredictor.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="43" column="28" selection-start="1021" selection-end="1021" vertical-scroll-proportion="0.0" vertical-offset="116" max-vertical-offset="795">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SsmModel.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmModel.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="6" selection-start="237" selection-end="237" vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="915">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SsmExamples.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="20" selection-start="192" selection-end="192" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
+            <state line="120" column="29" selection-start="6237" selection-end="6237" vertical-scroll-proportion="0.0" vertical-offset="1800" max-vertical-offset="3450">
               <folding />
             </state>
           </provider>
@@ -232,7 +188,36 @@
       <file leaf-file-name="UnscentedKalmanFilterTest.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="161" column="3" selection-start="6864" selection-end="6864" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2355">
+            <state line="77" column="32" selection-start="3214" selection-end="3214" vertical-scroll-proportion="0.0" vertical-offset="757" max-vertical-offset="2595">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MeshHyperParamsLogLikelihoodEvaluator.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/gp/classification/MeshHyperParamsLogLikelihoodEvaluator.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="48" column="31" selection-start="1699" selection-end="1699" vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="1395">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MeshUkfParamsEvaluator.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/MeshUkfParamsEvaluator.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="0" selection-start="191" selection-end="191" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
+              <folding>
+                <element signature="e#32#78#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StatsUtils.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="98" column="4" selection-start="3399" selection-end="3399" vertical-scroll-proportion="0.0" vertical-offset="1164" max-vertical-offset="1905">
               <folding />
             </state>
           </provider>
@@ -251,7 +236,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main/scala/utils/NormalDistrSampler.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/NormalDistributionSampler.scala" />
         <option value="$PROJECT_DIR$/src/main/resources/log4j.properties" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/classification/HyperParameterOptimizer.scala" />
@@ -259,7 +243,6 @@
         <option value="$PROJECT_DIR$/src/main/scala/gp/classification/EpParameterEstimator.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/classification/GpClassifier.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/classification/MeshHyperParamsEvaluator.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/gp/classification/MeshHyperParamsLogLikelihoodEvaluator.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/utils/StatsUtils$Test.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/ObjectTrackingTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/classification/MarginalLikelihoodEvaluator.scala" />
@@ -277,7 +260,6 @@
         <option value="$PROJECT_DIR$/src/main/scala/utils/TestingUtils.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/gp/regression/GpPredictorTest.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/classification/HyperParamsOptimization.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/datasetstests/CancerClassificationTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmTypeDefinitions.scala" />
@@ -293,14 +275,17 @@
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/optimization/Optimization.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/IOUtilities.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/utils/StatsUtilsTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SinusoidalSsmTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTestingUtils.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/gp/classification/MeshHyperParamsLogLikelihoodEvaluator.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTests.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/MeshUkfParamsEvaluator.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala" />
       </list>
     </option>
@@ -393,8 +378,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -680,6 +663,74 @@
               <option name="myItemId" value="datasetstests" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CancerClassificationTest.scala" />
+              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breeze_test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breeze_test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datasetstests" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breeze_test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breeze_test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="classification" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MeshHyperParamsLogLikelihoodEvaluator.scala" />
+              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -739,6 +790,40 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="tests" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breeze_test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="breeze_test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dynamicalsystems" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="filtering" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UnscentedKalmanFilter.scala" />
+              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -832,35 +917,11 @@
               <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ssm" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="breeze_test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="breeze_test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1225,7 +1286,13 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="breeze_test" />
       <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
       <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
@@ -1485,7 +1552,10 @@
       <workItem from="1399234433014" duration="5087000" />
       <workItem from="1399311073346" duration="6827000" />
       <workItem from="1399364529054" duration="10304000" />
-      <workItem from="1399481653067" duration="14649000" />
+      <workItem from="1399481653067" duration="18265000" />
+      <workItem from="1399907408761" duration="29000" />
+      <workItem from="1399915975843" duration="3737000" />
+      <workItem from="1399998608700" duration="3556000" />
     </task>
     <task id="LOCAL-00001" summary="init&#10;">
       <created>1395063724264</created>
@@ -1591,11 +1661,15 @@
       <created>1399640611855</created>
       <updated>1399640611855</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Testing Ssm much more improved.">
+      <created>1399835701197</created>
+      <updated>1399835701197</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="331195000" />
+    <option name="totallyTimeSpent" value="342133000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1626,8 +1700,8 @@
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3260274" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3251366" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32956383" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4520548" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1668,7 +1742,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="init&#10;" />
     <MESSAGE value="Optimizer based on apache maths + small test." />
     <MESSAGE value="Fixing an error in computing log likelihood function." />
     <MESSAGE value="Further fixes - for instance in classification algorithm." />
@@ -1693,7 +1766,8 @@
     <MESSAGE value="GP Ukf with kernel hyper params optimization - not tested yet." />
     <MESSAGE value="Gp Ukf with hyper param optimization tested, ukf test is enriched with some stuff." />
     <MESSAGE value="Class Testing sinusoidal ssm with ukf." />
-    <option name="LAST_COMMIT_MESSAGE" value="Class Testing sinusoidal ssm with ukf." />
+    <MESSAGE value="Testing Ssm much more improved." />
+    <option name="LAST_COMMIT_MESSAGE" value="Testing Ssm much more improved." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1703,23 +1777,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/DataSetsTestingUtils.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="0" selection-start="460" selection-end="460" vertical-scroll-proportion="0.0" vertical-offset="87" max-vertical-offset="630" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/gp/datasetstests/BostonPredictionDataSetTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="0" selection-start="2132" selection-end="2132" vertical-scroll-proportion="0.0" vertical-offset="810" max-vertical-offset="1200">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/boston.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="96" selection-start="9602" selection-end="9602" vertical-scroll-proportion="0.0" vertical-offset="7224" max-vertical-offset="7665" />
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.10.3/scala-library-2.10.3.jar!/scala/collection/IndexedSeq.class">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="61" selection-start="617" selection-end="617" vertical-scroll-proportion="0.14040561" vertical-offset="0" max-vertical-offset="641" />
@@ -1785,11 +1842,6 @@
         <state line="18" column="31" selection-start="892" selection-end="892" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2310" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/gp/datasetstests/CancerClassificationTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="124" column="60" selection-start="6407" selection-end="6407" vertical-scroll-proportion="0.0" vertical-offset="1247" max-vertical-offset="2070" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/gp/classification/GpClassifier.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="19" column="40" selection-start="690" selection-end="690" vertical-scroll-proportion="0.0" vertical-offset="285" max-vertical-offset="975" />
@@ -1832,9 +1884,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="80" selection-start="1934" selection-end="1934" vertical-scroll-proportion="0.0" vertical-offset="437" max-vertical-offset="855">
-          <folding />
-        </state>
+        <state line="53" column="80" selection-start="1934" selection-end="1934" vertical-scroll-proportion="0.0" vertical-offset="437" max-vertical-offset="855" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/gp/optimization/OptimizationUtils.scala">
@@ -1863,28 +1913,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/scalatest/scalatest_2.10/2.0/scalatest_2.10-2.0-sources.jar!/org/scalatest/OutcomeOf.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="0" selection-start="4229" selection-end="4229" vertical-scroll-proportion="0.36936936" vertical-offset="789" max-vertical-offset="1455" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/config/spring-context.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="64" selection-start="558" selection-end="558" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="675">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="15" column="8" selection-start="334" selection-end="334" vertical-scroll-proportion="0.0" vertical-offset="3" max-vertical-offset="1860">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="101" column="0" selection-start="5221" selection-end="5221" vertical-scroll-proportion="0.0" vertical-offset="1247" max-vertical-offset="3315">
           <folding />
         </state>
       </provider>
@@ -1903,23 +1934,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/gp/classification/MeshHyperParamsLogLikelihoodEvaluator.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="104" column="9" selection-start="2996" selection-end="2996" vertical-scroll-proportion="0.0" vertical-offset="1037" max-vertical-offset="1680">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/utils/IOUtilities.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="38" column="32" selection-start="1529" selection-end="1529" vertical-scroll-proportion="0.0" vertical-offset="71" max-vertical-offset="765">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="87" column="30" selection-start="2945" selection-end="2945" vertical-scroll-proportion="0.0" vertical-offset="806" max-vertical-offset="1755">
           <folding />
         </state>
       </provider>
@@ -1945,76 +1962,137 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTestingUtils.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="161" column="3" selection-start="6864" selection-end="6864" vertical-scroll-proportion="0.0" vertical-offset="1689" max-vertical-offset="2355">
+        <state line="17" column="90" selection-start="540" selection-end="540" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="390">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTestingUtils.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/ukf/true.dat">
+      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="90" selection-start="540" selection-end="540" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="390">
-          <folding>
-            <element signature="e#32#64#0" expanded="true" />
-          </folding>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.26533744" vertical-offset="173" max-vertical-offset="15090" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/ukf/predicted.dat">
+      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="15090" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="36" selection-start="681" selection-end="681" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/config/spring-context.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="49" selection-start="598" selection-end="598" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2895">
+        <state line="9" column="64" selection-start="558" selection-end="558" vertical-scroll-proportion="0.04464286" vertical-offset="120" max-vertical-offset="675">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/scalatest/scalatest_2.10/2.0/scalatest_2.10-2.0-sources.jar!/org/scalatest/OutcomeOf.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="83" column="0" selection-start="4229" selection-end="4229" vertical-scroll-proportion="0.33333334" vertical-offset="923" max-vertical-offset="1455" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="120" column="29" selection-start="6237" selection-end="6237" vertical-scroll-proportion="0.0" vertical-offset="1418" max-vertical-offset="3315">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="9" selection-start="2387" selection-end="2387" vertical-scroll-proportion="0.0" vertical-offset="548" max-vertical-offset="2370">
+        <state line="18" column="2" selection-start="521" selection-end="521" vertical-scroll-proportion="0.0" vertical-offset="1809" max-vertical-offset="2475">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/ukf/true.dat">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/gp/datasetstests/CancerClassificationTest.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.26533744" vertical-offset="173" max-vertical-offset="15090">
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="20" selection-start="1406" selection-end="1406" vertical-scroll-proportion="0.0" vertical-offset="188" max-vertical-offset="1560">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/ukf/predicted.dat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="15090">
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="20" selection-start="192" selection-end="192" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
+        <state line="128" column="59" selection-start="6658" selection-end="6685" vertical-scroll-proportion="0.0" vertical-offset="1357" max-vertical-offset="2070">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTests.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="49" selection-start="774" selection-end="774" vertical-scroll-proportion="0.55228275" vertical-offset="0" max-vertical-offset="679">
+        <state line="33" column="37" selection-start="1009" selection-end="1009" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="98" column="4" selection-start="3399" selection-end="3399" vertical-scroll-proportion="0.0" vertical-offset="1164" max-vertical-offset="1905">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="77" column="32" selection-start="3214" selection-end="3214" vertical-scroll-proportion="0.0" vertical-offset="675" max-vertical-offset="2595">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/gp/classification/MeshHyperParamsLogLikelihoodEvaluator.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="31" selection-start="1699" selection-end="1699" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1395">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="139" column="3" selection-start="7540" selection-end="7540" vertical-scroll-proportion="0.0" vertical-offset="1665" max-vertical-offset="2910">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/MeshUkfParamsEvaluator.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="0" selection-start="191" selection-end="191" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
           <folding>
-            <element signature="e#32#74#0" expanded="true" />
+            <element signature="e#32#78#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/sin/ukf/mesh.dat">
+      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-35.449276" vertical-offset="14676" max-vertical-offset="15090">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/ukf/mesh.dat">
+      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="997" column="41" selection-start="27645" selection-end="27645" vertical-scroll-proportion="0.82822084" vertical-offset="14415" max-vertical-offset="15090">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="61" column="40" selection-start="2331" selection-end="2331" vertical-scroll-proportion="0.5720721" vertical-offset="399" max-vertical-offset="1770">
+          <folding />
         </state>
       </provider>
     </entry>

@@ -28,6 +28,8 @@ class UnscentedKalmanFilterTest extends WordSpec with SsmTestingUtils{
   val kitRNoise:DenseMatrix[Double] = DenseMatrix((0.2*0.2))
   val kitQNoise:DenseMatrix[Double] = DenseMatrix((0.01*0.01))
   val initHiddenStateDistr:GaussianDistribution = GaussianDistribution.standard
+  val initHiddenStateDistrKit:GaussianDistribution = GaussianDistribution(mean = DenseVector(0.),
+	sigma = DenseMatrix((0.5*0.5)))
 
   new TestContextManager(this.getClass).prepareTestInstance(this)
 
@@ -104,10 +106,22 @@ class UnscentedKalmanFilterTest extends WordSpec with SsmTestingUtils{
 	  val (hidden,obs) = generateSinSamples(seqLength)
 	  val ukf = new UnscentedKalmanFilter(gpOptimizer)
 	  val ukfInput = ukfSinInput(obs,seqLength)
-	  val out = ukf.inferWithParamOptimization(ukfInput,None)
-	  val optimizedOut = ukf.inferHiddenState(ukfInput,None,true)
+	  val optimizedOut = ukf.inferWithParamOptimization(ukfInput,None)
+	  val out = ukf.inferHiddenState(ukfInput,None,true)
 	  println(s"UKF - Log likelihood = ${out.logLikelihood}")
 	  println(s"UKF-L - Log likelihood = ${optimizedOut.logLikelihood}")
+	}
+
+	"infer hidden state with unscented transform params optimization in kitagawa problem" in {
+	  val seqLength = 200
+	  val (hidden,obs) = generateKitSamples(seqLength)
+	  val ukf = new UnscentedKalmanFilter(gpOptimizer)
+	  val ukfInput = ukfKitInput(obs,seqLength)
+	  val bestParamsForKit = UnscentedTransformParams(alpha = 0.38,beta = 1.276,kappa = 2.58)
+	  val out = ukf.inferHiddenState(ukfInput,Some(bestParamsForKit),true)
+	  val optimizedOut = ukf.inferWithParamOptimization(ukfInput,None)
+	  println(s"Kit:UKF - Log likelihood = ${out.logLikelihood}")
+	  println(s"Kit:UKF-L - Log likelihood = ${optimizedOut.logLikelihood}")
 	}
 
   }
@@ -132,32 +146,34 @@ class UnscentedKalmanFilterTest extends WordSpec with SsmTestingUtils{
   }
 
   private def generateSinSamples(seqLength:Int) = {
-	generateSamples(seqLength,new SinusoidalSsm,(sinRNoise,sinQNoise))
+	generateSamples(seqLength,new SinusoidalSsm,(sinRNoise,sinQNoise),initHiddenStateDistr)
   }
 
   private def generateKitSamples(seqLength:Int) = {
-	generateSamples(seqLength,new KitagawaSsm,(kitRNoise,kitQNoise))
+	generateSamples(seqLength,new KitagawaSsm,(kitRNoise,kitQNoise),initHiddenStateDistrKit)
   }
 
-  private def generateSamples(seqLength:Int,ssmSampler:SsmModel,noises:(DenseMatrix[Double],DenseMatrix[Double])) = {
+  private def generateSamples(seqLength:Int,ssmSampler:SsmModel,
+							  noises:(DenseMatrix[Double],DenseMatrix[Double]),initDistr:GaussianDistribution) = {
 	val genData = SeriesGenerationData(qNoise = cloneMatrix(noises._1,seqLength),
-	  rNoise = cloneMatrix(noises._2,seqLength),initHiddenState = Right(initHiddenStateDistr))
+	  rNoise = cloneMatrix(noises._2,seqLength),initHiddenState = Right(initDistr))
 	ssmSampler.generateSeries(seqLength,genData)
   }
   
   private def ukfSinInput(obs:DenseMatrix[Double],seqLength:Int):UnscentedFilteringInput = {
-	ukfInput(obs,new SinusoidalSsm,seqLength,(sinRNoise,sinQNoise))
+	ukfInput(obs,new SinusoidalSsm,seqLength,(sinRNoise,sinQNoise),initHiddenStateDistr)
   }
 
   private def ukfKitInput(obs:DenseMatrix[Double],seqLength:Int):UnscentedFilteringInput = {
-	ukfInput(obs,new KitagawaSsm,seqLength,(kitRNoise,kitQNoise))
+	ukfInput(obs,new KitagawaSsm,seqLength,(kitRNoise,kitQNoise),initHiddenStateDistrKit)
   }
 
-  private def ukfInput(obs:DenseMatrix[Double],ssmModel:SsmModel,seqLength:Int,noises:(DenseMatrix[Double],DenseMatrix[Double])) = {
+  private def ukfInput(obs:DenseMatrix[Double],ssmModel:SsmModel,seqLength:Int,
+					   noises:(DenseMatrix[Double],DenseMatrix[Double]),initDistr:GaussianDistribution) = {
 	val (qNoiseFunc,rNoiseFunc) = UnscentedFilteringInput.classicUkfNoise(
 	  cloneMatrix(noises._2,seqLength),cloneMatrix(noises._1,seqLength))
 	UnscentedFilteringInput(ssmModel = ssmModel,observations = obs,
-	  u = None,initMean = initHiddenStateDistr.mean,initCov = initHiddenStateDistr.sigma,
+	  u = None,initMean = initDistr.mean,initCov = initDistr.sigma,
 	  qNoise = qNoiseFunc,rNoise = rNoiseFunc)
   }
 

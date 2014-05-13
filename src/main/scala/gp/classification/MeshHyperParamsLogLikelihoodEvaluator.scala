@@ -41,25 +41,6 @@ class MeshHyperParamsLogLikelihoodEvaluator(likelihoodEvaluator:MarginalLikeliho
 
 }
 
-/*
-	for (elem1 <- range1){
-		for (elem2 <- range2){
-			val mesh = (elem1,elem2)
-			
-		}
-	}
-	
-	for (elem <- currentRange){
-		currentParams(index) = elem
-		if (index == params.length){
-			
-		} else {
-			recEvaluate(index+1,currentParams)
-		}
-		
-		
-	}
- */
 
 object MeshHyperParamsLogLikelihoodEvaluator {
 
