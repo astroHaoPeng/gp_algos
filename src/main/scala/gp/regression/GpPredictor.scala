@@ -1,7 +1,7 @@
 package gp.regression
 import breeze.linalg._
-import breeze.optimize.{LBFGS, DiffFunction}
-import gp.regression.GpPredictor.{BreezeLBFGSPredictionOptimizer, PredictionTrainingInput, PredictionInput}
+import breeze.optimize.DiffFunction
+import gp.regression.GpPredictor.PredictionTrainingInput
 import utils.StatsUtils.GaussianDistribution
 import utils.KernelRequisites.{KernelFuncHyperParams, KernelFunc}
 import org.slf4j.{Logger, LoggerFactory}
@@ -81,11 +81,10 @@ class GpPredictor(val kernelFunc:KernelFunc) {
 	(ll,gradient)
   }
 
-  //TODO - use obtainOptimalHyperParams method
   def predictWithParamsOptimization(input:PredictionInput,optimizeNoise:Boolean):(GaussianDistribution,Double) = {
-	val optimizer = new BreezeLBFGSPredictionOptimizer(this,optimizeNoise)
-	val optimizedParams:KernelFuncHyperParams = optimizer.optimizerHyperParams(input)
-	predict(input.copy(initHyperParams = optimizedParams))
+	val optimalHyperParams:KernelFuncHyperParams = obtainOptimalHyperParams(trainingData = input.trainingData,
+	targets = input.targets,sigmaNoise = input.sigmaNoise,optimizeNoise = optimizeNoise)
+	predict(input.copy(initHyperParams = optimalHyperParams))
   }
 
   def preComputeComponents(trainingData:DenseMatrix[Double],
@@ -160,12 +159,6 @@ object GpPredictor {
 
   val apacheLogger:Logger = LoggerFactory.getLogger(classOf[GpPredictor])
 
-  trait PredictionHyperParamsOptimizer {
-
-	def optimizerHyperParams(predictionInput:PredictionInput):KernelFuncHyperParams
-	
-  }
-
   /*Noise can also be incorporated into kernel function, then sigmaNoise should be set to None*/
   case class PredictionInput(trainingData:DenseMatrix[Double],testData:DenseMatrix[Double],
 							 sigmaNoise:Option[Double],targets:DenseVector[Double],
@@ -180,42 +173,7 @@ object GpPredictor {
   case class PredictionTrainingInput (trainingData:DenseMatrix[Double],sigmaNoise:Option[Double],
 									  targets:DenseVector[Double],initHyperParams:KernelFuncHyperParams)
   
-  //TODO - unify params optimization in classification and prediction problems
-  class BreezeLBFGSPredictionOptimizer (gpPredictor:GpPredictor,optimizeNoise:Boolean)
-	extends PredictionHyperParamsOptimizer{
 
-	def optimizerHyperParams(predictionInput: PredictionInput): KernelFuncHyperParams = {
-
-	  val initPoint = predictionInput.initHyperParams.toDenseVector
-	  var (maximumPoint:DenseVector[Double],maximumVal) = (initPoint,Double.MinValue)
-
-	  /*diffFunction will be minimized so it needs to be equal to -logLikelihood*/
-	  val diffFunction = new DiffFunction[DenseVector[Double]] {
-
-		def calculate(hyperParams: DenseVector[Double]): (Double, DenseVector[Double]) = {
-
-		  val hyperParamsVec:KernelFuncHyperParams = predictionInput.initHyperParams.fromDenseVector(hyperParams)
-		  val (logLikelihood,derivatives) = gpPredictor.logLikelihoodWithDerivatives(
-			predictionInput.toPredictionTrainingInput,hyperParamsVec,
-		  	hyperParams.length)
-		  assert(hyperParams.length == derivatives.length)
-		  apacheLogger.info(s"Current solution is = ${hyperParams}, objective function value = ${-logLikelihood}")
-		  if (logLikelihood > maximumVal){
-			maximumPoint = hyperParams; maximumVal = logLikelihood
-		  }
-		  (-logLikelihood,derivatives :* (-1.))
-		}
-	  }
-
-	  val lbfgs = new LBFGS[DenseVector[Double]](maxIter = 30,m = 3)
-	  val initParams = if (optimizeNoise){initPoint} else {
-		predictionInput.initHyperParams.toDenseVector(0 to -2)
-	  }
-	  val optimizedParams = lbfgs.minimize(diffFunction,initParams)
-	  val returnedVal = if (diffFunction.calculate(optimizedParams)._1 < maximumVal){maximumPoint} else {optimizedParams}
-	  predictionInput.initHyperParams.fromDenseVector(returnedVal)
-	}
-  }
 
 }
 
