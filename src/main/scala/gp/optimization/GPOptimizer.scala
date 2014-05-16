@@ -56,7 +56,7 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer
 			  else {(currentBiggestUcbPoint,currentBiggestUcb)}
 		}
 		if (biggestUcbPoint.isEmpty){biggestUcbPoint = Some(sampler.sample)}
-		logger.info(s"iteration = ${iterNum}, biggestUcb = ${biggestUcb}, biggestUcbPoint = ${biggestUcbPoint.get}")
+		logger.debug(s"iteration = ${iterNum}, biggestUcb = ${biggestUcb}, biggestUcbPoint = ${biggestUcbPoint.get}")
 		val (newPointSet,newEvaluatedPointSet) = try{
 			val evaluatedBiggestUcbPoint = func(biggestUcbPoint.get.toArray)
 			(DenseMatrix.vertcat[Double](pointSet,biggestUcbPoint.get.toDenseMatrix),

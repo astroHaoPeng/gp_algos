@@ -1,7 +1,5 @@
 package gp.regression
 import breeze.linalg._
-import breeze.optimize.DiffFunction
-import gp.regression.GpPredictor.PredictionTrainingInput
 import utils.StatsUtils.GaussianDistribution
 import utils.KernelRequisites.{KernelFuncHyperParams, KernelFunc}
 import org.slf4j.{Logger, LoggerFactory}
