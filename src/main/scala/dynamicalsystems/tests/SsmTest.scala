@@ -38,9 +38,11 @@ trait SsmTest extends SsmTestingUtils{
 	val ssmResult = doTheTestWithUkf(samples)
 	val optimSsmResult = doTheTestWithUkfParamsOptim(samples)
 	val gpSsmResult = doTheTestWithGpUkf(samples)
+	val gpOptimSsmResult = doTheTestWithGpUkfParamsOptim(samples)
 	println(s"${this}-UKF-Test: Log likelihood = ${ssmResult.ll}, MSE = ${ssmResult.mse}, NLL = ${ssmResult.nll}")
 	println(s"${this}-UKF-L-Test: Log likelihood = ${optimSsmResult.ll}, MSE = ${optimSsmResult.mse}, NLL = ${optimSsmResult.nll}")
 	println(s"${this}-GP-UKF: Log likelihood = ${gpSsmResult.ll}, MSE = ${gpSsmResult.mse}, NLL = ${gpSsmResult.nll}")
+	println(s"${this}-GP-UKF-L: Log likelihood = ${gpOptimSsmResult.ll}, MSE = ${gpOptimSsmResult.mse}, NLL = ${gpOptimSsmResult.nll}")
   }
 
   def doTheTestWithUkfParamsOptim(samples:(DenseMatrix[Double],DenseMatrix[Double])):SsmTestingResult = {
@@ -61,7 +63,19 @@ trait SsmTest extends SsmTestingUtils{
 
   def doTheTestWithGpUkf(samples:(DenseMatrix[Double],DenseMatrix[Double]),
 						 params:UnscentedTransformParams = UnscentedTransformParams.defaultParams):SsmTestingResult = {
-	testWithGpUkf(samples,("gpukf/true.dat","gpukf/predicted.dat"))
+	val func:(GPUnscentedKalmanFilter,UnscentedFilteringInput,DenseMatrix[Double]) => FilteringOutput = {
+	  (gpUkf,ukfInput,_) => gpUkf.inferHiddenState(ukfInput,Some(params),samples._1,true,true)
+	}
+	testWithGpUkf(samples,("gpukf/true.dat","gpukf/predicted.dat"))(func)
+  }
+
+  def doTheTestWithGpUkfParamsOptim(samples:(DenseMatrix[Double],DenseMatrix[Double]),
+									params:UnscentedTransformParams = UnscentedTransformParams.defaultParams):SsmTestingResult = {
+	val func:(GPUnscentedKalmanFilter,UnscentedFilteringInput,DenseMatrix[Double]) => FilteringOutput = {
+	  (gpUkf,ukfInput,hidden) =>
+		gpUkf.inferWithUkfOptimWithWrtToNll(ukfInput,None,hidden,true)
+	}
+	testWithGpUkf(samples,("gpukf/true_optim.dat","gpukf/predicted_optim.dat"))(func)
   }
 
   def evaluateUkfParamsMesh(seqLength:Int):Unit = {
@@ -93,11 +107,12 @@ trait SsmTest extends SsmTestingUtils{
 	SsmTestingResult(hiddenStates = gaussianSeq,ll = out.logLikelihood.get,mse = mseVal,nll = nll)
   }
 
-  def testWithGpUkf(samples:(DenseMatrix[Double],DenseMatrix[Double]),paths:(String,String)) = {
+  def testWithGpUkf(samples:(DenseMatrix[Double],DenseMatrix[Double]),paths:(String,String))(
+	func:(GPUnscentedKalmanFilter,UnscentedFilteringInput,DenseMatrix[Double]) => FilteringOutput) = {
 	val (hidden,obs) = samples
 	val gpUkf = new GPUnscentedKalmanFilter(gpOptimizer,gpPredictor)
 	val ukfInput = ukfInputGen(obs,hidden.cols)
-	val out = gpUkf.inferHiddenState(ukfInput,None,hidden,true,true)
+	val out = func(gpUkf,ukfInput,hidden)
 	require(out.logLikelihood.isDefined,"Log likelihood must be defined")
 	val gaussianSeq = filteringOutputToNormDistr(out)
 	val mseVal:Double = mse(out.hiddenMeans,hidden,horSample = false)

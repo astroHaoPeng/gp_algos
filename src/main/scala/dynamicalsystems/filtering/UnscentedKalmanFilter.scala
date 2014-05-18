@@ -18,6 +18,8 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
   import SsmTypeDefinitions._
 
   val ukfParamRange = 0 to 10
+  /*Sth bigger than Double.minVal, but still reasonable value that can be used in computations*/
+  val veryLowValue = -scala.math.pow(10,6)
 
   def inferHiddenState(input: UnscentedFilteringInput, params: Option[UnscentedTransformParams],
 					   computeLL: Boolean = true): FilteringOutput = {
@@ -146,14 +148,18 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
 	  	val nll = nllOfHiddenData(trueHiddenStates = hidden,
 		  hiddenMeans = out.hiddenMeans,hiddenCovs = out.hiddenCovs)
 		/*We want to minimize negative log likelihood */
-		if (nll == Double.NegativeInfinity){Double.MinValue}
-		else if (nll == Double.PositiveInfinity){Double.MaxValue}
+		if (nll == Double.NegativeInfinity){veryLowValue}
+		else if (nll == Double.PositiveInfinity){-veryLowValue}
 		else {nll}
 	}
-	val gpoInput = GPOInput(mParam = 50,cParam = 10,kParam = 2.,
-	  ranges = IndexedSeq(rangeForParam,rangeForParam,rangeForParam))
+	val gpoInput = getGpoInput(rangeForParam)
 	val (optimizedParams,_) = gpOptimizer.minimize(objFunction,gpoInput)
 	inferHiddenState(input,Some(UnscentedTransformParams.fromVector(optimizedParams)),true)
+  }
+
+  protected def getGpoInput(rangeForParam:Range):GPOInput = {
+	GPOInput(mParam = 50,cParam = 10,kParam = 2.,
+	  ranges = IndexedSeq(rangeForParam,rangeForParam,rangeForParam))
   }
 
   private def marginalLogLikelihood(y_t:DenseVector[Double],probab_y_t_given_z_t:GaussianDistribution):Double = {

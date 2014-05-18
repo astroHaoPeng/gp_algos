@@ -5,6 +5,9 @@ import gp.regression.GpPredictor
 import breeze.linalg.{diag, DenseVector, DenseMatrix}
 import org.slf4j.LoggerFactory
 import utils.KernelRequisites.{KernelFunc, KernelFuncHyperParams}
+import utils.StatsUtils._
+import scala.Some
+import gp.optimization.GPOptimizer.GPOInput
 
 /**
  * Created by mjamroz on 29/04/14.
@@ -24,20 +27,51 @@ class GPUnscentedKalmanFilter(gpOptimizer: GPOptimizer, gpPredictor: GpPredictor
 								trueHiddenStates: DenseMatrix[Double],
 								computeLL: Boolean, optimizeGpLearning:Boolean): FilteringOutput = {
 
+	val (gpSsmModel,qNoiseFunc,rNoiseFunc) = learnNewSsmModelWithNoises(input.observations,trueHiddenStates,optimizeGpLearning)
+	inferHiddenState(input.copy(ssmModel = gpSsmModel,qNoise = qNoiseFunc,rNoise = rNoiseFunc),params,computeLL)
+  }
+
+  //TODO - try to integrate it more with corresponding function from UnscentedKalmanFilter class
+  def inferWithUkfOptimWithWrtToNll(input:UnscentedFilteringInput,
+									initParams:Option[UnscentedTransformParams],hidden:DenseMatrix[Double],
+									optimizeGpLearning:Boolean,rangeForParam:Range=ukfParamRange) = {
+
+	val (gpSsmModel,qNoiseFunc,rNoiseFunc) = learnNewSsmModelWithNoises(input.observations,hidden,optimizeGpLearning)
+	val ukfInput:UnscentedFilteringInput = input.copy(ssmModel = gpSsmModel,qNoise = qNoiseFunc,rNoise = rNoiseFunc)
+
+	val objFunction:optimization.Optimization.objectiveFunction = {
+	  point:Array[Double] =>
+		val unscentedParams = UnscentedTransformParams.fromVector(point)
+		val out = inferHiddenState(ukfInput,Some(unscentedParams),true)
+		val nll = nllOfHiddenData(trueHiddenStates = hidden,
+		  hiddenMeans = out.hiddenMeans,hiddenCovs = out.hiddenCovs)
+		/*We want to minimize negative log likelihood */
+		if (nll == Double.NegativeInfinity){veryLowValue}
+		else if (nll == Double.PositiveInfinity){-veryLowValue}
+		else {nll}
+	}
+	val gpoInput = getGpoInput(rangeForParam)
+	val (optimizedParams,_) = gpOptimizer.minimize(objFunction,gpoInput)
+	inferHiddenState(input,Some(UnscentedTransformParams.fromVector(optimizedParams)),true)
+  }
+
+  private def learnNewSsmModelWithNoises(observations:DenseMatrix[Double],trueHiddenStates:DenseMatrix[Double],
+								optimizeGpLearning:Boolean):
+  		(SsmModel,UnscentedKalmanFilter.noiseComputationFunc,UnscentedKalmanFilter.noiseComputationFunc) = {
 	val trainingDataForPredictor:DenseMatrix[Double] = trueHiddenStates.t
 	val trainingDataWithoutLastObj:DenseMatrix[Double] = trainingDataForPredictor(0 to -2,::)
 	val (systemFuncComponents,obsFuncComponents) = (learnSystemFunction(trueHiddenStates,optimizeGpLearning),
-	  learnObsFunction(trueHiddenStates,input.observations,optimizeGpLearning))
+	  learnObsFunction(trueHiddenStates,observations,optimizeGpLearning))
 
 	logger.info("Learning of two state functions is done")
 
-  	val gpSsmModel:SsmModel = new SsmModel {
+	val gpSsmModel:SsmModel = new SsmModel {
 	  override val transitionFuncImpl: SsmTypeDefinitions.transitionFunc = {
 		(_,prevHiddenState,_) =>
 
 		  val diffVector = DenseVector( systemFuncComponents.map{ case (lc,hp) =>
-			  gpPredictor.computePosterior(trainingDataWithoutLastObj,
-				prevHiddenState.toDenseMatrix,lc._1,lc._2,kernelFunc = getKernelFunc(hp))._1.mean(0)
+			gpPredictor.computePosterior(trainingDataWithoutLastObj,
+			  prevHiddenState.toDenseMatrix,lc._1,lc._2,kernelFunc = getKernelFunc(hp))._1.mean(0)
 		  } )
 		  prevHiddenState + diffVector
 	  }
@@ -59,8 +93,7 @@ class GPUnscentedKalmanFilter(gpOptimizer: GPOptimizer, gpPredictor: GpPredictor
 	  computeNoiseMatrix(obsFuncComponents,trainingDataForPredictor,
 		context.firstTransformFromIteration.distribution.mean.toDenseMatrix)
 	}
-
-	inferHiddenState(input.copy(ssmModel = gpSsmModel,qNoise = qNoiseFunc,rNoise = rNoiseFunc),params,computeLL)
+	(gpSsmModel,qNoiseFunc,rNoiseFunc)
   }
 
   /*Learning gaussian process for each hidden state dimension*/

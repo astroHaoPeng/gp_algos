@@ -90,7 +90,7 @@ object StatsUtils {
   
   def nllOfHiddenData(trueHiddenStates:DenseMatrix[Double],inferredDistr:Array[GaussianDistribution]):Double = {
   	require(trueHiddenStates.cols == inferredDistr.length,
-	  "Hidden states number must be equal to iferred states number")
+	  "Hidden states number must be equal to inferred states number")
 	(0 until trueHiddenStates.cols).foldLeft(0.){
 	  case (nll,index) =>
 		val normalDistr = inferredDistr(index)
