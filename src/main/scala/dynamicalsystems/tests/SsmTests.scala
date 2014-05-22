@@ -30,8 +30,8 @@ object SsmTests {
 
 	val seqLength = 200
 	val (sinusoidalSsmTest,kitSsmTest) = (new SinusoidalSsmTest,new KitagawaSsmTest)
-	//sinusoidalSsmTest.run(seqLength)
-	kitSsmTest.run(seqLength)
+	sinusoidalSsmTest.run(seqLength)
+	//kitSsmTest.run(seqLength)
   }
 
 }

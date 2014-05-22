@@ -3,10 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="794477cd-1721-497f-8216-730639d3bdec" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/SinusoidalSsmTest.scala" afterPath="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/SinusoidalSsmTest.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmModel.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmModel.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTests.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTests.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" afterPath="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmTypeDefinitions.scala" afterPath="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmTypeDefinitions.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" afterPath="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="breeze_test.iws" />
@@ -140,7 +143,7 @@
       <file leaf-file-name="UnscentedKalmanFilter.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="154" column="44" selection-start="8254" selection-end="8254" vertical-scroll-proportion="0.0" vertical-offset="1710" max-vertical-offset="3315">
+            <state line="205" column="8" selection-start="9981" selection-end="9981" vertical-scroll-proportion="0.0" vertical-offset="3075" max-vertical-offset="3435">
               <folding />
             </state>
           </provider>
@@ -149,7 +152,7 @@
       <file leaf-file-name="SsmTest.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="80" column="51" selection-start="3748" selection-end="3748" vertical-scroll-proportion="0.0" vertical-offset="699" max-vertical-offset="2340">
+            <state line="75" column="58" selection-start="3582" selection-end="3582" vertical-scroll-proportion="0.0" vertical-offset="1125" max-vertical-offset="2460">
               <folding />
             </state>
           </provider>
@@ -158,7 +161,7 @@
       <file leaf-file-name="SsmTests.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTests.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="4" selection-start="954" selection-end="954" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
+            <state line="26" column="3" selection-start="776" selection-end="776" vertical-scroll-proportion="0.0" vertical-offset="390" max-vertical-offset="645">
               <folding />
             </state>
           </provider>
@@ -167,7 +170,16 @@
       <file leaf-file-name="SsmModel.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmModel.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="6" selection-start="1212" selection-end="1212" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="915">
+            <state line="40" column="53" selection-start="1576" selection-end="1576" vertical-scroll-proportion="0.0" vertical-offset="600" max-vertical-offset="930">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SsmTypeDefinitions.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmTypeDefinitions.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="19" column="67" selection-start="703" selection-end="703" vertical-scroll-proportion="0.0" vertical-offset="285" max-vertical-offset="435">
               <folding />
             </state>
           </provider>
@@ -176,7 +188,7 @@
       <file leaf-file-name="GPUnscentedKalmanFilter.scala" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="111" column="108" selection-start="5211" selection-end="5211" vertical-scroll-proportion="0.8423423" vertical-offset="969" max-vertical-offset="2160">
+            <state line="38" column="101" selection-start="1776" selection-end="1776" vertical-scroll-proportion="-1.1261262" vertical-offset="1320" max-vertical-offset="2385">
               <folding />
             </state>
           </provider>
@@ -185,7 +197,34 @@
       <file leaf-file-name="StatsUtils.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="108" column="5" selection-start="3846" selection-end="3846" vertical-scroll-proportion="0.0" vertical-offset="1188" max-vertical-offset="2085">
+            <state line="108" column="5" selection-start="3846" selection-end="3846" vertical-scroll-proportion="0.0" vertical-offset="1620" max-vertical-offset="2130">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SsmExamples.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="19" column="40" selection-start="442" selection-end="442" vertical-scroll-proportion="0.0" vertical-offset="285" max-vertical-offset="750">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UnscentedKalmanFilterTest.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="137" column="60" selection-start="5933" selection-end="5933" vertical-scroll-proportion="0.0" vertical-offset="1928" max-vertical-offset="2775">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SinusoidalSsmTest.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/SinusoidalSsmTest.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="17" column="3" selection-start="569" selection-end="569" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="585">
               <folding />
             </state>
           </provider>
@@ -229,21 +268,16 @@
         <option value="$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/classification/HyperParamsOptimization.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/datasetstests/CancerClassificationTest.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmTypeDefinitions.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/SsmTestingUtils.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/SinusoidalSsmTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/KalmanFilter.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/NumericalUtils.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmObservationSampler.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmModel.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/KernelRequisites.scala" />
         <option value="$PROJECT_DIR$/src/main/resources/config/spring-context.xml" />
         <option value="$PROJECT_DIR$/src/main/scala/optimization/Optimization.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/IOUtilities.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/utils/StatsUtilsTest.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SinusoidalSsmTest.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/classification/MeshHyperParamsLogLikelihoodEvaluator.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTestingUtils.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/MeshUkfParamsEvaluator.scala" />
@@ -252,9 +286,14 @@
         <option value="$PROJECT_DIR$/src/main/resources/log4j.properties" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmTypeDefinitions.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmModel.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/SinusoidalSsmTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTests.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala" />
       </list>
     </option>
   </component>
@@ -346,6 +385,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -842,7 +882,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -1477,7 +1516,9 @@
       <workItem from="1399481653067" duration="18265000" />
       <workItem from="1399907408761" duration="29000" />
       <workItem from="1399915975843" duration="3737000" />
-      <workItem from="1399998608700" duration="15360000" />
+      <workItem from="1399998608700" duration="17026000" />
+      <workItem from="1400521783276" duration="1713000" />
+      <workItem from="1400782808410" duration="37000" />
     </task>
     <task id="LOCAL-00001" summary="init&#10;">
       <created>1395063724264</created>
@@ -1603,11 +1644,15 @@
       <created>1400281268031</created>
       <updated>1400281268031</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="GP-UKF since now with UT-params learning.">
+      <created>1400448217178</created>
+      <updated>1400448217178</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="353937000" />
+    <option name="totallyTimeSpent" value="357353000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1638,7 +1683,6 @@
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32465753" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32956383" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -1649,13 +1693,12 @@
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="ASM" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32739726" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32956383" sideWeight="0.6011396" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25686592" sideWeight="0.67094016" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25686592" sideWeight="0.67094016" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3260274" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="100" y="100" width="1080" height="600" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1663,6 +1706,8 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32465753" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32739726" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1680,7 +1725,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="Little refactoring.&#10;" />
     <MESSAGE value="Evaluating mesh of hyper parameters implemented." />
     <MESSAGE value="Some files with mesh evaluation added. Kalman filter implemented, not tested." />
     <MESSAGE value="Some code testing kalman filter in object tracking task, some improvements/fixes." />
@@ -1705,7 +1749,8 @@
     <MESSAGE value="Implemented nll computation and optimization w.r.t to it." />
     <MESSAGE value="Removed unnecessary optimizer involved with gp predictor - hyperparams optimization, gp-ukf test in SsmTest class." />
     <MESSAGE value="Changed logging a bit, ssm tests are run on the same samples." />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed logging a bit, ssm tests are run on the same samples." />
+    <MESSAGE value="GP-UKF since now with UT-params learning." />
+    <option name="LAST_COMMIT_MESSAGE" value="GP-UKF since now with UT-params learning." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1757,13 +1802,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmTypeDefinitions.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="7" selection-start="180" selection-end="180" vertical-scroll-proportion="0.16535433" vertical-offset="0" max-vertical-offset="635">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/gp/regression/GpPredictorTest.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="30" column="53" selection-start="1138" selection-end="1138" vertical-scroll-proportion="-0.036036037" vertical-offset="339" max-vertical-offset="1245">
@@ -1807,19 +1845,19 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/ukf/true.dat">
-      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.26533744" vertical-offset="173" max-vertical-offset="15090" />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/ukf/predicted.dat">
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/ukf/predicted.dat">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="15090" />
+      </provider>
+      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/config/spring-context.xml">
@@ -1849,51 +1887,39 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/sin/ukf/mesh.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-35.449276" vertical-offset="14676" max-vertical-offset="15090" />
+      </provider>
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-35.449276" vertical-offset="14676" max-vertical-offset="15090">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/ukf/mesh.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="997" column="41" selection-start="27645" selection-end="27645" vertical-scroll-proportion="0.82822084" vertical-offset="14415" max-vertical-offset="15090" />
+      </provider>
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="997" column="41" selection-start="27645" selection-end="27645" vertical-scroll-proportion="0.82822084" vertical-offset="14415" max-vertical-offset="15090">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-math3/3.2/commons-math3-3.2-sources.jar!/org/apache/commons/math3/exception/util/LocalizedFormats.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="395" column="19" selection-start="28635" selection-end="28635" vertical-scroll-proportion="0.0" vertical-offset="5515" max-vertical-offset="5805">
-          <folding />
-        </state>
+        <state line="395" column="19" selection-start="28635" selection-end="28635" vertical-scroll-proportion="0.0" vertical-offset="5515" max-vertical-offset="5805" />
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-math3/3.2/commons-math3-3.2-sources.jar!/org/apache/commons/math3/exception/util/ExceptionContext.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="136" column="0" selection-start="4257" selection-end="4257" vertical-scroll-proportion="0.0" vertical-offset="1534" max-vertical-offset="4710">
-          <folding />
-        </state>
+        <state line="136" column="0" selection-start="4257" selection-end="4257" vertical-scroll-proportion="0.0" vertical-offset="1534" max-vertical-offset="4710" />
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-math3/3.2/commons-math3-3.2-sources.jar!/org/apache/commons/math3/exception/MathIllegalArgumentException.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="0" selection-start="2343" selection-end="2343" vertical-scroll-proportion="0.0" vertical-offset="454" max-vertical-offset="780">
-          <folding />
-        </state>
+        <state line="62" column="0" selection-start="2343" selection-end="2343" vertical-scroll-proportion="0.0" vertical-offset="454" max-vertical-offset="780" />
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-math3/3.2/commons-math3-3.2-sources.jar!/org/apache/commons/math3/distribution/MultivariateNormalDistribution.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="11" selection-start="3189" selection-end="3189" vertical-scroll-proportion="0.33128834" vertical-offset="582" max-vertical-offset="3330">
-          <folding />
-        </state>
+        <state line="70" column="11" selection-start="3189" selection-end="3189" vertical-scroll-proportion="0.33128834" vertical-offset="582" max-vertical-offset="3330" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/MeshUkfParamsEvaluator.scala">
@@ -1906,23 +1932,19 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/sin/ukf/predicted.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3090" />
+      </provider>
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3090">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/sin/ukf/predicted_optim.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="68" selection-start="661" selection-end="661" vertical-scroll-proportion="0.34509203" vertical-offset="0" max-vertical-offset="3090" />
+      </provider>
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="68" selection-start="661" selection-end="661" vertical-scroll-proportion="0.34509203" vertical-offset="0" max-vertical-offset="3090">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala">
@@ -1939,32 +1961,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="122" column="62" selection-start="5461" selection-end="5461" vertical-scroll-proportion="0.0" vertical-offset="1050" max-vertical-offset="2595">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/SinusoidalSsmTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="527" selection-end="527" vertical-scroll-proportion="0.24300441" vertical-offset="0" max-vertical-offset="679">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/log4j.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="59" selection-start="338" selection-end="338" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="21" selection-start="242" selection-end="242" vertical-scroll-proportion="0.24774775" vertical-offset="0" max-vertical-offset="666">
-          <folding />
-        </state>
+        <state line="7" column="59" selection-start="338" selection-end="338" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala">
@@ -1974,72 +1973,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="154" column="44" selection-start="8254" selection-end="8254" vertical-scroll-proportion="0.0" vertical-offset="1710" max-vertical-offset="3315">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmModel.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="6" selection-start="1212" selection-end="1212" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="915">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/sin/gpukf/predicted.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="90.296295" vertical-offset="2438" max-vertical-offset="3090" />
+      </provider>
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="90.296295" vertical-offset="2438" max-vertical-offset="3090">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/sin/gpukf/true_optim.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-3.7392638" vertical-offset="2438" max-vertical-offset="3090" />
+      </provider>
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-3.7392638" vertical-offset="2438" max-vertical-offset="3090">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/sin/gpukf/true.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-2.8420246" vertical-offset="1853" max-vertical-offset="3090" />
+      </provider>
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-2.8420246" vertical-offset="1853" max-vertical-offset="3090">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/sin/gpukf/predicted_optim.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="3090" />
+      </provider>
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="3090">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="51" selection-start="3748" selection-end="3748" vertical-scroll-proportion="0.0" vertical-offset="699" max-vertical-offset="2340">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTests.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="4" selection-start="954" selection-end="954" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/utils/StatsUtils.scala">
@@ -2050,48 +2013,96 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/gpukf/predicted.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="46.333332" vertical-offset="1251" max-vertical-offset="3090" />
+      </provider>
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="46.333332" vertical-offset="1251" max-vertical-offset="3090">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/gpukf/true_optim.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="44.11111" vertical-offset="1191" max-vertical-offset="3090" />
+      </provider>
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="44.11111" vertical-offset="1191" max-vertical-offset="3090">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/gpukf/predicted_optim.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-6.4492755" vertical-offset="2670" max-vertical-offset="3090" />
+      </provider>
       <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/gpukf/true.dat">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-6.4492755" vertical-offset="2670" max-vertical-offset="3090">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="3090" />
+      </provider>
+      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/UnscentedKalmanFilter.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="205" column="8" selection-start="9981" selection-end="9981" vertical-scroll-proportion="0.0" vertical-offset="2649" max-vertical-offset="3315">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/kit/gpukf/true.dat">
-      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
-        <state />
-      </provider>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmTypeDefinitions.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="3090">
+        <state line="19" column="67" selection-start="703" selection-end="703" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/SinusoidalSsmTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="3" selection-start="569" selection-end="569" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmModel.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="53" selection-start="1576" selection-end="1576" vertical-scroll-proportion="0.0" vertical-offset="210" max-vertical-offset="900">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/SsmExamples.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="40" selection-start="442" selection-end="442" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="720">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/dynamicalsystems/filtering/UnscentedKalmanFilterTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="137" column="60" selection-start="5933" selection-end="5933" vertical-scroll-proportion="0.0" vertical-offset="1928" max-vertical-offset="2775">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="75" column="58" selection-start="3582" selection-end="3582" vertical-scroll-proportion="0.0" vertical-offset="623" max-vertical-offset="2325">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/tests/SsmTests.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="3" selection-start="776" selection-end="776" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/dynamicalsystems/filtering/GPUnscentedKalmanFilter.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="111" column="108" selection-start="5211" selection-end="5211" vertical-scroll-proportion="0.8423423" vertical-offset="969" max-vertical-offset="2160">
+        <state line="38" column="101" selection-start="1776" selection-end="1776" vertical-scroll-proportion="-1.1261262" vertical-offset="1320" max-vertical-offset="2385">
           <folding />
         </state>
       </provider>

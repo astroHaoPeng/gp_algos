@@ -64,7 +64,7 @@ trait SsmTest extends SsmTestingUtils{
   def doTheTestWithGpUkf(samples:(DenseMatrix[Double],DenseMatrix[Double]),
 						 params:UnscentedTransformParams = UnscentedTransformParams.defaultParams):SsmTestingResult = {
 	val func:(GPUnscentedKalmanFilter,UnscentedFilteringInput,DenseMatrix[Double]) => FilteringOutput = {
-	  (gpUkf,ukfInput,_) => gpUkf.inferHiddenState(ukfInput,Some(params),samples._1,true,true)
+	  (gpUkf,ukfInput,_) => gpUkf.inferHiddenState(ukfInput,Some(params),true,true)
 	}
 	testWithGpUkf(samples,("gpukf/true.dat","gpukf/predicted.dat"))(func)
   }
@@ -73,7 +73,7 @@ trait SsmTest extends SsmTestingUtils{
 									params:UnscentedTransformParams = UnscentedTransformParams.defaultParams):SsmTestingResult = {
 	val func:(GPUnscentedKalmanFilter,UnscentedFilteringInput,DenseMatrix[Double]) => FilteringOutput = {
 	  (gpUkf,ukfInput,hidden) =>
-		gpUkf.inferWithUkfOptimWithWrtToNll(ukfInput,None,hidden,true)
+		gpUkf.inferWithUkfOptimWithWrtToNll(ukfInput,None,true)
 	}
 	testWithGpUkf(samples,("gpukf/true_optim.dat","gpukf/predicted_optim.dat"))(func)
   }
@@ -142,14 +142,13 @@ trait SsmTest extends SsmTestingUtils{
   }
 
   private def generateSamples(seqLength:Int) = {
-	val genData = SeriesGenerationData(qNoise = cloneMatrix(qNoise,seqLength),
-	  rNoise = cloneMatrix(rNoise,seqLength),initHiddenState = Right(initHiddenStateDistr))
+	val genData = SeriesGenerationData(initHiddenState = Right(initHiddenStateDistr))
 	ssmModel.generateSeries(seqLength,genData)
   }
 
   private def ukfInputGen(obs:DenseMatrix[Double],seqLength:Int):UnscentedFilteringInput = {
 	val (qNoiseFunc,rNoiseFunc) = UnscentedFilteringInput.classicUkfNoise(
-	  cloneMatrix(qNoise,seqLength),cloneMatrix(rNoise,seqLength))
+	  cloneMatrix(ssmModel.latentNoise,seqLength),cloneMatrix(ssmModel.obsNoise,seqLength))
 	UnscentedFilteringInput(ssmModel = ssmModel,observations = obs,
 	  u = None,initMean = initHiddenStateDistr.mean,initCov = initHiddenStateDistr.sigma,
 	  qNoise = qNoiseFunc,rNoise = rNoiseFunc)

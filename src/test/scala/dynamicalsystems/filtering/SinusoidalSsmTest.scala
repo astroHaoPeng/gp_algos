@@ -21,8 +21,8 @@ class SinusoidalSsmTest extends WordSpec with SsmTestingUtils{
 	"generate a sequence of observations" in {
 
 	  	val seqLength = 10;
-	  	val genData = SeriesGenerationData(qNoise = cloneMatrix(rNoise,seqLength),
-		  rNoise = cloneMatrix(qNoise,seqLength),initHiddenState = Right(GaussianDistribution.standard))
+	  	val genData = SeriesGenerationData(
+		  initHiddenState = Right(GaussianDistribution.standard))
 		val (hidden,obs) = ssmSampler.generateSeries(seqLength,genData)
 	    assert(hidden.rows == 1 && obs.rows == 1)
 	  	assert(hidden.cols == seqLength && obs.cols == seqLength)

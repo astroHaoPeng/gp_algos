@@ -12,7 +12,8 @@ trait SsmModel {
 
   val transitionFuncImpl:transitionFunc
   val observationFuncImpl:observationFunc
-
+  val latentNoise:DenseMatrix[Double]
+  val obsNoise:DenseMatrix[Double]
 
   def sampleHiddenState(previousStateVal:DenseVector[Double],
 						optionalInput:DenseVector[Double],qNoise:DenseMatrix[Double],iterNum:Int):DenseVector[Double] = {
@@ -34,21 +35,19 @@ trait SsmModel {
   /*_1 - hidden state values, _2 - observations*/
   def generateSeries(length:Int,generationData:SeriesGenerationData):(DenseMatrix[Double],DenseMatrix[Double]) = {
 
-	require(generationData.rNoise.length == length && generationData.qNoise.length == length,
-	  "Number of noise matrices needs to be equal to series length")
 	val initHiddenState:DenseVector[Double] = generationData.initHiddenState match {
 	  case Left(dv) => dv
 	  case Right(normalDistr) =>
 		NormalDistributionSampler.sample(normalDistr)
 	}
 	val hiddenStateMatrix = DenseMatrix.zeros[Double](initHiddenState.length,length)
-	val observationStateMatrix = DenseMatrix.zeros[Double](generationData.qNoise(0).rows,length)
+	val observationStateMatrix = DenseMatrix.zeros[Double](obsNoise.rows,length)
 	(0 until length).foldLeft(initHiddenState){
 	  case (currentHiddenState,iterNum) =>
-	  	val observation = sampleObservation(currentHiddenState,generationData.rNoise(iterNum),iterNum)
+	  	val observation = sampleObservation(currentHiddenState,obsNoise,iterNum)
 	  	hiddenStateMatrix(::,iterNum) := currentHiddenState
 	  	observationStateMatrix(::,iterNum) := observation
-	  	sampleHiddenState(currentHiddenState,null,generationData.qNoise(iterNum),iterNum)
+	  	sampleHiddenState(currentHiddenState,null,latentNoise,iterNum)
 	}
 
 	(hiddenStateMatrix,observationStateMatrix)

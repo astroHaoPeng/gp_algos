@@ -16,8 +16,8 @@ object SsmTypeDefinitions {
   /*1 - hidden state z_t, 2 - time step, result - observation state y_t*/
   type observationFunc = (DenseVector[Double], Int) => DenseVector[Double]
 
-  case class SeriesGenerationData(qNoise:Array[transitionMatrix],
-								  rNoise:Array[transitionMatrix],
+  case class SeriesGenerationData(/*qNoise:Array[transitionMatrix],
+								  rNoise:Array[transitionMatrix],*/
 								  initHiddenState:Either[DenseVector[Double],GaussianDistribution])
 
 }

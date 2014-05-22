@@ -134,11 +134,11 @@ class UnscentedKalmanFilterTest extends WordSpec with SsmTestingUtils{
 	  val (hidden,obs) = generateSinSamples(seqLength)
 	  val gpUkf = new GPUnscentedKalmanFilter(gpOptimizer,gpPredictor)
 	  val ukfInput = ukfSinInput(obs,seqLength)
-	  val out =  gpUkf.inferHiddenState(ukfInput,None,hidden,true,false)
+	  val out =  gpUkf.inferHiddenState(ukfInput,None,true,false)
 	  assert(out.hiddenMeans.cols == seqLength)
 	  assert(out.hiddenMeans.rows == hidden.rows)
 	  assert(out.hiddenCovs.length == seqLength)
-	  val optimizedOut = gpUkf.inferHiddenState(ukfInput,None,hidden,true,true)
+	  val optimizedOut = gpUkf.inferHiddenState(ukfInput,None,true,true)
 	  println(s"GP-UKF Log likelihood = ${out.logLikelihood}")
 	  println(s"GP-UKF-HPO Log likelihood = ${optimizedOut.logLikelihood}")
 	}
@@ -146,32 +146,31 @@ class UnscentedKalmanFilterTest extends WordSpec with SsmTestingUtils{
   }
 
   private def generateSinSamples(seqLength:Int) = {
-	generateSamples(seqLength,new SinusoidalSsm,(sinRNoise,sinQNoise),initHiddenStateDistr)
+	generateSamples(seqLength,new SinusoidalSsm,initHiddenStateDistr)
   }
 
   private def generateKitSamples(seqLength:Int) = {
-	generateSamples(seqLength,new KitagawaSsm,(kitRNoise,kitQNoise),initHiddenStateDistrKit)
+	generateSamples(seqLength,new KitagawaSsm,initHiddenStateDistrKit)
   }
 
   private def generateSamples(seqLength:Int,ssmSampler:SsmModel,
-							  noises:(DenseMatrix[Double],DenseMatrix[Double]),initDistr:GaussianDistribution) = {
-	val genData = SeriesGenerationData(qNoise = cloneMatrix(noises._1,seqLength),
-	  rNoise = cloneMatrix(noises._2,seqLength),initHiddenState = Right(initDistr))
+							  initDistr:GaussianDistribution) = {
+	val genData = SeriesGenerationData(initHiddenState = Right(initDistr))
 	ssmSampler.generateSeries(seqLength,genData)
   }
   
   private def ukfSinInput(obs:DenseMatrix[Double],seqLength:Int):UnscentedFilteringInput = {
-	ukfInput(obs,new SinusoidalSsm,seqLength,(sinRNoise,sinQNoise),initHiddenStateDistr)
+	ukfInput(obs,new SinusoidalSsm,seqLength,initHiddenStateDistr)
   }
 
   private def ukfKitInput(obs:DenseMatrix[Double],seqLength:Int):UnscentedFilteringInput = {
-	ukfInput(obs,new KitagawaSsm,seqLength,(kitRNoise,kitQNoise),initHiddenStateDistrKit)
+	ukfInput(obs,new KitagawaSsm,seqLength,initHiddenStateDistrKit)
   }
 
   private def ukfInput(obs:DenseMatrix[Double],ssmModel:SsmModel,seqLength:Int,
-					   noises:(DenseMatrix[Double],DenseMatrix[Double]),initDistr:GaussianDistribution) = {
+					   initDistr:GaussianDistribution) = {
 	val (qNoiseFunc,rNoiseFunc) = UnscentedFilteringInput.classicUkfNoise(
-	  cloneMatrix(noises._2,seqLength),cloneMatrix(noises._1,seqLength))
+	  cloneMatrix(ssmModel.latentNoise,seqLength),cloneMatrix(ssmModel.obsNoise,seqLength))
 	UnscentedFilteringInput(ssmModel = ssmModel,observations = obs,
 	  u = None,initMean = initDistr.mean,initCov = initDistr.sigma,
 	  qNoise = qNoiseFunc,rNoise = rNoiseFunc)

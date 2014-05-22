@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 import utils.KernelRequisites.{KernelFunc, KernelFuncHyperParams}
 import utils.StatsUtils._
 import scala.Some
-import gp.optimization.GPOptimizer.GPOInput
+import dynamicalsystems.filtering.SsmTypeDefinitions.SeriesGenerationData
 
 /**
  * Created by mjamroz on 29/04/14.
@@ -24,26 +24,31 @@ class GPUnscentedKalmanFilter(gpOptimizer: GPOptimizer, gpPredictor: GpPredictor
   type aLCWithHyperParams = Array[(afterLearningComponents,Option[KernelFuncHyperParams])]
 
   def inferHiddenState(input: UnscentedFilteringInput, params: Option[UnscentedTransformParams],
-								trueHiddenStates: DenseMatrix[Double],
 								computeLL: Boolean, optimizeGpLearning:Boolean): FilteringOutput = {
 
-	val (gpSsmModel,qNoiseFunc,rNoiseFunc) = learnNewSsmModelWithNoises(input.observations,trueHiddenStates,optimizeGpLearning)
+	val tMax = input.observations.cols
+	val initDistr = GaussianDistribution(mean = input.initMean,sigma = input.initCov)
+	val (hiddenSamples,_) = input.ssmModel.generateSeries(tMax,SeriesGenerationData(initHiddenState = Right(initDistr)))
+	val (gpSsmModel,qNoiseFunc,rNoiseFunc) = learnNewSsmModelWithNoises(input.observations,hiddenSamples,optimizeGpLearning)
 	inferHiddenState(input.copy(ssmModel = gpSsmModel,qNoise = qNoiseFunc,rNoise = rNoiseFunc),params,computeLL)
   }
 
   //TODO - try to integrate it more with corresponding function from UnscentedKalmanFilter class
   def inferWithUkfOptimWithWrtToNll(input:UnscentedFilteringInput,
-									initParams:Option[UnscentedTransformParams],hidden:DenseMatrix[Double],
+									initParams:Option[UnscentedTransformParams],
 									optimizeGpLearning:Boolean,rangeForParam:Range=ukfParamRange) = {
 
-	val (gpSsmModel,qNoiseFunc,rNoiseFunc) = learnNewSsmModelWithNoises(input.observations,hidden,optimizeGpLearning)
+	val tMax = input.observations.cols
+	val initDistr = GaussianDistribution(mean = input.initMean,sigma = input.initCov)
+	val (hiddenSamples,_) = input.ssmModel.generateSeries(tMax,SeriesGenerationData(initHiddenState = Right(initDistr)))
+	val (gpSsmModel,qNoiseFunc,rNoiseFunc) = learnNewSsmModelWithNoises(input.observations,hiddenSamples,optimizeGpLearning)
 	val ukfInput:UnscentedFilteringInput = input.copy(ssmModel = gpSsmModel,qNoise = qNoiseFunc,rNoise = rNoiseFunc)
 
 	val objFunction:optimization.Optimization.objectiveFunction = {
 	  point:Array[Double] =>
 		val unscentedParams = UnscentedTransformParams.fromVector(point)
 		val out = inferHiddenState(ukfInput,Some(unscentedParams),true)
-		val nll = nllOfHiddenData(trueHiddenStates = hidden,
+		val nll = nllOfHiddenData(trueHiddenStates = hiddenSamples,
 		  hiddenMeans = out.hiddenMeans,hiddenCovs = out.hiddenCovs)
 		/*We want to minimize negative log likelihood */
 		if (nll == Double.NegativeInfinity){veryLowValue}
@@ -82,7 +87,8 @@ class GPUnscentedKalmanFilter(gpOptimizer: GPOptimizer, gpPredictor: GpPredictor
 			  hiddenState.toDenseMatrix,lc._1,lc._2,kernelFunc = getKernelFunc(hp))._1.mean(0)
 		  } )
 	  }
-
+	  override val obsNoise: DenseMatrix[Double] = null
+	  override val latentNoise: DenseMatrix[Double] = null
 	}
 
 	val qNoiseFunc:noiseComputationFunc = {context =>

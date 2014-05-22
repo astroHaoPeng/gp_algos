@@ -2,7 +2,7 @@ package dynamicalsystems.filtering
 
 import breeze.numerics.sigmoid
 import utils.NumericalUtils
-import breeze.linalg.DenseVector
+import breeze.linalg.{DenseMatrix, DenseVector}
 
 /**
  * Created by mjamroz on 25/04/14.
@@ -20,9 +20,14 @@ object SsmExamples {
 	override val transitionFuncImpl: SsmTypeDefinitions.transitionFunc = {
 	  (_,previousState,_) => sin(previousState)
 	}
+	override val obsNoise: DenseMatrix[Double] = DenseMatrix((0.1*0.1))
+	override val latentNoise: DenseMatrix[Double] = DenseMatrix((0.1*0.1))
   }
 
   class KitagawaSsm extends SsmModel {
+
+	override val latentNoise:DenseMatrix[Double] = DenseMatrix((0.01*0.01))
+	override val obsNoise:DenseMatrix[Double] = DenseMatrix((0.2*0.2))
 
 	override val observationFuncImpl: SsmTypeDefinitions.observationFunc = {
 	  (hiddenState,_) =>
