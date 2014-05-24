@@ -31,7 +31,7 @@ object Main {
 	val targets:DenseVector[Double] = data(::,data.cols-1)
 	val featureMatrix:DenseMatrix[Double] = data(::,0 until data.cols-1)
 	val input = PredictionInput(trainingData = featureMatrix,testData = testExample.toDenseMatrix,
-	  sigmaNoise = None,targets = targets,initHyperParams = defaultRbfParams)
+	  sigmaNoise = None,targets = targets)
 	println(new GpPredictor(gaussianKernel).predict(input))
   }
 

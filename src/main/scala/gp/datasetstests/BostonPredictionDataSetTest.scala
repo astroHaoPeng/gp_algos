@@ -44,7 +44,7 @@ class BostonPredictionDataSetTest {
 	loadDataSet(DataLoadSpec(fileName = "boston.csv",divRatio = ratio)) match {
 	  case Right(dataSet) =>
 		val predictionInput = PredictionInput(trainingData = dataSet.trainingData,
-		  testData = dataSet.testData,sigmaNoise = None,targets = dataSet.trainingLabels,initHyperParams = defaultRbfParams)
+		  testData = dataSet.testData,sigmaNoise = None,targets = dataSet.trainingLabels)
 		val (gaussianDistr,logLikelihood) = if (!optimizeParams){
 		  gpPredictor.predict(predictionInput)
 		} else {

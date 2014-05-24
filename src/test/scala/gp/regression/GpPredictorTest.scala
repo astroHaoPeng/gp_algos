@@ -59,7 +59,7 @@ class GpPredictorTest extends WordSpec with BeforeAndAfterAll{
 	"predict the output of train example equal to the true value in noiseless case" in {
 
 	  	val input = PredictionInput(trainingData = trainData,testData = testExample.toDenseMatrix,
-		  sigmaNoise = None,targets = targets,initHyperParams = gpPredictor.kernelFunc.hyperParams)
+		  sigmaNoise = None,targets = targets)
 	    val (distr,logLikelihood) = gpPredictor.predict(input)
 	  	val (testDistr,_) = gpPredictor.predict(
 		  input.copy(trainingData = trainData(0 to -3,::),testData = trainData(-2 to -1,::),targets = targets(0 to -3)))
@@ -70,15 +70,15 @@ class GpPredictorTest extends WordSpec with BeforeAndAfterAll{
 	  	println(s"distr=$testDistr - ll=$logLikelihood")
 	}
 
-//	"optimize hyper params and predict values at specified point" in {
-//
-////	  	val input = PredictionInput(trainingData = trainData(0 to -3,::),testData = testExample.toDenseMatrix,
-////		  sigmaNoise = None,targets = targets,initHyperParams = defaultRbfParams)
-//	  val input = PredictionInput(trainingData = trainData(0 to -3,::),testData = trainData(-2 to -1,::),
-//		sigmaNoise = None,targets = targets(0 to -3),initHyperParams = defaultRbfParams)
-//	  	val (distr,logLikelihood) = gpPredictor.predictWithParamsOptimization(input,false)
-//	  	println(s"distr=$distr - ll=$logLikelihood")
-//	}
+	"optimize hyper params and predict values at specified point" in {
+
+//	  	val input = PredictionInput(trainingData = trainData(0 to -3,::),testData = testExample.toDenseMatrix,
+//		  sigmaNoise = None,targets = targets,initHyperParams = defaultRbfParams)
+	 	val input = PredictionInput(trainingData = trainData(0 to -3,::),testData = trainData(-2 to -1,::),
+			sigmaNoise = None,targets = targets(0 to -3))
+	  	val (distr,logLikelihood) = gpPredictor.predictWithParamsOptimization(input,true)
+	  	println(s"distr=$distr - ll=$logLikelihood")
+	}
 
 
   }

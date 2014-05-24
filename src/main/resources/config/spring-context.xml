@@ -17,8 +17,20 @@
         <constructor-arg name="rbfParams" ref="defaultRbfParams" />
     </bean>
 
+    <bean id="co2HyperParams" class="gp.regression.Co2Prediction$Co2HyperParams">
+        <constructor-arg name="dv" value="#{objectCreator.co2HyperParamsVec()}" />
+    </bean>
+
+    <bean id="co2Kernel" class="gp.regression.Co2Prediction$Co2Kernel">
+        <constructor-arg name="co2HyperParams" ref="co2HyperParams" />
+    </bean>
+
     <bean id="gpPredictor" class="gp.regression.GpPredictor">
         <constructor-arg name="kernelFunc" ref="rbfKernel" />
+    </bean>
+
+    <bean id="co2GpPredictor" class="gp.regression.GpPredictor">
+        <constructor-arg name="kernelFunc" ref="co2Kernel" />
     </bean>
 
     <bean id="stopCriterion" class="gp.classification.EpParameterEstimator$AvgBasedStopCriterion">

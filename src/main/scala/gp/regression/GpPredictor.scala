@@ -21,13 +21,13 @@ class GpPredictor(val kernelFunc:KernelFunc) {
 
   type predictOutput = (DenseVector[Double],Double)
 
-  def predict(input:PredictionInput):(GaussianDistribution,Double) = {
+  def predict(input:PredictionInput,hyperParams:KernelFuncHyperParams=kernelFunc.hyperParams):(GaussianDistribution,Double) = {
 
 	val (trainingData,trainingDataDim,testData,testDataDim) =
 	  (input.trainingData,input.trainingData.rows,input.testData,input.testData.rows)
-	val newKernelFunc = kernelFunc.changeHyperParams(input.initHyperParams.toDenseVector)
+	val newKernelFunc = kernelFunc.changeHyperParams(hyperParams.toDenseVector)
 	val (l:DenseMatrix[Double],alphaVec:DenseVector[Double],noiseDiagMtx) =
-	  preComputeComponents(trainingData,input.initHyperParams,input.sigmaNoise,input.targets)
+	  preComputeComponents(trainingData,hyperParams,input.sigmaNoise,input.targets)
 	val testTrainCovMatrix:DenseMatrix[Double] = buildKernelMatrix(newKernelFunc,testData,trainingData)
 	assert(testTrainCovMatrix.rows == testDataDim && testTrainCovMatrix.cols == trainingDataDim)
 	val fMean:DenseVector[Double] = (testTrainCovMatrix * alphaVec).toDenseVector
@@ -67,7 +67,7 @@ class GpPredictor(val kernelFunc:KernelFunc) {
 	val inversedK:DenseMatrix[Double] = lInversed.t * lInversed
 	val newKernelFunc:KernelFunc = kernelFunc.changeHyperParams(hyperParams.toDenseVector)
 	val alphaSq:DenseMatrix[Double] = alphaVec * alphaVec.t
-	val gradient = (0 until optimizedParamsNum).foldLeft(DenseVector.zeros[Double](optimizedParamsNum)){
+	val gradientVec = (0 until optimizedParamsNum).foldLeft(DenseVector.zeros[Double](optimizedParamsNum)){
 	  case (gradient,index) =>
 		val func:(DenseVector[Double],DenseVector[Double],Boolean) => Double = {(vec1,vec2,sameIndex) =>
 		  newKernelFunc.derAfterHyperParam(index+1)(vec1,vec2,sameIndex)
@@ -76,13 +76,13 @@ class GpPredictor(val kernelFunc:KernelFunc) {
 		val logLikelihoodDerAfterParam:Double = 0.5*trace((alphaSq - inversedK) * derAfterKernelHyperParams)
 		gradient.update(index,logLikelihoodDerAfterParam); gradient
 	}
-	(ll,gradient)
+	(ll,gradientVec)
   }
 
   def predictWithParamsOptimization(input:PredictionInput,optimizeNoise:Boolean):(GaussianDistribution,Double) = {
 	val optimalHyperParams:KernelFuncHyperParams = obtainOptimalHyperParams(trainingData = input.trainingData,
 	targets = input.targets,sigmaNoise = input.sigmaNoise,optimizeNoise = optimizeNoise)
-	predict(input.copy(initHyperParams = optimalHyperParams))
+	predict(input,hyperParams = optimalHyperParams)
   }
 
   def preComputeComponents(trainingData:DenseMatrix[Double],
@@ -139,7 +139,7 @@ class GpPredictor(val kernelFunc:KernelFunc) {
 	val llObjFunction:Optimization.objectiveFunctionWithGradient = { currentParams =>
 	  	val hyperParams:KernelFuncHyperParams = kernelFunc.hyperParams.fromDenseVector(DenseVector(currentParams))
 		val ptInput = PredictionTrainingInput(trainingData = trainingData,targets = targets,
-			sigmaNoise = sigmaNoise,initHyperParams = kernelFunc.hyperParams)
+			sigmaNoise = sigmaNoise)
 	  	val (value,gradient) = logLikelihoodWithDerivatives(ptInput,hyperParams,currentParams.length)
 	  	(value,gradient.toArray)
 	}
@@ -159,17 +159,16 @@ object GpPredictor {
 
   /*Noise can also be incorporated into kernel function, then sigmaNoise should be set to None*/
   case class PredictionInput(trainingData:DenseMatrix[Double],testData:DenseMatrix[Double],
-							 sigmaNoise:Option[Double],targets:DenseVector[Double],
-							 initHyperParams:KernelFuncHyperParams) {
+							 sigmaNoise:Option[Double],targets:DenseVector[Double]) {
 
 	def toPredictionTrainingInput:PredictionTrainingInput = {
 		PredictionTrainingInput(trainingData = trainingData,sigmaNoise = sigmaNoise,
-		  targets = targets,initHyperParams = initHyperParams)
+		  targets = targets)
 	}
   }
 
   case class PredictionTrainingInput (trainingData:DenseMatrix[Double],sigmaNoise:Option[Double],
-									  targets:DenseVector[Double],initHyperParams:KernelFuncHyperParams)
+									  targets:DenseVector[Double])
   
 
 

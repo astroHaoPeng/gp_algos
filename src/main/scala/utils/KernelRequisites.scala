@@ -14,7 +14,7 @@ object KernelRequisites {
   type kernelDerivative = (featureVector,featureVector) => DenseVector[Double]
 
   trait KernelFuncHyperParams{
-
+	/*Indexed from 1, not from 0 !!!*/
 	def getAtPosition(i:Int):Double
 	def toDenseVector:DenseVector[Double]
 	def fromDenseVector(dv:DenseVector[Double]):KernelFuncHyperParams
@@ -55,7 +55,7 @@ object KernelRequisites {
 	  this.copy(alpha = newAlpha,gamma = newGamma,beta = newBeta)
 	}
   }
-  //function of form k(x_p,x_q) = alpha*exp(-0.5*(gamma^2)*t(x_p-x_q)*(x_p-x_q)) + (beta^2)*(p == q)
+  //function of form k(x_p,x_q) = alpha*alpha*exp(-0.5*(gamma^2)*t(x_p-x_q)*(x_p-x_q)) + (beta^2)*(p == q)
   case class GaussianRbfKernel(rbfParams:GaussianRbfParams) extends KernelFunc {
 
 	private val (alpha,gamma,beta) = (rbfParams.alpha,rbfParams.gamma,rbfParams.beta)
@@ -99,7 +99,7 @@ object KernelRequisites {
 	  {case (vec1,vec2) =>
 		val diff = (vec1 - vec2)
 		val prodOfDiffs:Double = diff dot diff
-		val a1:Double = alpha*exp(-0.5*gamma*gamma*prodOfDiffs)
+		val a1:Double = alpha*alpha*exp(-0.5*gamma*gamma*prodOfDiffs)
 		if (afterFirstArg){diff :* ((-1.)*gamma*gamma*a1)} else {diff :* gamma*gamma*a1}
 	  }
 	}
