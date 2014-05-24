@@ -20,6 +20,8 @@ object Co2Prediction {
 	override def toDenseVector: DenseVector[Double] = dv
 
 	override def getAtPosition(i: Int): Double = dv(i - 1)
+
+	override def toString = dv.toString()
   }
 
   case class Co2Kernel(co2HyperParams: Co2HyperParams) extends KernelFunc {
@@ -75,7 +77,6 @@ object Co2Prediction {
 
 		}
 	}
-
 
 	override def hyperParametersNum: Int = 11
 
@@ -166,9 +167,15 @@ object Co2Prediction {
 	genericContext.load("classpath:config/spring-context.xml")
 	genericContext.refresh()
 	val co2GpPredictor = genericContext.getBean("co2GpPredictor",classOf[GpPredictor])
+	val rbfGpPredictor = genericContext.getBean("gpPredictor",classOf[GpPredictor])
 	val gpInput = PredictionInput(trainingData = co2Concentration(::,0).toDenseMatrix.t,sigmaNoise = None,
 	  targets = co2Concentration(::,1),testData = DenseMatrix((2022.)))
 	val predictResult = co2GpPredictor.predict(gpInput)
-	println(s"Posterior distribution = ${predictResult._1}, Marginal LL = ${predictResult._2}")
+	val rbfPredictResult = rbfGpPredictor.predict(gpInput)
+	val optimizedPredictResult = co2GpPredictor.predictWithParamsOptimization(gpInput,true)
+	println(s"Co2Kernel - Posterior distribution = ${predictResult._1}, Marginal LL = ${predictResult._2}")
+	println(s"RbfKernel - Posterior distribution = ${rbfPredictResult._1}, Marginal LL = ${rbfPredictResult._2}")
+	println(s"Co2Kernel - HPO - Posterior distribution = ${optimizedPredictResult._1}," +
+	  s" Marginal LL = ${optimizedPredictResult._2}, optimal hyperParams = ${optimizedPredictResult._3}")
   }
 }

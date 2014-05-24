@@ -9,7 +9,7 @@ import gp.regression.GpPredictor.PredictionInput
 import org.junit.runner.RunWith
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.test.context.{TestContextManager, ContextConfiguration}
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.{Qualifier, Autowired}
 
 /**
  * Created by mjamroz on 07/04/14.
@@ -46,6 +46,7 @@ class GpPredictorTest extends WordSpec with BeforeAndAfterAll{
 	18.00, 393.53,   3.57)
 
   @Autowired
+  @Qualifier("gpPredictor")
   var gpPredictor:GpPredictor = _
 
   override def beforeAll = {
@@ -76,7 +77,7 @@ class GpPredictorTest extends WordSpec with BeforeAndAfterAll{
 //		  sigmaNoise = None,targets = targets,initHyperParams = defaultRbfParams)
 	 	val input = PredictionInput(trainingData = trainData(0 to -3,::),testData = trainData(-2 to -1,::),
 			sigmaNoise = None,targets = targets(0 to -3))
-	  	val (distr,logLikelihood) = gpPredictor.predictWithParamsOptimization(input,true)
+	  	val (distr,logLikelihood,_) = gpPredictor.predictWithParamsOptimization(input,true)
 	  	println(s"distr=$distr - ll=$logLikelihood")
 	}
 

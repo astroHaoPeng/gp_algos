@@ -11,7 +11,7 @@ import dynamicalsystems.filtering.SsmTypeDefinitions.SeriesGenerationData
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.test.context.{TestContextManager, ContextConfiguration}
 import gp.optimization.GPOptimizer
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.{Qualifier, Autowired}
 import gp.regression.GpPredictor
 import dynamicalsystems.tests.SsmTestingUtils
 
@@ -36,6 +36,7 @@ class UnscentedKalmanFilterTest extends WordSpec with SsmTestingUtils{
   @Autowired
   var gpOptimizer:GPOptimizer = _
   @Autowired
+  @Qualifier("gpPredictor")
   var gpPredictor:GpPredictor = _
 
   "unscented transform" should {

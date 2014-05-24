@@ -79,10 +79,11 @@ class GpPredictor(val kernelFunc:KernelFunc) {
 	(ll,gradientVec)
   }
 
-  def predictWithParamsOptimization(input:PredictionInput,optimizeNoise:Boolean):(GaussianDistribution,Double) = {
+  def predictWithParamsOptimization(input:PredictionInput,optimizeNoise:Boolean):(GaussianDistribution,Double,KernelFuncHyperParams) = {
 	val optimalHyperParams:KernelFuncHyperParams = obtainOptimalHyperParams(trainingData = input.trainingData,
 	targets = input.targets,sigmaNoise = input.sigmaNoise,optimizeNoise = optimizeNoise)
-	predict(input,hyperParams = optimalHyperParams)
+	val predictedValWithLL = predict(input,hyperParams = optimalHyperParams)
+	(predictedValWithLL._1,predictedValWithLL._2,optimalHyperParams)
   }
 
   def preComputeComponents(trainingData:DenseMatrix[Double],
@@ -132,7 +133,7 @@ class GpPredictor(val kernelFunc:KernelFunc) {
   private def obtainOptimalHyperParams(trainingData:DenseMatrix[Double],sigmaNoise:Option[Double],
 									   targets:DenseVector[Double],optimizeNoise:Boolean):KernelFuncHyperParams = {
 
-	val breezeOptimizer = new BreezeLbfgsOptimizer
+	val breezeOptimizer = new BreezeLbfgsOptimizer(maxIter = 20)
 	val initPoint:DenseVector[Double] = if (optimizeNoise){kernelFunc.hyperParams.toDenseVector} else{
 	  kernelFunc.hyperParams.toDenseVector(0 to -2)
 	}

@@ -48,7 +48,8 @@ class BostonPredictionDataSetTest {
 		val (gaussianDistr,logLikelihood) = if (!optimizeParams){
 		  gpPredictor.predict(predictionInput)
 		} else {
-		  gpPredictor.predictWithParamsOptimization(predictionInput,false)
+		  val (distr,ll,_) = gpPredictor.predictWithParamsOptimization(predictionInput,false)
+		  (distr,ll)
 		}
 		logger.info(s"Log likelihood = $logLikelihood")
 		val predictedValues = extractingFunc(gaussianDistr)

@@ -29,7 +29,7 @@ trait SsmTest extends SsmTestingUtils{
   genericContext.load("classpath:config/spring-context.xml")
   genericContext.refresh
 
-  val gpPredictor = genericContext.getBean(classOf[GpPredictor])
+  val gpPredictor = genericContext.getBean("gpPredictor",classOf[GpPredictor])
   val gpOptimizer = genericContext.getBean(classOf[GPOptimizer])
 
 

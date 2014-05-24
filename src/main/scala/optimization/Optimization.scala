@@ -27,10 +27,12 @@ object Optimization {
 
   }
 
-  class BreezeLbfgsOptimizer extends GradientBasedOptimizer {
+  class BreezeLbfgsOptimizer(maxIter:Int) extends GradientBasedOptimizer {
+
+	def this() = this(10)
 
 	val lbfgsFactory:() => LBFGS[DenseVector[Double]] =
-	  {() => new LBFGS[DenseVector[Double]](maxIter = 10,m = 4)}
+	  {() => new LBFGS[DenseVector[Double]](maxIter = maxIter,m = 4)}
 
 	override def minimize(func:objectiveFunctionWithGradient,initPoint:Array[Double]) = {
 
@@ -38,6 +40,7 @@ object Optimization {
 	  val diffFunction = new DiffFunction[DenseVector[Double]] {
 		override def calculate(point: DenseVector[Double]): (Double, DenseVector[Double]) = {
 		  val (value,gradient) = func(point.toArray)
+		  println(s"Func value = $value")
 		  if (value < minimumVal){
 			minimumPoint = point; minimumVal = value
 		  }
