@@ -7,6 +7,8 @@ import breeze.numerics.{pow, sin, exp}
 import org.springframework.core.io.ClassPathResource
 import org.springframework.context.support.GenericXmlApplicationContext
 import gp.regression.GpPredictor.PredictionInput
+import utils.StatsUtils.GaussianDistribution
+import svm.SvmRegressionImpl
 
 /**
  * Created by mjamroz on 22/05/14.
@@ -67,13 +69,13 @@ object Co2Prediction {
 		val (hp1, hp2, hp3, hp4, hp5, hp6, hp7, hp8, hp9, hp10, hp11) = getHyperParams
 		paramNum match {
 		  case num if (num < 3) =>
-			derAfterFirstKernel(x1,x2,hp1,hp2,num)
+			derAfterFirstKernel(x1, x2, hp1, hp2, num)
 		  case num if (num < 6) =>
-			derAfterSecondKernel(x1,x2,hp3,hp4,hp5,num)
+			derAfterSecondKernel(x1, x2, hp3, hp4, hp5, num)
 		  case num if (num < 9) =>
-			derAfterThirdKernel(x1,x2,hp6,hp7,hp8,num)
+			derAfterThirdKernel(x1, x2, hp6, hp7, hp8, num)
 		  case num if (num < 12) =>
-			derAfterFourthKernel(x1,x2,hp9,hp10,hp11,num,sameIndex)
+			derAfterFourthKernel(x1, x2, hp9, hp10, hp11, num, sameIndex)
 
 		}
 	}
@@ -100,82 +102,115 @@ object Co2Prediction {
 	  val sinVal: Double = sin(Math.PI * xDiff)
 	  val k2Val: Double = hp3 * hp3 * exp(-sqDiff / (2 * hp4 * hp4) - 2 * sinVal * sinVal / (hp5 * hp5))
 	  paramNum match {
-		case 3 => 2*k2Val/hp3
-		case 4 => k2Val*sqDiff*pow(hp4,-3)
-		case 5 => k2Val*4*sinVal*sinVal*pow(hp5,-3)
+		case 3 => 2 * k2Val / hp3
+		case 4 => k2Val * sqDiff * pow(hp4, -3)
+		case 5 => k2Val * 4 * sinVal * sinVal * pow(hp5, -3)
 	  }
 	}
 
-	private def derAfterThirdKernel(x1:Double,x2:Double,hp6:Double,hp7:Double,hp8:Double,paramNum:Int):Double = {
-	  val sqDiff = (x1-x2)*(x1-x2)
+	private def derAfterThirdKernel(x1: Double, x2: Double, hp6: Double, hp7: Double, hp8: Double, paramNum: Int): Double = {
+	  val sqDiff = (x1 - x2) * (x1 - x2)
 	  val k3Pow1: Double = 1 + sqDiff / (2 * hp8 * hp7 * hp7)
 	  paramNum match {
-		case 6 => 2*hp6*pow(k3Pow1,-hp8)
-		case 7 => hp6*hp6*pow(k3Pow1,-hp8-1)*sqDiff*pow(hp7,-3)
+		case 6 => 2 * hp6 * pow(k3Pow1, -hp8)
+		case 7 => hp6 * hp6 * pow(k3Pow1, -hp8 - 1) * sqDiff * pow(hp7, -3)
 		case 8 =>
-		  val firstTerm:Double = exp(-hp8*math.log(k3Pow1))
-		  val secondTerm:Double = -math.log(k3Pow1) + (hp8*sqDiff/(2*hp7*hp7*hp8*hp8*k3Pow1))
-		  hp6*hp6*firstTerm * secondTerm
+		  val firstTerm: Double = exp(-hp8 * math.log(k3Pow1))
+		  val secondTerm: Double = -math.log(k3Pow1) + (hp8 * sqDiff / (2 * hp7 * hp7 * hp8 * hp8 * k3Pow1))
+		  hp6 * hp6 * firstTerm * secondTerm
 	  }
 	}
 
-	private def derAfterFourthKernel(x1:Double,x2:Double,hp9:Double,hp10:Double,hp11:Double,paramNum:Int,sameIndex:Boolean):Double = {
-	  val sqDiff = (x1-x2)*(x1-x2)
+	private def derAfterFourthKernel(x1: Double, x2: Double, hp9: Double, hp10: Double, hp11: Double, paramNum: Int, sameIndex: Boolean): Double = {
+	  val sqDiff = (x1 - x2) * (x1 - x2)
 	  val k4Val: Double = hp9 * hp9 * exp(-sqDiff / (2 * hp10 * hp10))
 	  paramNum match {
-		case 9 => 2*k4Val/hp9
-		case 10 => k4Val*sqDiff*pow(hp10,-3)
-		case 11 => if (sameIndex) {2*hp11} else {0.}
+		case 9 => 2 * k4Val / hp9
+		case 10 => k4Val * sqDiff * pow(hp10, -3)
+		case 11 => if (sameIndex) {
+		  2 * hp11
+		} else {
+		  0.
+		}
 	  }
 	}
   }
 
-  def loadInput:DenseMatrix[Double] = {
+  def loadInput: DenseMatrix[Double] = {
 	val lines = io.Source.fromFile(new ClassPathResource("co2/maunaLoa.txt").getFile).getLines().toSeq
-	val finalMatrix = DenseMatrix.zeros[Double](lines.length,14)
-	lines.foldLeft(0){
-	  case (index,line) =>
+	val finalMatrix = DenseMatrix.zeros[Double](lines.length, 14)
+	lines.foldLeft(0) {
+	  case (index, line) =>
 		val numbers = line.split("(\\s|\\t)").map(_.toDouble)
-	  	finalMatrix(index,::) := DenseVector(numbers)
-	  	index+1
+		finalMatrix(index, ::) := DenseVector(numbers)
+		index + 1
 	}
 	finalMatrix
   }
 
-  /*Result is Nx2 matrix where 1st column of row is a year, 2nd column of row is a co2 ppm */
-  def co2DataToYearWithValue(matrix:DenseMatrix[Double]):(DenseMatrix[Double]) = {
-  	val yearCo2PpmTuples:IndexedSeq[(Double,Double)] = (0 until matrix.rows).foldLeft(IndexedSeq[(Double,Double)]()){
-	  case (acc,row) =>
-		val year = matrix(row,0)
-		val tuplesFromYear = (1 until matrix.cols-1).foldLeft(IndexedSeq[(Double,Double)]()){
-			case (acc,month) =>
-		  		val co2Ppm:Double = matrix(row,month)
-				if (co2Ppm > 0){
-				  acc :+ (year + (1/12.)*(month-1),co2Ppm)
-				} else {acc}
+  /*Result is pair of Nx2 matrices where 1st column of a given row is a year, 2nd column is a co2 ppm */
+  def co2DataToYearWithValue(matrix: DenseMatrix[Double], trainTestRatio: Double):
+  (DenseMatrix[Double], DenseMatrix[Double]) = {
+	require(trainTestRatio > 0 && trainTestRatio < 1, "Division's ratio should be between 0 and 1")
+	val yearCo2PpmTuples: IndexedSeq[(Double, Double)] = (0 until matrix.rows).foldLeft(IndexedSeq[(Double, Double)]()) {
+	  case (acc, row) =>
+		val year = matrix(row, 0)
+		val tuplesFromYear = (1 until matrix.cols - 1).foldLeft(IndexedSeq[(Double, Double)]()) {
+		  case (acc, month) =>
+			val co2Ppm: Double = matrix(row, month)
+			if (co2Ppm > 0) {
+			  acc :+(year + (1 / 12.) * (month - 1), co2Ppm)
+			} else {
+			  acc
+			}
+		}
+		acc ++ tuplesFromYear
+	}
+	val wholeDataSet = DenseMatrix.tabulate[Double](yearCo2PpmTuples.length, 2) {
+	  case (row, col) => if (col == 0) {
+		yearCo2PpmTuples(row)._1
+	  } else {
+		yearCo2PpmTuples(row)._2
 	  }
-	  acc ++ tuplesFromYear
 	}
-	DenseMatrix.tabulate[Double](yearCo2PpmTuples.length,2){
-	  case (row,col) => if (col == 0){yearCo2PpmTuples(row)._1} else {yearCo2PpmTuples(row)._2}
-	}
+	val trainNum: Int = (wholeDataSet.rows * trainTestRatio).toInt
+	(wholeDataSet(0 to trainNum-1, ::),wholeDataSet(trainNum to wholeDataSet.rows - 1,::))
   }
 
-  def main(args:Array[String]) = {
-	val co2Concentration = co2DataToYearWithValue(loadInput)
+  def predictionComparisonToString(testData:DenseMatrix[Double],posterior:GaussianDistribution,
+								   targets:DenseVector[Double]):String = {
+	require(posterior.dim == testData.rows && posterior.dim == targets.length)
+	(0 until posterior.dim).foldLeft(new StringBuffer()){
+	  case (buff,index) =>
+	  	val testObjectAsStr = s"$index - ${testData(index,::).toString}"
+	  	val predictedDistrAsStr = s"${posterior.mean(index)} +- ${2*math.sqrt(posterior.sigma(index,index))}"
+	  	val trueValue = targets(index)
+	  	buff.append(s"$testObjectAsStr, predicted: $predictedDistrAsStr, true value: $trueValue")
+	  	buff.append('\n')
+	}.toString
+  }
+
+  def main(args: Array[String]):Unit = {
+	val trainTestRatio = 0.8
+	val (co2Train,co2Test) = co2DataToYearWithValue(loadInput,trainTestRatio)
 	val genericContext = new GenericXmlApplicationContext()
 	genericContext.load("classpath:config/spring-context.xml")
 	genericContext.refresh()
-	val co2GpPredictor = genericContext.getBean("co2GpPredictor",classOf[GpPredictor])
-	val rbfGpPredictor = genericContext.getBean("gpPredictor",classOf[GpPredictor])
-	val gpInput = PredictionInput(trainingData = co2Concentration(::,0).toDenseMatrix.t,sigmaNoise = None,
-	  targets = co2Concentration(::,1),testData = DenseMatrix((2022.)))
-	val predictResult = co2GpPredictor.predict(gpInput)
-	val rbfPredictResult = rbfGpPredictor.predict(gpInput)
-	val optimizedPredictResult = co2GpPredictor.predictWithParamsOptimization(gpInput,true)
-	println(s"Co2Kernel - Posterior distribution = ${predictResult._1}, Marginal LL = ${predictResult._2}")
+	val co2GpPredictor = genericContext.getBean("co2GpPredictor", classOf[GpPredictor])
+	val rbfGpPredictor = genericContext.getBean("gpPredictor", classOf[GpPredictor])
+	val predInput = PredictionInput(trainingData = co2Train(::, 0).toDenseMatrix.t, sigmaNoise = None,
+	  targets = co2Train(::, 1), testData = co2Test(::,0).toDenseMatrix.t)
+	val svmRegression = new SvmRegressionImpl(co2GpPredictor.kernelFunc.asInstanceOf[Co2Kernel])
+	//val predictResult = co2GpPredictor.predict(predInput)
+	val rbfPredictResult = rbfGpPredictor.predict(predInput)
+	val optimizedPredictResult = co2GpPredictor.predictWithParamsOptimization(predInput, true)
+	val predictedValues = svmRegression.predict(predInput)
+	/*println(s"Co2Kernel - Posterior distribution = ${predictResult._1}, Marginal LL = ${predictResult._2}")
 	println(s"RbfKernel - Posterior distribution = ${rbfPredictResult._1}, Marginal LL = ${rbfPredictResult._2}")
 	println(s"Co2Kernel - HPO - Posterior distribution = ${optimizedPredictResult._1}," +
-	  s" Marginal LL = ${optimizedPredictResult._2}, optimal hyperParams = ${optimizedPredictResult._3}")
+	  s" Marginal LL = ${optimizedPredictResult._2}, optimal hyperParams = ${optimizedPredictResult._3}")*/
+	println(predictionComparisonToString(co2Test(::,0).toDenseMatrix.t,optimizedPredictResult._1,co2Test(::,1)))
+	println("---------------------- SVM -----------------------")
+	predictedValues.mapPairs((index,value) => println(s"$index - $value"))
   }
 }

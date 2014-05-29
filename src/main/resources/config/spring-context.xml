@@ -18,7 +18,7 @@
     </bean>
 
     <bean id="co2HyperParams" class="gp.regression.Co2Prediction$Co2HyperParams">
-        <constructor-arg name="dv" value="#{objectCreator.co2HyperParamsVec()}" />
+        <constructor-arg name="dv" value="#{objectCreator.defaultCo2HyperParamsVec()}" />
     </bean>
 
     <bean id="co2Kernel" class="gp.regression.Co2Prediction$Co2Kernel">

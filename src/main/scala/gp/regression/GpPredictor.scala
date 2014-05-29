@@ -123,29 +123,29 @@ class GpPredictor(val kernelFunc:KernelFunc) {
 	(L,alphaVec,noiseDiagMtx)
   }
 
-  private def logLikelihood(alphaVector:DenseVector[Double],L:DenseMatrix[Double],targets:DenseVector[Double]):Double = {
-	val n = L.rows
-	val a1 = -0.5*(targets dot alphaVector)
-	val a2 = 0.to(n-1).foldLeft[Double](0.){case (sum,indx) => sum + log(L(indx,indx))}
-	a1 - a2 - 0.5*n*log(2*Pi)
-  }
-
-  private def obtainOptimalHyperParams(trainingData:DenseMatrix[Double],sigmaNoise:Option[Double],
-									   targets:DenseVector[Double],optimizeNoise:Boolean):KernelFuncHyperParams = {
+  def obtainOptimalHyperParams(trainingData:DenseMatrix[Double],sigmaNoise:Option[Double],
+							   targets:DenseVector[Double],optimizeNoise:Boolean):KernelFuncHyperParams = {
 
 	val breezeOptimizer = new BreezeLbfgsOptimizer(maxIter = 20)
 	val initPoint:DenseVector[Double] = if (optimizeNoise){kernelFunc.hyperParams.toDenseVector} else{
 	  kernelFunc.hyperParams.toDenseVector(0 to -2)
 	}
 	val llObjFunction:Optimization.objectiveFunctionWithGradient = { currentParams =>
-	  	val hyperParams:KernelFuncHyperParams = kernelFunc.hyperParams.fromDenseVector(DenseVector(currentParams))
-		val ptInput = PredictionTrainingInput(trainingData = trainingData,targets = targets,
-			sigmaNoise = sigmaNoise)
-	  	val (value,gradient) = logLikelihoodWithDerivatives(ptInput,hyperParams,currentParams.length)
-	  	(value,gradient.toArray)
+	  val hyperParams:KernelFuncHyperParams = kernelFunc.hyperParams.fromDenseVector(DenseVector(currentParams))
+	  val ptInput = PredictionTrainingInput(trainingData = trainingData,targets = targets,
+		sigmaNoise = sigmaNoise)
+	  val (value,gradient) = logLikelihoodWithDerivatives(ptInput,hyperParams,currentParams.length)
+	  (value,gradient.toArray)
 	}
 	val optimalHyperParams = breezeOptimizer.maximize(llObjFunction,initPoint.toArray)
 	kernelFunc.hyperParams.fromDenseVector(DenseVector(optimalHyperParams))
+  }
+
+  private def logLikelihood(alphaVector:DenseVector[Double],L:DenseMatrix[Double],targets:DenseVector[Double]):Double = {
+	val n = L.rows
+	val a1 = -0.5*(targets dot alphaVector)
+	val a2 = 0.to(n-1).foldLeft[Double](0.){case (sum,indx) => sum + log(L(indx,indx))}
+	a1 - a2 - 0.5*n*log(2*Pi)
   }
 
 }

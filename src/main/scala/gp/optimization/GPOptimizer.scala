@@ -21,8 +21,7 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer
 
   import utils.StatsUtils._
   import utils.KernelRequisites._
-  
-  type objectiveFunction = (Array[Double] => Double)
+  import optimization.Optimization._
 
   val hyperParams = gpPredictor.kernelFunc.hyperParams
 
@@ -39,12 +38,16 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer
 
 	val pointGrid:DenseMatrix[Double] = prepareGrid(ranges)
 	val evaluatedPointGrid:DenseVector[Double] = evaluateGridPoints(pointGrid,func)
-
+	val hyperParamsForComputation = if (params.optimizeHpOnInitGrid){
+	  gpPredictor.obtainOptimalHyperParams(pointGrid,noise,evaluatedPointGrid,true)
+	} else {
+	  hyperParams
+	}
 	val (finalPointSet,finalEvaluatedPointSet) = (0 until m).foldLeft((pointGrid,evaluatedPointGrid)){
 
 	  case ((pointSet,evaluatedPointSet),iterNum) =>
 		assert(pointSet.rows == evaluatedPointSet.length)
-		val (l,alphaVec,_) = gpPredictor.preComputeComponents(pointSet,hyperParams,noise,evaluatedPointSet)
+		val (l,alphaVec,_) = gpPredictor.preComputeComponents(pointSet,hyperParamsForComputation,noise,evaluatedPointSet)
 		val (observedMean,observedCov) = meanAndVarOfData(pointSet)
 		val sampler = new NormalDistributionSampler(GaussianDistribution(mean = observedMean,sigma = observedCov))
 	    var (biggestUcbPoint,biggestUcb) = (0 until c).foldLeft[(Option[DenseVector[Double]],Double)](None,Double.MinValue){
@@ -165,6 +168,7 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer
 
 object GPOptimizer {
 
-  case class GPOInput(ranges:IndexedSeq[Range],mParam:Int,cParam:Int,kParam:Double)
+  case class GPOInput(ranges:IndexedSeq[Range],mParam:Int,cParam:Int,
+					  kParam:Double,optimizeHpOnInitGrid:Boolean=true)
 
 }

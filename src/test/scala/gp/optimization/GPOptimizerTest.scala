@@ -45,13 +45,13 @@ class GPOptimizerTest extends WordSpec {
 	}
 
 	"find the optimum of simple quadratic 1D function" in {
-	  val gpoInput = GPOInput(ranges = IndexedSeq(-6 to 6), mParam = 50, cParam = 5, kParam = 2.)
+	  val gpoInput = GPOInput(ranges = IndexedSeq(-6 to 6), mParam = 50, cParam = 5, kParam = 2.,optimizeHpOnInitGrid = false)
 	  val (optimalSolution, optimalValue) = gpOptimizer.minimize(strangeFunc1, gpoInput)
 	  println(s"optimal solution = ${DenseVector(optimalSolution)} , optimal value = ${optimalValue}")
 	}
 
 	"find the optimum of rastrigin 2D function" in {
-	  val gpoInput = GPOInput(ranges = IndexedSeq(-5 to 5,-5 to 5), mParam = 100, cParam = 10, kParam = 2.)
+	  val gpoInput = GPOInput(ranges = IndexedSeq(-5 to 5,-5 to 5), mParam = 200, cParam = 10, kParam = 2.,optimizeHpOnInitGrid = true)
 	  val (optimalSolution, optimalValue) = gpOptimizer.minimize(rastriginFunc, gpoInput)
 	  println(s"Rastr - optimal solution = ${DenseVector(optimalSolution)} , optimal value = ${optimalValue}")
 	}
