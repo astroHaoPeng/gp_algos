@@ -2,28 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="794477cd-1721-497f-8216-730639d3bdec" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_davidsoergel_conja_1_061.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_davidsoergel_dsutils_1_051.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_davidsoergel_runutils_0_911.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_davidsoergel_stats_0_931.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_davidsoergel_trees_1_031.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_collections_google_collections_1_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_intellij_annotations_7_0_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_martiansoftware_JSAP_2_0a_ds1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_collections_commons_collections_20040616.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_lang_commons_lang_2_6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__edu_berkeley_compbio_jlibsvm_0_911.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__edu_berkeley_compbio_ml_0_921.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_sourceforge_collections_collections_generic_4_01.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/svm/SvmRegressionImpl.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/gp/regression/Co2Prediction.scala" afterPath="$PROJECT_DIR$/src/main/scala/gp/regression/Co2Prediction.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala" afterPath="$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala" afterPath="$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala" afterPath="$PROJECT_DIR$/src/main/scala/gp/regression/GpPredictor.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/utils/TestingUtils.scala" afterPath="$PROJECT_DIR$/src/main/scala/utils/TestingUtils.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/breeze_test.iml" afterPath="$PROJECT_DIR$/breeze_test.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/config/spring-context.xml" afterPath="$PROJECT_DIR$/src/main/resources/config/spring-context.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/svm/SvmRegressionImpl.scala" afterPath="$PROJECT_DIR$/src/main/scala/svm/SvmRegressionImpl.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="breeze_test.iws" />
@@ -154,22 +133,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Co2Prediction.scala" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Co2Prediction.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/gp/regression/Co2Prediction.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="193" column="37" selection-start="7760" selection-end="7760" vertical-scroll-proportion="0.34684685" vertical-offset="2664" max-vertical-offset="3330">
+            <state line="191" column="50" selection-start="7693" selection-end="7693" vertical-scroll-proportion="0.0" vertical-offset="2664" max-vertical-offset="3330">
               <folding>
                 <element signature="e#23#88#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="spring-context.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/config/spring-context.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="75" selection-start="1103" selection-end="1103" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="855">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -178,15 +148,6 @@
         <entry file="file://$PROJECT_DIR$/src/main/scala/utils/TestingUtils.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state line="21" column="57" selection-start="455" selection-end="455" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pom.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="77" column="19" selection-start="2568" selection-end="2568" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1800">
               <folding />
             </state>
           </provider>
@@ -210,13 +171,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SvmRegressionImpl.scala" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="SvmRegressionImpl.scala" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/svm/SvmRegressionImpl.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="0" selection-start="1215" selection-end="1215" vertical-scroll-proportion="0.0" vertical-offset="234" max-vertical-offset="900">
-              <folding>
-                <element signature="e#13#61#0" expanded="true" />
-              </folding>
+            <state line="7" column="0" selection-start="309" selection-end="309" vertical-scroll-proportion="0.15765765" vertical-offset="0" max-vertical-offset="930">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -292,10 +251,10 @@
         <option value="$PROJECT_DIR$/src/main/scala/gp/optimization/GPOptimizer.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/gp/optimization/GPOptimizerTest.scala" />
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/scala/svm/SvmRegressionImpl.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/gp/regression/Co2Prediction.scala" />
         <option value="$PROJECT_DIR$/src/main/resources/config/spring-context.xml" />
         <option value="$PROJECT_DIR$/src/main/scala/utils/TestingUtils.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/svm/SvmRegressionImpl.scala" />
       </list>
     </option>
   </component>
@@ -1481,7 +1440,7 @@
       <workItem from="1399998608700" duration="17026000" />
       <workItem from="1400521783276" duration="1713000" />
       <workItem from="1400782808410" duration="6681000" />
-      <workItem from="1400795093095" duration="29414000" />
+      <workItem from="1400795093095" duration="33727000" />
     </task>
     <task id="LOCAL-00001" summary="init&#10;">
       <created>1395063724264</created>
@@ -1623,11 +1582,15 @@
       <created>1400949283164</created>
       <updated>1400949283164</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Svm regression implemented with jlibsvm library, hyper params optimization in GPO algorithm.">
+      <created>1401397801316</created>
+      <updated>1401397801316</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="393411000" />
+    <option name="totallyTimeSpent" value="397724000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1676,7 +1639,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32956383" sideWeight="0.6011396" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25686592" sideWeight="0.67094016" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3260274" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3328767" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="100" y="100" width="1080" height="600" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -1733,7 +1696,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="Unscented kalman filter implemented - not tested yet." />
     <MESSAGE value="Gp regression reimplemented." />
     <MESSAGE value="Computing derivatives of log likelihood w.r.t hyperparams." />
     <MESSAGE value="Optimization of gp regression hyperparams." />
@@ -1758,7 +1720,8 @@
     <MESSAGE value="GP-UKF since now has to generate latent samples from ssm model, they are not passed to it as before." />
     <MESSAGE value="Refactoring of gp predictor interface - removed ambiguity of hyper params passing. Co2 prediction implemented." />
     <MESSAGE value="Spring context file complemented with co2 kernel." />
-    <option name="LAST_COMMIT_MESSAGE" value="Spring context file complemented with co2 kernel." />
+    <MESSAGE value="Svm regression implemented with jlibsvm library, hyper params optimization in GPO algorithm." />
+    <option name="LAST_COMMIT_MESSAGE" value="Svm regression implemented with jlibsvm library, hyper params optimization in GPO algorithm." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1768,14 +1731,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/sin/ukf/predicted.dat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3090" />
-      </provider>
-      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ssm/sin/ukf/predicted_optim.dat">
       <provider selected="true" editor-type-id="text-editor">
         <state line="15" column="68" selection-start="661" selection-end="661" vertical-scroll-proportion="0.34509203" vertical-offset="0" max-vertical-offset="3090" />
@@ -2106,15 +2061,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/svm/SvmRegressionImpl.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="0" selection-start="1215" selection-end="1215" vertical-scroll-proportion="0.0" vertical-offset="234" max-vertical-offset="900">
-          <folding>
-            <element signature="e#13#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/config/spring-context.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="20" column="75" selection-start="1103" selection-end="1103" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="855">
@@ -2136,12 +2082,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.10.3/scala-library-2.10.3.jar!/scala/Predef.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="6" selection-start="1660" selection-end="1660" vertical-scroll-proportion="0.35323384" vertical-offset="248" max-vertical-offset="3150">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/gp/regression/Co2Prediction.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="193" column="37" selection-start="7760" selection-end="7760" vertical-scroll-proportion="0.34684685" vertical-offset="2664" max-vertical-offset="3330">
+        <state line="191" column="50" selection-start="7693" selection-end="7693" vertical-scroll-proportion="0.0" vertical-offset="2664" max-vertical-offset="3330">
           <folding>
             <element signature="e#23#88#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/svm/SvmRegressionImpl.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="0" selection-start="309" selection-end="309" vertical-scroll-proportion="0.15765765" vertical-offset="0" max-vertical-offset="930">
+          <folding />
         </state>
       </provider>
     </entry>
