@@ -7,14 +7,14 @@
 
      <!-- GaussianRbfParams(-0.03672911112580335,-0.8027556425944483,0.035355339059327376) -->
     <!-- 1.3, 0.1011 -->
-    <bean id="defaultRbfParams" class="utils.KernelRequisites$GaussianRbfParams">
-        <constructor-arg name="alpha" value="-0.0367" />
-        <constructor-arg name="gamma" value="-0.80275" />
-        <constructor-arg name="beta" value="#{ T(java.lang.Math).sqrt(0.00125) }" />
+    <bean id="bostonRbfParams" class="utils.KernelRequisites$GaussianRbfParams">
+        <constructor-arg name="signalVar" value="-0.0367" />
+        <constructor-arg name="lengthScales" value="#{objectCreator.lengthScales(13)}" />
+        <constructor-arg name="noiseVar" value="#{ T(java.lang.Math).sqrt(0.00125) }" />
     </bean>
 
-    <bean  id="rbfKernel" class="utils.KernelRequisites$GaussianRbfKernel">
-        <constructor-arg name="rbfParams" ref="defaultRbfParams" />
+    <bean  id="bostonRbfKernel" class="utils.KernelRequisites$GaussianRbfKernel">
+        <constructor-arg name="rbfParams" ref="bostonRbfParams" />
     </bean>
 
     <bean id="co2HyperParams" class="gp.regression.Co2Prediction$Co2HyperParams">
@@ -26,7 +26,7 @@
     </bean>
 
     <bean id="gpPredictor" class="gp.regression.GpPredictor">
-        <constructor-arg name="kernelFunc" ref="rbfKernel" />
+        <constructor-arg name="kernelFunc" ref="bostonRbfKernel" />
     </bean>
 
     <bean id="co2GpPredictor" class="gp.regression.GpPredictor">
@@ -38,7 +38,7 @@
     </bean>
 
     <bean id="gpClassifier" class="gp.classification.GpClassifier">
-        <constructor-arg name="kernelFun" ref="rbfKernel" />
+        <constructor-arg name="kernelFun" ref="bostonRbfKernel" />
         <constructor-arg name="stopCriterion" ref="stopCriterion" />
     </bean>
 

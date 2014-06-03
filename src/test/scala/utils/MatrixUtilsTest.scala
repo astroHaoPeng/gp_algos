@@ -92,7 +92,8 @@ class MatrixUtilsTest extends WordSpec {
 	"work properly" in {
 
 	  val input = DenseMatrix((2.4,1.3,1.9),(2.1,0.99,3.1),(1.89,2.01,4.))
-	  val kernelFun = GaussianRbfKernel(GaussianRbfParams(alpha = 1.,gamma = 1.,beta = 0.))
+	  val kernelFun = GaussianRbfKernel(GaussianRbfParams(signalVar = 1.,lengthScales = DenseVector(1.,1.,1.),
+		noiseVar = 0.))
 	  val kernelMatrix = MatrixUtils.buildKernelMatrix(kernelFun,input)
 	  assert(kernelMatrix.rows == 3 && kernelMatrix.cols == 3)
 	  (0 until 3).foreach {index => assert(kernelMatrix(index,index) == 1.)}
@@ -102,7 +103,8 @@ class MatrixUtilsTest extends WordSpec {
 
   "function inverting triangular matrix" in {
 	val input = DenseMatrix((2.4,1.3,1.9),(2.1,0.99,3.1),(1.89,2.01,4.))
-	val kernelFun = GaussianRbfKernel(GaussianRbfParams(alpha = 1.,gamma = 1.,beta = 0.))
+	val kernelFun = GaussianRbfKernel(GaussianRbfParams(signalVar = 1.,lengthScales = DenseVector(1.,1.,1.),
+	  noiseVar = 0.))
 	val kernelMatrix = MatrixUtils.buildKernelMatrix(kernelFun,input)
 	val L:DenseMatrix[Double] = cholesky(kernelMatrix)
 	val inversedK = inv(kernelMatrix)

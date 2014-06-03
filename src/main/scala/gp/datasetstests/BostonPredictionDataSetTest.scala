@@ -21,8 +21,9 @@ class BostonPredictionDataSetTest {
   type valueExtractingFunc = GaussianDistribution => DenseVector[Double]
 
   //val (alpha,gamma,beta) = (1.,-1.,sqrt(0.0125))
-  val (alpha,gamma,beta) = (exp(6.1),exp(-5.),sqrt(0.0015))
-  val defaultRbfParams:GaussianRbfParams = GaussianRbfParams(alpha = alpha,gamma = gamma,beta = beta)
+  val (alpha,gamma,beta) = (exp(6.1),sqrt(exp(5.)),sqrt(0.0015))
+  val defaultRbfParams:GaussianRbfParams = GaussianRbfParams(signalVar = alpha,
+	lengthScales = DenseVector(gamma),noiseVar = beta)
   val gaussianKernel = GaussianRbfKernel(defaultRbfParams)
   val gpPredictor = new GpPredictor(gaussianKernel)
 

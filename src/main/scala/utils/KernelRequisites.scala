@@ -32,54 +32,52 @@ object KernelRequisites {
   }
 
 
-  case class GaussianRbfParams(alpha:Double,gamma:Double,beta:Double) extends KernelFuncHyperParams{
+  case class GaussianRbfParams(signalVar:Double,lengthScales:DenseVector[Double],noiseVar:Double) extends KernelFuncHyperParams{
 	def getAtPosition(i: Int): Double = {
 	  i match {
-		case 1 => alpha
-		case 2 => gamma
-		case 3 => beta
+		case 1 => signalVar
+		case i_ if i_ < lengthScales.length + 2 => lengthScales(i_ - 2)
+		case i_ if i_ == lengthScales.length + 2 => noiseVar
 	  }
 	}
 
 	override def toDenseVector: DenseVector[Double] = {
-	  DenseVector(alpha,gamma,beta)
+	  DenseVector.tabulate(lengthScales.length+2){
+		index => getAtPosition(index+1)
+	  }
 	}
 
 	override def fromDenseVector(dv: DenseVector[Double]): GaussianRbfParams = {
-	  val (newAlpha,newGamma,newBeta) = dv.length match {
-		case 0 => (alpha,gamma,beta)
-		case 1 => (dv(0),gamma,beta)
-		case 2 => (dv(0),dv(1),beta)
-		case 3 => (dv(0),dv(1),dv(2))
-	  }
-	  this.copy(alpha = newAlpha,gamma = newGamma,beta = newBeta)
+	  require(dv.length == lengthScales.length + 2)
+	  val (newSignalVar,newLs,newNoiseVar) = (dv(0),dv(1 to -2),dv(-1))
+	  this.copy(signalVar = newSignalVar,lengthScales = newLs,noiseVar = newNoiseVar)
 	}
+	
   }
-  //function of form k(x_p,x_q) = alpha*alpha*exp(-0.5*(gamma^2)*t(x_p-x_q)*(x_p-x_q)) + (beta^2)*(p == q)
+  //function of form k(x_p,x_q) = signalVar^2*exp(-0.5*t(x_p-x_q)*diag(lengthScales^-2)*(x_p-x_q)) + (noiseVar^2)*(p == q)
   case class GaussianRbfKernel(rbfParams:GaussianRbfParams) extends KernelFunc {
 
-	private val (alpha,gamma,beta) = (rbfParams.alpha,rbfParams.gamma,rbfParams.beta)
+	private val (signalVar,lengthScales,noiseVar) = (rbfParams.signalVar,rbfParams.lengthScales,rbfParams.noiseVar)
 
   	def apply(obj1:featureVector,obj2:featureVector,sameIndex:Boolean):Double = {
-	  val diff = (obj1 - obj2)
-	  val valWithoutNoise:Double = alpha*alpha*exp(-0.5*gamma*gamma*(diff dot diff))
+	  val valWithoutNoise:Double = signalVar*signalVar*exp(-0.5*inputWithLsProduct(obj1,obj2))
 	  val retValue = if (!sameIndex){valWithoutNoise} else {
-		valWithoutNoise + beta*beta
+		valWithoutNoise + noiseVar*noiseVar
 	  }
 	  retValue
 	}
 
-	def hyperParametersNum: Int = 3
+	def hyperParametersNum: Int = rbfParams.lengthScales.length + 2
 
 	def derAfterHyperParam(paramNum: Int):
 		(KernelRequisites.featureVector, KernelRequisites.featureVector,Boolean) => Double = {
 	  		case (vec1,vec2,sameIndex) =>
-		val diff = (vec1 - vec2)
-		val prodOfDiffs = diff dot diff
 	    paramNum match {
-		  case 1 => 2*alpha*exp(-0.5*gamma*gamma*prodOfDiffs)
-		  case 2 => alpha*alpha*exp(-0.5*gamma*gamma*prodOfDiffs)*(-1.)*gamma*prodOfDiffs
-		  case 3 => if (sameIndex){2*beta} else {0.}
+		  case 1 => 2*signalVar*exp(-0.5*inputWithLsProduct(vec1,vec2))
+		  case i_ if i_ < lengthScales.length + 2 =>
+			val diffAtPosi:Double = vec1(i_ - 2)-vec2(i_ - 2)
+		  	math.pow(signalVar,2)*exp(-0.5*inputWithLsProduct(vec1,vec2))* math.pow(diffAtPosi, 2) *math.pow(lengthScales(i_ - 2),-3)
+		  case i_ if i_ == lengthScales.length + 2 => if (sameIndex){2*noiseVar} else {0.}
 		}
 	}
 
@@ -98,10 +96,16 @@ object KernelRequisites {
 		(KernelRequisites.featureVector, KernelRequisites.featureVector) => DenseVector[Double] = {
 	  {case (vec1,vec2) =>
 		val diff = (vec1 - vec2)
-		val prodOfDiffs:Double = diff dot diff
-		val a1:Double = alpha*alpha*exp(-0.5*gamma*gamma*prodOfDiffs)
-		if (afterFirstArg){diff :* ((-1.)*gamma*gamma*a1)} else {diff :* gamma*gamma*a1}
+		val inversedSqLs:DenseVector[Double] = lengthScales.map(ls => 1./(ls*ls))
+		val a1:Double = apply(vec1,vec2,sameIndex = false)
+		if (afterFirstArg){(diff :* inversedSqLs) :* (-a1)} else {(diff :* inversedSqLs) :* a1}
 	  }
+	}
+
+	private def inputWithLsProduct(obj1:featureVector,obj2:featureVector):Double = {
+	  val diff = (obj1 - obj2)
+	  val inversedSqLs:DenseVector[Double] = lengthScales.map(ls => 1./(ls*ls))
+	  (diff :* inversedSqLs) dot diff
 	}
   }
 

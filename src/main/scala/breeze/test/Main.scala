@@ -16,8 +16,8 @@ import gp.regression.GpPredictor.PredictionInput
  */
 object Main {
 
-  val (alpha,gamma,beta) = (exp(4.1),exp(-5.),10.12)
-  val defaultRbfParams:GaussianRbfParams = GaussianRbfParams(alpha = alpha,gamma = gamma,beta = beta)
+  val (alpha,gamma,beta) = (exp(4.1),sqrt(exp(5)),10.12)
+  val defaultRbfParams:GaussianRbfParams = GaussianRbfParams(signalVar = alpha,lengthScales = DenseVector(gamma),noiseVar = beta)
   val gaussianKernel = GaussianRbfKernel(defaultRbfParams)
 
   def main(args:Array[String]):Unit = {

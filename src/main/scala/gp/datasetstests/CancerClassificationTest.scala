@@ -30,7 +30,7 @@ class CancerClassificationTest {
   //val initRbfParams = GaussianRbfParams(alpha = 40887.67,gamma = 164.021)
   //val initRbfParams = GaussianRbfParams(alpha = 1.,gamma = 1.)
   //val initRbfParams = GaussianRbfParams(alpha = 0.1,gamma = 0.3)
-  val initRbfParams = GaussianRbfParams(alpha = 3.58,gamma = 0.07,beta = 0.)
+  val initRbfParams = GaussianRbfParams(signalVar = 3.58,lengthScales = DenseVector(12.),noiseVar = 0.)
 
   val eps = 0.01
   val stopCriterion:EpParameterEstimator.stopCriterionFunc = new AvgBasedStopCriterion(eps)

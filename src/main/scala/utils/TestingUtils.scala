@@ -22,6 +22,8 @@ object TestingUtils {
 	  DenseVector(100.,50.,50.,50.,2.,1.,1.,1.,1.,1.,0.5)
 	}
 
+	def lengthScales(dim:Int) = DenseVector.ones[Double](dim)
+
   }
 
 }
