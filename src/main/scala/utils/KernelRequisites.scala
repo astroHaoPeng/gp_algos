@@ -113,7 +113,7 @@ object KernelRequisites {
 	val result:kernelMatrixType = DenseMatrix.zeros[Double](test.rows,train.rows)
 	for (i <- 0.until(test.rows)){
 	  for (j <- 0.until(train.rows)){
-		result(i until (i+1),j until (j+1)) := kernelFun(test(i,::).toDenseVector,train(j,::).toDenseVector,false)
+		result(i until (i+1),j until (j+1)) := kernelFun(test(i,::).t,train(j,::).t,false)
 	  }
 	}
 	result

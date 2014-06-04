@@ -30,14 +30,14 @@ class SvmRegressionImpl(kernelFunc:KernelFunc) {
 	val regressionModel = epsSvm.train(regressionProblemImpl,immutableSvmParam)
 	DenseVector.tabulate[Double](input.testData.rows){
 	  case index =>
-	  	regressionModel.predictValue(input.testData(index,::).toDenseVector).toDouble
+	  	regressionModel.predictValue(input.testData(index,::).t).toDouble
 	}
   }
 
   private def populateWithData(mutableRegProblem:MutableRegressionProblemImpl[objectType],input:PredictionInput):Unit = {
 	val (training,targets) =  (input.trainingData,input.targets)
 	for (i <- 0 until training.rows){
-	  mutableRegProblem.addExample(training(i,::).toDenseVector,targets(i).toFloat)
+	  mutableRegProblem.addExample(training(i,::).t,targets(i).toFloat)
 	}
   }
 

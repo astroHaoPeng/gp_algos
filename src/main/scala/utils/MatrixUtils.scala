@@ -60,7 +60,7 @@ object MatrixUtils {
 	val result:kernelMatrixType = DenseMatrix.zeros[Double](rowSize,rowSize)
 	for (i <- 0.until(rowSize)){
 	  for (j <- 0.to(i)){
-		val value = kernelFun(data(i,::).toDenseVector,data(j,::).toDenseVector,i == j)
+		val value = kernelFun(data(i,::).t,data(j,::).t,i == j)
 		/*Assumption that kernel matrix is symmetric*/
 		result.update(i,j,value)
 		result.update(j,i,value)
@@ -74,7 +74,7 @@ object MatrixUtils {
 	val result:kernelMatrixType = DenseMatrix.zeros[Double](rowSize,rowSize)
 	for (i <- 0.until(rowSize)){
 	  for (j <- 0.to(i)){
-		val value = f(data(i,::).toDenseVector,data(j,::).toDenseVector,i == j)
+		val value = f(data(i,::).t,data(j,::).t,i == j)
 		/*Assumption that matrix is symmetric i.e f(data[i,],data[j,]) == f(data[j,],data[i,])*/
 		result.update(i,j,value)
 		result.update(j,i,value)
@@ -89,7 +89,7 @@ object MatrixUtils {
 	val result:kernelMatrixType = DenseMatrix.zeros[Double](rowSize,colSize)
 	for (i <- 0.until(rowSize)){
 	  for (j <- 0.until(colSize)){
-		val value = func(input1(i,::).toDenseVector,input2(j,::).toDenseVector)
+		val value = func(input1(i,::).t,input2(j,::).t)
 		result.update(i,j,value)
 	  }
 	}

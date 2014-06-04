@@ -77,8 +77,8 @@ class GpPredictorTest extends WordSpec with BeforeAndAfterAll{
 //		  sigmaNoise = None,targets = targets,initHyperParams = defaultRbfParams)
 	 	val input = PredictionInput(trainingData = trainData(0 to -3,::),testData = trainData(-2 to -1,::),
 			sigmaNoise = None,targets = targets(0 to -3))
-	  	val (distr,logLikelihood,_) = gpPredictor.predictWithParamsOptimization(input,true)
-	  	println(s"distr=$distr - ll=$logLikelihood")
+	  	val (distr,logLikelihood,optimalHp) = gpPredictor.predictWithParamsOptimization(input,true)
+	  	println(s"distr=$distr - ll=$logLikelihood - optimalHp = $optimalHp")
 	}
 
 

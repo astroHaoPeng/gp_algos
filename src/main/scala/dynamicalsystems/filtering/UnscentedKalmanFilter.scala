@@ -59,12 +59,12 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
 	  val (zTransformed,yTransformed,weights) =
 		(firstUTransformOut.transformedSigmaPoints,secondUTransformOut.transformedSigmaPoints,firstUTransformOut.weights)
 	  val initZYCovMatrix:DenseMatrix[Double] =
-		((zTransformed(0,::).toDenseVector - probab_z_t_given_prev_y.mean) * (yTransformed(0,::).toDenseVector - probab_y_t_given_z_t.mean).t) :* weights._2
+		((zTransformed(0,::).t - probab_z_t_given_prev_y.mean) * (yTransformed(0,::).t - probab_y_t_given_z_t.mean).t) :* weights._2
 	  val z_y_covMatrix:DenseMatrix[Double] = (1 until (2*hiddenSpaceSize+1)).
 		foldLeft[DenseMatrix[Double]](initZYCovMatrix){
 		case (currentCov,index) =>
 			val update:DenseMatrix[Double] =
-			  ((zTransformed(index,::).toDenseVector - probab_z_t_given_prev_y.mean) * (yTransformed(index,::).toDenseVector - probab_y_t_given_z_t.mean).t) :* weights._3
+			  ((zTransformed(index,::).t - probab_z_t_given_prev_y.mean) * (yTransformed(index,::).t - probab_y_t_given_z_t.mean).t) :* weights._3
 			currentCov :+ update
 	  }
 	  assert(z_y_covMatrix.rows == hiddenSpaceSize && z_y_covMatrix.cols == obsSpaceSize)
@@ -90,30 +90,30 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
 	val lowerTriangular:DenseMatrix[Double] = cholesky(covMatrix)
 	val dim = normalDistribution.dim
 	val (sigmaPoints, lambda) = (DenseMatrix.zeros[Double](2 * dim + 1, dim), params.alpha * params.alpha * (d + params.kappa) - d)
-	sigmaPoints(0, ::) := mean
+	sigmaPoints(0, ::) := mean.t
 	for (col <- (0 until dim)) {
 	  val sqrtCoeff: DenseVector[Double] = lowerTriangular(::, col) :* math.sqrt(d + lambda)
-	  sigmaPoints(col + 1, ::) := mean + sqrtCoeff
-	  sigmaPoints(col + 1 + dim, ::) := mean - sqrtCoeff
+	  sigmaPoints(col + 1, ::) := (mean + sqrtCoeff).t
+	  sigmaPoints(col + 1 + dim, ::) := (mean - sqrtCoeff).t
 	}
 
 	val (w_0_m, w_0_c, w_i_c) = (lambda / (d + lambda),
 	  (lambda / (d + lambda)) + (1 - params.alpha * params.alpha + params.beta), 1 / (2 * (d + lambda)))
-	val firstSigmaPointTransformed: DenseVector[Double] = func(sigmaPoints(0, ::).toDenseVector)
+	val firstSigmaPointTransformed: DenseVector[Double] = func(sigmaPoints(0, ::).t)
 	val transformedSigmaPoints: DenseMatrix[Double] = DenseMatrix.zeros[Double](2 * dim + 1, firstSigmaPointTransformed.length)
-	transformedSigmaPoints(0, ::) := firstSigmaPointTransformed
+	transformedSigmaPoints(0, ::) := firstSigmaPointTransformed.t
 	val firstMeanCoeff: DenseVector[Double] = firstSigmaPointTransformed :* w_0_m
 	val finalMean: DenseVector[Double] = (1 until (2 * dim + 1)).foldLeft(firstMeanCoeff) {
 	  case (tempMean, index) =>
-		val transformedSigmaPoint = func(sigmaPoints(index, ::).toDenseVector)
-		transformedSigmaPoints(index, ::) := transformedSigmaPoint
+		val transformedSigmaPoint = func(sigmaPoints(index, ::).t)
+		transformedSigmaPoints(index, ::) := transformedSigmaPoint.t
 		tempMean :+ (transformedSigmaPoint :* w_i_c)
 	}
-	val diff: DenseVector[Double] = transformedSigmaPoints(0, ::).toDenseVector - finalMean
+	val diff: DenseVector[Double] = transformedSigmaPoints(0, ::).t - finalMean
 	var finalCovMatrix: DenseMatrix[Double] = (diff * diff.t) :* w_0_c
 	finalCovMatrix = (1 until (2 * dim + 1)).foldLeft(finalCovMatrix) {
 	  case (tempCov, index) =>
-		val diff: DenseVector[Double] = transformedSigmaPoints(index, ::).toDenseVector - finalMean
+		val diff: DenseVector[Double] = transformedSigmaPoints(index, ::).t - finalMean
 		tempCov :+ ((diff * diff.t) :* w_i_c)
 	}
 	val distr = GaussianDistribution(mean = finalMean, sigma = finalCovMatrix)

@@ -118,7 +118,7 @@ class MatrixUtilsTest extends WordSpec {
   }
 
   def compare2Matrices(m1:DenseMatrix[Double],m2:DenseMatrix[Double]):Unit = {
-	(0 until m1.rows).foreach {rowIndx => compare2Vectors(m1(rowIndx,::).toDenseVector, m2(rowIndx,::).toDenseVector)}
+	(0 until m1.rows).foreach {rowIndx => compare2Vectors(m1(rowIndx,::).t, m2(rowIndx,::).t)}
   }
 
 }

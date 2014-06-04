@@ -15,7 +15,7 @@ object NumericalUtils {
 
   implicit class DoubleVectorWithAlmostEquals(val dv:DenseVector[Double]) {
 	def ~= (dv1:DenseVector[Double])(implicit p:Precision):Boolean = {
-	  dv.forall{ case (index,value) => value ~= dv1(index)}
+	  dv.forall{ (index:Int,value:Double) => value ~= dv1(index)}
 	}
   }
 

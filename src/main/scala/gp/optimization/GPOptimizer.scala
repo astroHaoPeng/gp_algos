@@ -75,7 +75,7 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer
 		  (biggestIndex,currentBiggestValue)
 		}
 	}
-	(finalPointSet(maxIndex,::).toDenseVector.toArray,maxValue)
+	(finalPointSet(maxIndex,::).t.toArray,maxValue)
   }
 
   private def maximizeUCB(ll:DenseMatrix[Double],targets:DenseVector[Double],pointSet:DenseMatrix[Double],
@@ -115,11 +115,11 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer
 	}
 	for (index <- (0 until input2.rows)){
 	  if (testPointFirstArgToDer){
-		val elem = kernelDer(input1,input2(index,::).toDenseVector)
+		val elem = kernelDer(input1,input2(index,::).t)
 		resultMatrix(::,index) := elem
 	  } else {
-		val elem = kernelDer(input2(index,::).toDenseVector,input1)
-		resultMatrix(index,::) := elem
+		val elem = kernelDer(input2(index,::).t,input1)
+		resultMatrix(index,::) := elem.t
 	  }
 	}
 	resultMatrix
@@ -140,7 +140,7 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer
   /*grid(i,::) - i'th d-dimensional point*/
   def evaluateGridPoints(grid:DenseMatrix[Double],func:objectiveFunction):DenseVector[Double] = {
 	(0 until grid.rows).foldLeft(DenseVector.zeros[Double](grid.rows)){
-	  case (evaluatedPoints,index) => evaluatedPoints.update(index,func(grid(index,::).toDenseVector.toArray)); evaluatedPoints
+	  case (evaluatedPoints,index) => evaluatedPoints.update(index,func(grid(index,::).t.toArray)); evaluatedPoints
 	}
   }
 
@@ -153,7 +153,7 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer
 		  case ((randVector,index),range) =>
 			randVector.update(index,randDouble(randGenerator,range.start,range.end)); (randVector,index+1)
 		}._1
-	  	resultGrid(i,::) := randomPoint
+	  	resultGrid(i,::) := randomPoint.t
 	}
 	resultGrid
   }

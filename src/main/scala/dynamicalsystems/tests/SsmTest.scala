@@ -127,7 +127,7 @@ trait SsmTest extends SsmTestingUtils{
   	val (trueHiddenFile:File,predictedFile:File) = (new File(s"$resourcePathPrefix/$resultFilePath/${paths._1}"),
 	  new File(s"$resourcePathPrefix/$resultFilePath/${paths._2}"))
 	val timeSeries = DenseVector((1 to out.hiddenMeans.cols).toArray)
-	val (predicted,trueHidden) = (out.hiddenMeans(0,::).toDenseVector,trueHiddenStates(0,::).toDenseVector)
+	val (predicted,trueHidden) = (out.hiddenMeans(0,::).t,trueHiddenStates(0,::).t)
 	val covs = DenseVector(out.hiddenCovs.map(_(0,0)))
 	IOUtilities.writeVectorsToFile(trueHiddenFile,timeSeries,trueHidden)
 	IOUtilities.writeVectorsToFile(predictedFile,timeSeries,predicted,covs)

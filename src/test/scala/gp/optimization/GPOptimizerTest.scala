@@ -38,7 +38,7 @@ class GPOptimizerTest extends WordSpec {
 	  assert(grid.rows == 3)
 	  (0 until grid.rows).forall{
 		index =>
-		  val elem:Double = grid(index,::).toDenseVector(0)
+		  val elem:Double = grid(index, ::).t.indexAt(0)
 		  (elem < gpoInput.ranges(0).end) && (elem > gpoInput.ranges(0).start)
 	  }
 

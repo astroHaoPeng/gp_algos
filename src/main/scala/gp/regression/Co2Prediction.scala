@@ -142,7 +142,7 @@ object Co2Prediction {
 	lines.foldLeft(0) {
 	  case (index, line) =>
 		val numbers = line.split("(\\s|\\t)").map(_.toDouble)
-		finalMatrix(index, ::) := DenseVector(numbers)
+		finalMatrix(index, ::) := DenseVector(numbers).t
 		index + 1
 	}
 	finalMatrix

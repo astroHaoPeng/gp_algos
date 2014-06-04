@@ -60,12 +60,12 @@ object StatsUtils {
   /*data(i,::) - ith sample*/
   def meanAndVarOfData(data:DenseMatrix[Double]):(DenseVector[Double],DenseMatrix[Double]) = {
 	val sumOfSamples:DenseVector[Double] = (0 until data.rows).foldLeft(DenseVector.zeros[Double](data.cols)){
-	  case (mean,index) => mean + data(index,::).toDenseVector
+	  case (mean,index) => mean + data(index,::).t
 	}
 	val mean:DenseVector[Double] = sumOfSamples :/ data.rows.toDouble
 	val covMatrix:DenseMatrix[Double] = (0 until data.rows).foldLeft(DenseMatrix.zeros[Double](data.cols,data.cols)){
 	  case (cov,index) =>
-		val diff:DenseVector[Double] = (data(index,::).toDenseVector - mean)
+		val diff:DenseVector[Double] = (data(index,::).t - mean)
 		cov :+ (diff * diff.t)
 	}
 	(mean,covMatrix :/ data.rows.toDouble)
@@ -79,7 +79,7 @@ object StatsUtils {
 	val squaredSum:Double = (0 until numOfSamples).foldLeft(0.){
 	  case (acc,index) =>
 		val diff:DenseVector[Double] = if (horSample) {
-		  (estimate(index,::) - trueValues(index,::)).toDenseVector
+		  (estimate(index,::) - trueValues(index,::)).t
 		} else {
 		  (estimate(::,index) - trueValues(::,index)).toDenseVector
 		}

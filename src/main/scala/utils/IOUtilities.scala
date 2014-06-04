@@ -24,7 +24,7 @@ object IOUtilities {
 	  }
 	}
 	val result = DenseMatrix.zeros[Double](vectorSeq.length,colSize)
-	vectorSeq.foldLeft(0){case (indx,vector) => result(indx,::) := vector; indx+1}
+	vectorSeq.foldLeft(0){case (indx,vector) => result(indx,::) := vector.t; indx+1}
 	result
   }
 

@@ -126,10 +126,10 @@ class GPUnscentedKalmanFilter(gpOptimizer: GPOptimizer, gpPredictor: GpPredictor
 	(0 until output.rows).foldLeft(new aLCWithHyperParams(output.rows)){
 	  case (componentArray,dim) =>
 	  	val lc = if (optimizeGPL){
-		  val tuple = gpPredictor.preComputeComponentsWithHpOptimization(input,None,output(dim,::).toDenseVector)
+		  val tuple = gpPredictor.preComputeComponentsWithHpOptimization(input,None,output(dim,::).t)
 		  (tuple._1,Some(tuple._2))
 		} else { (gpPredictor.preComputeComponents(trainingData = input,sigmaNoise = None,
-		  targets = output(dim,::).toDenseVector), None)
+		  targets = output(dim,::).t), None)
 		}
 	 	componentArray(dim) = lc; componentArray
 	}
