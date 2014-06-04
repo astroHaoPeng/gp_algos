@@ -33,7 +33,7 @@
     <dependencies>
         <dependency>
             <groupId>org.scalanlp</groupId>
-            <artifactId>breeze_2.10</artifactId>
+            <artifactId>breeze-natives_2.10</artifactId>
             <version>${breeze.version}</version>
         </dependency>
         <dependency>
