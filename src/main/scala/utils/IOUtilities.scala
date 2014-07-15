@@ -39,6 +39,7 @@ object IOUtilities {
 			newBuff.append('\n')
 	  }.toString
 	  printWriter.write(strToWrite)
+	  printWriter.flush()
 	} catch {
 	  case e:Exception => println(e)
 	} finally {

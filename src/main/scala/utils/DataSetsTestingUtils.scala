@@ -10,7 +10,8 @@ object DataSetsTestingUtils {
   case class DataLoadSpec(fileName:String,sep:Char = ' ', divRatio:Option[Double])
   
   case class DataSet(trainingData:DenseMatrix[Double],trainingLabels:DenseVector[Double],
-								   testData:DenseMatrix[Double],testLabels:DenseVector[Double])
+								   testData:DenseMatrix[Double],testLabels:DenseVector[Double],
+								   wholeDataSet:DenseMatrix[Double])
   
   def loadDataSet(loadSpec:DataLoadSpec):Either[Exception,DataSet] = {
 	try{
@@ -25,7 +26,9 @@ object DataSetsTestingUtils {
 	  val targets:DenseVector[Double] = tempTargets(0 until numOfTrainCases)
 	  val testSet:DenseMatrix[Double] = wholeDataSet(numOfTrainCases until dsLength,0 until (wholeDataSet.cols-1))
 	  val testTargets:DenseVector[Double] = tempTargets(numOfTrainCases until dsLength)
-	  Right(DataSet(trainingData = trainData,trainingLabels = targets,testData = testSet,testLabels = testTargets))
+	  Right(DataSet(trainingData = trainData,trainingLabels = targets,
+		testData = testSet,testLabels = testTargets,
+		wholeDataSet = DenseMatrix.vertcat[Double](trainData,testSet)))
 	} catch {
 	  case ex:Exception => Left(ex)
 	}
