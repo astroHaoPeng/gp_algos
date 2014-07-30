@@ -7,6 +7,7 @@ import gp.regression.GpPredictor
 import gp.regression.GpPredictor.PredictionInput
 import utils.StatsUtils.GaussianDistribution
 import breeze.linalg.{DenseMatrix, DenseVector}
+import dynamicalsystems.tests.SsmTests
 
 /**
  * Created by mjamroz on 13/07/14.
@@ -88,10 +89,15 @@ object MasterThesisRelatedTasks {
 	}
   }
 
+  def evaluateSsmInference = {
+	SsmTests.main(Array.empty[String])
+  }
+
   def main(args:Array[String]):Unit = {
 	//writeCo2DataSetToFile
 	//evaluateGpPredictionOnCo2Ds
-	evaluateGpPredictionOnBostonDs
+	//evaluateGpPredictionOnBostonDs
+	evaluateSsmInference
   }
 
 }
