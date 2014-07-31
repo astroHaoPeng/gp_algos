@@ -13,6 +13,9 @@ class SortingUtilsTest extends WordSpec{
 	val sortedArr = SortingUtils.radixSort(arr)
 	assert(sortedArr === Array(2,5,6,6,7,90,123,345,987,1231))
 	assert(arr != sortedArr)
+	val arr1 = arr.clone()
+	val sortedArr1 = SortingUtils.radixSort(arr1,immutableInput = false)
+	assert(sortedArr1 === arr1)
   }
 
 }
