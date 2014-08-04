@@ -32,7 +32,8 @@ class MeshHyperParamsLogLikelihoodEvaluator(likelihoodEvaluator:MarginalLikeliho
 	  if (rangeIndex + 1 < allRanges.length){
 		recEvaluate(copiedHyperParams,allRanges,rangeIndex+1,classContext,result)
 	  }
-	  val (likelihood,_) = likelihoodEvaluator.logLikelihood(classContext.trainInput,classContext.targets,DenseVector(copiedHyperParams))
+	  val likelihood:Double = likelihoodEvaluator.logLikelihoodWithoutGrad(classContext.trainData.get,classContext.targets,
+		DenseVector(currentHyperParams))
 	  logger.info(s"Evaluated likelihood for hyperParams = ${DenseVector(currentHyperParams)}, value = ${likelihood}")
 	  result.addResult(copiedHyperParams,likelihood)
 	}	

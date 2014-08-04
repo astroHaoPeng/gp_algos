@@ -5,6 +5,7 @@ import breeze.linalg.{trace, diag, DenseVector, DenseMatrix}
 import breeze.numerics.sqrt
 import breeze.optimize.DiffFunction
 import utils.KernelRequisites._
+import utils.MatrixUtils
 
 /**
  * Created by mjamroz on 15/03/14.
@@ -14,15 +15,24 @@ class MarginalLikelihoodEvaluator(stopCriterion:EpParameterEstimator.stopCriteri
   import utils.MatrixUtils._
   import MarginalLikelihoodEvaluator._
 
-  def logLikelihood(trainData:DenseMatrix[Double],targets:DenseVector[Int],
+  def logLikelihoodWithoutGrad(trainInput:DenseMatrix[Double],
+					targets:DenseVector[Int],hyperParams:DenseVector[Double]):Double = {
+	val newKernelFunc = kernelFunc.changeHyperParams(hyperParams)
+	val kernelMatrix = MatrixUtils.buildKernelMatrix(newKernelFunc,trainInput)
+	val epParameterEstimator = new EpParameterEstimator(kernelMatrix,targets,stopCriterion)
+	val (siteParams,_) = epParameterEstimator.estimateSiteParams
+	siteParams.marginalLogLikelihood.get
+  }
+
+  def logLikelihood(trainInput:DenseMatrix[Double],targets:DenseVector[Int],
 							   hyperParams:DenseVector[Double]):(Double,DenseVector[Double]) = {
 
 	val newKernelFunc = kernelFunc.changeHyperParams(hyperParams)
-  	val kernelMatrix = buildKernelMatrix(newKernelFunc,trainData)
+	val kernelMatrix = MatrixUtils.buildKernelMatrix(newKernelFunc,trainInput)
 	val epParameterEstimator = new EpParameterEstimator(kernelMatrix,targets,stopCriterion)
 	val (siteParams,lowerTriangular) = epParameterEstimator.estimateSiteParams
 	val optimInput = HyperParameterOptimInput(siteParams = siteParams,lowerTriangular = lowerTriangular,
-	  kernelMatrix = kernelMatrix,trainData = trainData)
+	  kernelMatrix = kernelMatrix,trainInput = trainInput)
 	val derivatives = logLikelihoodDerivativesAfterHyperParams(optimInput,newKernelFunc)
 	(siteParams.marginalLogLikelihood.get,derivatives)
   }
@@ -30,7 +40,7 @@ class MarginalLikelihoodEvaluator(stopCriterion:EpParameterEstimator.stopCriteri
   def logLikelihoodDerivativesAfterHyperParams(optimInput:HyperParameterOptimInput,
 						  kernelFun:KernelFunc):DenseVector[Double] = {
 	val (siteParams,lowerTriangular,trainData) =
-	  (optimInput.siteParams,optimInput.lowerTriangular,optimInput.trainData)
+	  (optimInput.siteParams,optimInput.lowerTriangular,optimInput.trainInput)
 	val kernelMatrix:kernelMatrixType = optimInput.kernelMatrix
 	val tauDiagVector:DenseVector[Double] = sqrt(siteParams.tauSiteParams)
 	val tauDiagMatrix:DenseMatrix[Double] = diag(tauDiagVector)
@@ -69,6 +79,6 @@ object MarginalLikelihoodEvaluator {
   type logLikelihoodAfterParamDerivative = (Double) => Double
 
   case class HyperParameterOptimInput(siteParams:SiteParams,lowerTriangular:DenseMatrix[Double],
-									  kernelMatrix:DenseMatrix[Double],trainData:DenseMatrix[Double])
+									  kernelMatrix:DenseMatrix[Double],trainInput:DenseMatrix[Double])
 
 }

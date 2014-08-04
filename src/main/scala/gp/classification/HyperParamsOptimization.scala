@@ -34,23 +34,11 @@ object HyperParamsOptimization {
 
 	def optimizeHyperParams(optimizationInput:ClassifierInput): KernelFuncHyperParams = {
 
-	  val (trainData,targets) = (optimizationInput.trainInput,optimizationInput.targets)
-
-	  /*diffFunction will be minimized so it needs to be equal to -logLikelihood*/
-	  /*val diffFunction = new DiffFunction[DenseVector[Double]] {
-
-		def calculate(hyperParams: DenseVector[Double]): (Double, DenseVector[Double]) = {
-
-		  val (logLikelihood,derivatives) = marginalLikelihoodEvaluator.logLikelihood(trainData,targets,hyperParams)
-		  assert(hyperParams.length == derivatives.length)
-		  apacheLogger.info(s"Current solution is = ${hyperParams}, objective function value = ${-logLikelihood}")
-		  (-logLikelihood,derivatives :* (-1.))
-		}
-	  } */
-
+	  val targets = optimizationInput.targets
 	  val funcWithGradient:objectiveFunctionWithGradient = {hyperParams:Array[Double] =>
-		val (logLikelihood,derivatives) = marginalLikelihoodEvaluator.logLikelihood(trainData,targets,
-		  DenseVector(hyperParams))
+		val (logLikelihood,derivatives) =
+		  marginalLikelihoodEvaluator.logLikelihood(optimizationInput.trainData.get,
+			targets,DenseVector(hyperParams))
 		assert(hyperParams.length == derivatives.length)
 		apacheLogger.info(s"Current solution is = ${hyperParams}, objective function value = ${-logLikelihood}")
 		(logLikelihood,derivatives.toArray)
@@ -139,14 +127,9 @@ object HyperParamsOptimization {
 	private def computeValueAndGradient(optimizationInput: ClassifierInput,hyperParams:Array[Double]):(Double,Array[Double])
 		 = {
 
-	  val (trainData,targets) = (optimizationInput.trainInput,optimizationInput.targets)
-	  val (logLikelihood,derivatives) = marginalLikelihoodEvaluator.logLikelihood(trainData,targets,DenseVector(hyperParams))
-	  /*assert(hyperParams.length == derivatives.length)
-	  val evaluatedDerivatives:DenseVector[Double]  = (0 until derivatives.length).
-		foldLeft(DenseVector.zeros[Double](hyperParams.length)){
-		case (gradient,index) => gradient.update(index,derivatives(index)(hyperParams(index))); gradient
-	  }
-	  (logLikelihood,evaluatedDerivatives.data)*/
+	  val targets = optimizationInput.targets
+	  val (logLikelihood,derivatives) = marginalLikelihoodEvaluator.logLikelihood(
+		optimizationInput.trainData.get,targets,DenseVector(hyperParams))
 	  (logLikelihood,derivatives.data)
 	}
 

@@ -1,7 +1,7 @@
 package gp.datasetstests
 
 import breeze.linalg.{DenseVector, DenseMatrix}
-import utils.IOUtilities
+import utils.{MatrixUtils, IOUtilities}
 import gp.classification._
 import utils.KernelRequisites.GaussianRbfParams
 import gp.classification.GpClassifier.ClassifierInput
@@ -65,10 +65,16 @@ class CancerClassificationTest {
 
   def testWithTrainAndTestSet(trainSet:DenseMatrix[Double],targets:DenseVector[Int],
 							  testSet:DenseMatrix[Double]):DenseVector[Double] = {
-	val learnParams = gpClassifier.trainClassifier(ClassifierInput(trainInput = trainSet,targets = targets,initHyperParams = initRbfParams))
+	val kernelMatrix = MatrixUtils.buildKernelMatrix(rbfKernel,trainSet)
+	val testKernelMatrix = MatrixUtils.buildKernelMatrix(rbfKernel,testSet)
+	val testTrainKernelMatrix = MatrixUtils.buildKernelMatrix(rbfKernel,testSet,trainSet)
+	val learnParams = gpClassifier.trainClassifier(ClassifierInput(trainData = Some(trainSet),
+	  targets = targets,initHyperParams = initRbfParams,trainKernelMatrix = kernelMatrix))
 	logger.info(s"Marginal log likelihood = ${learnParams._1.marginalLogLikelihood.get}")
-	val targetsForTestSet = gpClassifier.classify(AfterEstimationClassifierInput(trainInput = trainSet,testInput = testSet,
-	  targets = targets,learnParams = Some(learnParams),hyperParams = initRbfParams),None)
+	val targetsForTestSet = gpClassifier.classify(
+	  AfterEstimationClassifierInput(testTrainKernelMatrix = testTrainKernelMatrix,trainKernelMatrix = kernelMatrix,
+	  testKernelMatrix = testKernelMatrix, targets = targets,learnParams = Some(learnParams),
+		hyperParams = initRbfParams))
 	targetsForTestSet
   }
 
@@ -97,7 +103,7 @@ class CancerClassificationTest {
 	val input:DenseMatrix[Double] = wholeDataSet(0 until numOfTrainCases,0 until (wholeDataSet.cols-1))
 	val tempTargets:DenseVector[Double] = wholeDataSet(::,wholeDataSet.cols-1)
 	val targets:DenseVector[Int] = (tempTargets(0 until numOfTrainCases)).mapValues(_.toInt)
-	assert(targets.forallValues{label => label == 1 || label == -1})
+	assert(targets.forall{label => label == 1 || label == -1})
 	val testSet:DenseMatrix[Double] = wholeDataSet(numOfTrainCases until dsLength,0 until (wholeDataSet.cols-1))
 	val testTargets:DenseVector[Int] = tempTargets(numOfTrainCases until dsLength).mapValues(_.toInt)
 	assert(testTargets.forallValues{label => label == 1 || label == -1})
@@ -111,15 +117,22 @@ class CancerClassificationTest {
 	val wholeDataSet:DenseMatrix[Double] = loadDataSet(limit)
 	val input:DenseMatrix[Double] = wholeDataSet(::,0 until (wholeDataSet.cols-1))
 	val targets:DenseVector[Int] = wholeDataSet(::,wholeDataSet.cols-1).mapValues(_.toInt)
+	val testSet:DenseMatrix[Double] = input(35,::).t.toDenseMatrix
 	val marginalEvaluator = new MarginalLikelihoodEvaluator(stopCriterion,rbfKernel)
 	val hyperParamOptimizer = new GradientHyperParamsOptimizer(marginalEvaluator,new BreezeLbfgsOptimizer)
-	//val hyperParamOptimizer = new ApacheCommonsOptimizer(marginalEvaluator)
+	val kernelMatrix = MatrixUtils.buildKernelMatrix(rbfKernel,input)
+	val testKernelMatrix = MatrixUtils.buildKernelMatrix(rbfKernel,testSet)
+	val testTrainKernelMatrix = MatrixUtils.buildKernelMatrix(rbfKernel,testSet,input)
 	val optimizedParams = hyperParamOptimizer.optimizeHyperParams(
-	  ClassifierInput(trainInput = input,targets = targets,initHyperParams = rbfKernel.rbfParams))
+	  ClassifierInput(trainKernelMatrix = kernelMatrix,targets = targets,
+		initHyperParams = rbfKernel.rbfParams,trainData = Some(input)))
 	val newGpClassifier = new GpClassifier(rbfKernel.changeHyperParams(optimizedParams.toDenseVector),stopCriterion)
-	val learnParams = newGpClassifier.trainClassifier(ClassifierInput(trainInput = input,targets = targets,initHyperParams = optimizedParams))
-	newGpClassifier.classify(AfterEstimationClassifierInput(trainInput = input,testInput = input(35,::).t.toDenseMatrix,
-		targets = targets,learnParams = Some(learnParams),hyperParams = optimizedParams),None)
+	val learnParams = newGpClassifier.trainClassifier(
+	  ClassifierInput(trainKernelMatrix = kernelMatrix,trainData = Some(input),
+		targets = targets,initHyperParams = optimizedParams))
+	newGpClassifier.classify(AfterEstimationClassifierInput(trainKernelMatrix = kernelMatrix,
+	  testKernelMatrix = testKernelMatrix, testTrainKernelMatrix = testTrainKernelMatrix,
+		targets = targets,learnParams = Some(learnParams),hyperParams = optimizedParams))
   }
 
   def evaluateHyperParamsMesh(limit:Option[Int]):HyperParamsMeshValues = {
@@ -130,7 +143,8 @@ class CancerClassificationTest {
 	val meshEvaluator = new MeshHyperParamsLogLikelihoodEvaluator(marginalEvaluator)
 	val (alphaRange,gammaRange) = (Range.Double(0.5,100.,8.),Range.Double(0.01,10.,1.))
 	meshEvaluator.evaluate(IndexedSeq(alphaRange,gammaRange),
-	  ClassifierInput(trainInput = input,targets = targets,initHyperParams = rbfKernel.rbfParams))
+	  ClassifierInput(trainData = Some(input),targets = targets,initHyperParams = rbfKernel.rbfParams,
+		trainKernelMatrix = null))
   }
 
 }
