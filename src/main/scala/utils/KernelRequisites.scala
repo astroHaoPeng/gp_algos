@@ -20,9 +20,13 @@ object KernelRequisites {
 	def fromDenseVector(dv:DenseVector[Double]):KernelFuncHyperParams
   }
 
-  trait KernelFunc{
+  trait AbstractKernelFunc[T] {
+	def apply(obj1:T,obj2:T,index1:Int,index2:Int):Double = apply(obj1,obj2,index1 == index2)
+	def apply(obj1:T,obj2:T,sameIndex:Boolean):Double
+  }
 
-	def apply(obj1:featureVector,obj2:featureVector,sameIndex:Boolean):Double
+  trait KernelFunc extends AbstractKernelFunc[featureVector]{
+
 	def hyperParametersNum:Int
 	def derAfterHyperParam(paramNum:Int):(featureVector,featureVector,Boolean) => Double
 	def gradient(afterFirstArg:Boolean):kernelDerivative
@@ -48,7 +52,7 @@ object KernelRequisites {
 	}
 
 	override def fromDenseVector(dv: DenseVector[Double]): GaussianRbfParams = {
-	  require(dv.length == lengthScales.length + 2)
+	  require(dv.length == lengthScales.length + 2,s"${dv.length} does not equal to ${lengthScales.length+2}")
 	  val (newSignalVar,newLs,newNoiseVar) = (dv(0),dv(1 to -2),dv(-1))
 	  this.copy(signalVar = newSignalVar,lengthScales = newLs,noiseVar = newNoiseVar)
 	}
@@ -118,5 +122,6 @@ object KernelRequisites {
 	}
 	result
   }
+
 
 }
