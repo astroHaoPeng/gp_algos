@@ -1,9 +1,10 @@
 package gp.imageprocessing
 
 import utils.SortingUtils
-import java.io.File
+import java.io.{FileFilter, File}
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
+import org.springframework.core.io.ClassPathResource
 
 /**
  * Created by mjamroz on 30/07/14.
@@ -69,25 +70,30 @@ object ImageProcessingUtils {
   def removeDuplicates(image1D:Array[Long]):Array[Long] = {
 	image1D.toSet.toArray
   }
-  /*type imageConvertingFunc = BufferedImage => BufferedImage
-  val removeAlphaCompFunc:imageConvertingFunc = {
-	buffImage:BufferedImage =>
-	  for (row <- 0 until buffImage.getHeight){
-		for (col <- 0 until buffImage.getWidth){
-		  val rgbWithAlpha = buffImage.getRGB(col,row)
-		  val currColor = new Color(rgbWithAlpha)
-		  val colorWithoutAlpha = new Color(currColor.getRed,currColor.getGreen,currColor.getBlue,0)
-		  buffImage.setRGB(col,row,colorWithoutAlpha.getRGB)
-		}
-	  }
-	  buffImage
+
+  def loadAndConvertImage(file:File):(Array[Double],PreScalingOutput) = {
+	val imageLoadSpec = ImageLoadingSpec(file = file,
+	  shiftByAlpha = true,convertToPositive = true)
+	val imageSpec = ImageProcessingUtils.loadImageInto2DArray(imageLoadSpec)
+	val imageSpec_ = imageSpec.right.get
+	val imageAs1Darr = ImageProcessingUtils.linearizeImage(imageSpec_.data)
+	val imageWithoutDupl = ImageProcessingUtils.removeDuplicates(imageAs1Darr)
+	val preScalingOut = ImageProcessingUtils.computePreScalingOut(imageWithoutDupl,0.5)
+	(ImageProcessingUtils.preScaleInput(preScalingOut.scalingFactor,imageWithoutDupl),preScalingOut)
   }
-  val convertingFuncs:Seq[imageConvertingFunc] = Seq(removeAlphaCompFunc)
-  def applyConversion(initBuff:BufferedImage):BufferedImage = {
-	convertingFuncs.foldLeft(initBuff){
-	  case (currBuff,convertingFunc) =>
-	  	convertingFunc(currBuff)
+
+  def loadAndConvertImage(fileName:String,resourceBaseDir:Boolean=true):(Array[Double],PreScalingOutput) = {
+	val file = if (resourceBaseDir){new ClassPathResource(fileName).getFile}
+	else {new File(fileName)}
+	loadAndConvertImage(file)
+  }
+
+  def loadAndConvertImagesFromDir(dirName:String):IndexedSeq[(Array[Double],PreScalingOutput)] = {
+	val file = new File(dirName)
+	file.listFiles.filterNot(_.isDirectory).map{ imageFile =>
+	  	assert(imageFile.exists())
+	    loadAndConvertImage(imageFile)
 	}
-  } */
+  }
 
 }

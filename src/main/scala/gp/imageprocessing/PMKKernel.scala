@@ -28,15 +28,24 @@ class PMKKernel(diameter:Double) extends AbstractKernelFunc[Array[Double]]{
 	}
 	require(histsForObj1.length == histsForObj2.length,
 	  "Histogram vectors needs to have equal lengths. Ensure that they were built with the same diameter D")
-	/*At level -1 */
+	unormalizedKernelVal(histsForObj1,histsForObj2)
+  }
+
+  def unormalizedKernelVal(hists1:HistPyramid,hists2:HistPyramid):Double = {
 	val firstPyramidIntersection = /*histogramIntersection(histsForObj1(0),histsForObj2(0))*/ 0
-	val (kernelVal,_) = (1 until histsForObj1.length).foldLeft((0.,firstPyramidIntersection)){
+	val (kernelVal,_) = (1 until hists1.length).foldLeft((0.,firstPyramidIntersection)){
 	  case ((kernelVal,lastIntersectionVal),index) =>
 		val weight = 1./(math.pow(2,index-1))
-		val currIntersection:Int = histogramIntersection(histsForObj1(index),histsForObj2(index))
+		val currIntersection:Int = histogramIntersection(hists1(index),hists2(index))
 		(kernelVal + weight * (currIntersection - lastIntersectionVal), currIntersection)
 	}
 	kernelVal
+  }
+  
+  def normalize(hists1:HistPyramid,hists2:HistPyramid,unormalizedVal:Double):Double = {
+	val unormalizedObj1 = unormalizedKernelVal(hists1,hists1)
+	val unormalizedObj2 = unormalizedKernelVal(hists2,hists2)
+	(1/math.sqrt(unormalizedObj1*unormalizedObj2))*unormalizedVal
   }
 
 }

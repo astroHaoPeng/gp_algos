@@ -1,11 +1,13 @@
 package gp.imageprocessing
 
-import gp.imageprocessing.ImageProcessingUtils.PreScalingOutput
 import org.springframework.context.support.GenericXmlApplicationContext
 import breeze.linalg.{DenseVector, DenseMatrix}
 import gp.classification.GpClassifier
-import gp.classification.GpClassifier.AfterEstimationClassifierInput
 import utils.StatsUtils
+import java.io._
+import gp.imageprocessing.ImageProcessingUtils.PreScalingOutput
+import gp.classification.GpClassifier.AfterEstimationClassifierInput
+import org.slf4j.LoggerFactory
 
 /**
  * Created by mjamroz on 04/08/14.
@@ -17,6 +19,12 @@ object ImageProcessingTests {
   genericAppContext.load("classpath:config/spring-context.xml")
   genericAppContext.refresh()
   val gpClassifier = genericAppContext.getBean(classOf[GpClassifier])
+
+  val fileGenerationFunc: (String,String) => String = {case (dir1,dir2) =>
+	s"${dir1}_${dir2}.dat"
+  }
+
+  val logger = LoggerFactory.getLogger(this.getClass)
 
   case class LoadDataSetSpec(kernelMatrix:DenseMatrix[Double],
 							 testTrainKernelMatrix:DenseMatrix[Double],testKernelMatrix:DenseMatrix[Double],
@@ -51,38 +59,20 @@ object ImageProcessingTests {
 	}
   }
 
-  /*def firstTest(testTrainRatio:Double,dir1:String="dolphin",dir2:String="emu"):ClassificationResult = {
-	val dataSpec = loadDataSet(dir1,dir2,testTrainRatio)
-	val afterEstimationParams = AfterEstimationClassifierInput(learnParams = None,
-	  targets = dataSpec.trainTargets,hyperParams = null,trainKernelMatrix = dataSpec.kernelMatrix,
-	  testTrainKernelMatrix = dataSpec.testTrainKernelMatrix,testKernelMatrix = dataSpec.testKernelMatrix)
-	val probabsOfClassEq1 = gpClassifier.classify(afterEstimationParams)
-	assert(probabsOfClassEq1.length == dataSpec.testTargets.length)
-	val predictedLabels = DenseVector.zeros[Int](probabsOfClassEq1.length)
-	val (misclassified,wrongDeviationSum,rightSum) =
-	  (0 until probabsOfClassEq1.length).foldLeft((0,0.,0.)) { case ((missClassNum,wrongDeviation,avgRight),index) =>
-	  	val probabOfClass1 = probabsOfClassEq1(index)
-		val labelForIndex = if (probabOfClass1 >= 0.5){1} else {-1}
-	  	predictedLabels.update(index,labelForIndex)
-	  	val missClassified = if (labelForIndex != dataSpec.testTargets(index)){true} else {false}
-	  	val newMissClassNum = if (missClassified){missClassNum+1}else{missClassNum}
-	    val newWrongDev = if (missClassified){wrongDeviation + (math.abs(probabOfClass1-0.5))} else {wrongDeviation}
-	  	val newAvgRight = if (!missClassified){
-		  val probabToAdd = if (labelForIndex == 1){probabOfClass1} else {1 - probabOfClass1}
-		  avgRight + probabToAdd
-		}
-		else {avgRight}
-	    (newMissClassNum,newWrongDev,newAvgRight)
-	}
-	ClassificationResult(probabsOfClass1 = probabsOfClassEq1,misclassified = misclassified,
-	  avgDeviationFromRightLabel = wrongDeviationSum/misclassified,predictedLabels = predictedLabels,
-	  avgRightPrediction = rightSum / (predictedLabels.length - misclassified),
-	  trueLabels = dataSpec.testTargets,errorate = misclassified.toDouble / predictedLabels.length)
-  } */
+
 
   def repeatTestFewTimes(iterNum:Int,testTrainRatio:Double,dir1:String,dir2:String):
   (Seq[ClassificationResult],ClassificationTestSuiteResult) = {
-  	val (wholeKernelMatrix,imageIndexes,targets) = computeKernelMatrixForWholeDataSet(dir1,dir2)
+  	val (wholeKernelMatrix,imageIndexes,targets) = if (new File(fileGenerationFunc(dir1,dir2)).exists()){
+	  logger.info(s"DataLoadSpec file found, loading from file ${fileGenerationFunc(dir1,dir2)}")
+	  loadDataSpec(fileGenerationFunc(dir1,dir2))
+	} else {
+	  logger.info(s"DataLoadSpec file not found, computing in progress...")
+	  val dataLoadSpec = computeKernelMatrixForWholeDataSet(dir1,dir2)
+	  saveLoadDataSpec(dataLoadSpec._1,dataLoadSpec._2,dataLoadSpec._3,fileGenerationFunc(dir1,dir2))
+	  logger.info(s"DataLoadSpec computed and saved to file ${fileGenerationFunc(dir1,dir2)}")
+	  dataLoadSpec
+	}
 	val classResults = (1 to iterNum).foldLeft(Seq.empty[ClassificationResult]){
 	  case (collectedResults,num) =>
 		val testInstance = prepareOneTestInstance(wholeKernelMatrix,imageIndexes,targets,testTrainRatio)
@@ -169,40 +159,7 @@ object ImageProcessingTests {
 	  trueLabels = dataSpec.testTargets,errorate = misclassified.toDouble / predictedLabels.length)
   }
 
-  /*def loadDataSet(dir1:String,dir2:String,testTrainRatio:Double):LoadDataSetSpec = {
-	require(testTrainRatio > 0 && testTrainRatio < 1)
-	val gramMatrixBuilder = new PMKGramMatrixBuilder
-	val (dolphinDir,emuDir) = (s"$imageRootDir/$dir1",s"$imageRootDir/$dir2")
-	val dolphinImages = ImageProcessingUtils.loadAndConvertImagesFromDir(dolphinDir)
-	val emuImages = ImageProcessingUtils.loadAndConvertImagesFromDir(emuDir)
-	val diameter = computeDiameter(dolphinImages,emuImages)
-	val concatenatedImagesWithIds =
-	  (dolphinImages ++ emuImages).map(_._1) zip (0 until (dolphinImages.size + emuImages.size))
-	var index = 0
-	val imagesWithIdsWithTargets:IndexedSeq[(Array[Double],Int,Int)] = concatenatedImagesWithIds.map{ tuple2 =>
-	  val target = if (index >= dolphinImages.size){-1} else {1}
-	  index += 1
-	  (tuple2._1,tuple2._2,target);
-	}
-	val shuffledImagesWithIdsAndTargets = util.Random.shuffle(imagesWithIdsWithTargets)
-	val shuffledImagesWithIds = shuffledImagesWithIdsAndTargets.map {case (image,id,_) => (image,id) }
-	val histIndex = gramMatrixBuilder.buildHistIndex(shuffledImagesWithIds,diameter)
-	val trainWithTestSetSize = shuffledImagesWithIds.size
-	val trainSize = (testTrainRatio * trainWithTestSetSize).toInt
-	val testSize = trainWithTestSetSize - trainSize
-	val (trainTargets,testTargets) = (shuffledImagesWithIdsAndTargets.dropRight(testSize).map(_._3),
-	  shuffledImagesWithIdsAndTargets.drop(trainSize).map(_._3))
-	val (trainingSet,testSet) = (shuffledImagesWithIds.dropRight(testSize),shuffledImagesWithIds.drop(trainSize))
-	assert((trainingSet.size == trainSize) && (testSet.size == testSize))
-	val gramMatrix = gramMatrixBuilder.buildGramMatrix(trainingSet,histIndex,diameter)
-	require((gramMatrix.rows == trainingSet.size) && (gramMatrix.cols == trainingSet.size))
-	val testTrainGramMatrix = gramMatrixBuilder.buildGramMatrix(testSet,trainingSet,histIndex,diameter)
-	assert(testTrainGramMatrix.rows == testSize && testTrainGramMatrix.cols == trainSize)
-	val testGramMatrix = gramMatrixBuilder.buildGramMatrix(testSet,histIndex,diameter)
-	LoadDataSetSpec(kernelMatrix = gramMatrix,testTrainKernelMatrix = testTrainGramMatrix,
-	  testKernelMatrix = testGramMatrix,trainTargets = DenseVector(trainTargets.toArray),
-	  testTargets = DenseVector(testTargets.toArray))
-  } */
+
 
   def computeDiameter(firstImageSet:IndexedSeq[(Array[Double],PreScalingOutput)],
 						secondImageSet:IndexedSeq[(Array[Double],PreScalingOutput)]):Double = {
@@ -211,8 +168,31 @@ object ImageProcessingTests {
 	} max
   }
 
+  def saveLoadDataSpec(kernelMatrix:DenseMatrix[Double],ids:IndexedSeq[Int],targets:IndexedSeq[Int],fileName:String) = {
+	try{
+	  val fileOutStream = new FileOutputStream(new File(fileName))
+	  val objOutStream = new ObjectOutputStream(fileOutStream)
+	  val tupleToBeSaved = (kernelMatrix,ids,targets)
+	  objOutStream.writeObject(tupleToBeSaved)
+	} catch {
+	  case e:Exception => throw e
+	}
+  }
+
+  def loadDataSpec(fileName:String):(DenseMatrix[Double],IndexedSeq[Int],IndexedSeq[Int]) = {
+	try{
+	  val fileInStream = new FileInputStream(new File(fileName))
+	  val objInStream = new ObjectInputStream(fileInStream)
+	  objInStream.readObject().asInstanceOf[(DenseMatrix[Double],IndexedSeq[Int],IndexedSeq[Int])]
+	} catch {
+	  case e:Exception => throw e
+	}
+  }
+
   def main(args:Array[String]):Unit = {
-	val (_,testSuiteResult) = repeatTestFewTimes(10,0.7,"dolphin","emu")
+	//val (_,testSuiteResult) = repeatTestFewTimes(10,0.8,"dolphin","emu")
+	//val (_,testSuiteResult) = repeatTestFewTimes(10,0.9,"panda","okapi")
+	val (_,testSuiteResult) = repeatTestFewTimes(100,0.9,"scissors","starfish")
 	println(testSuiteResult)
   }
 
