@@ -9,9 +9,9 @@ class SortingUtilsTest extends WordSpec{
 
   "Radix sort algorithm should sort the array and return it without affecting the input" in {
 
-	val arr = Array(345,123,6,7,1231,6,5,2,90,987)
+	val arr = Array(3453131231l,1231231231l,6123313l,7l,1231l,6l,5l,2l,90l,987l)
 	val sortedArr = SortingUtils.radixSort(arr)
-	assert(sortedArr === Array(2,5,6,6,7,90,123,345,987,1231))
+	assert(sortedArr === arr.sortWith(_ < _))
 	assert(arr != sortedArr)
 	val arr1 = arr.clone()
 	val sortedArr1 = SortingUtils.radixSort(arr1,immutableInput = false)
