@@ -13,12 +13,17 @@
         <constructor-arg name="noiseVar" value="#{ T(java.lang.Math).sqrt(0.00125) }" />
     </bean>
 
+
     <bean  id="bostonRbfKernel" class="utils.KernelRequisites$GaussianRbfKernel">
         <constructor-arg name="rbfParams" ref="bostonRbfParams" />
     </bean>
 
+    <bean id="optimalBostonRbfKernel" class="utils.KernelRequisites$GaussianRbfKernel">
+        <constructor-arg name="rbfParams" value="#{objectCreator.optimalBostonHp()}" />
+    </bean>
+
     <bean id="co2HyperParams" class="gp.regression.Co2Prediction$Co2HyperParams">
-        <constructor-arg name="dv" value="#{objectCreator.defaultCo2HyperParamsVec()}" />
+        <constructor-arg name="dv" value="#{objectCreator.co2HyperParamsVec()}" />
     </bean>
 
     <bean id="co2Kernel" class="gp.regression.Co2Prediction$Co2Kernel">
@@ -27,6 +32,18 @@
 
     <bean id="gpPredictor" class="gp.regression.GpPredictor">
         <constructor-arg name="kernelFunc" ref="bostonRbfKernel" />
+    </bean>
+
+    <bean id="ukfTransfGpPredictor" class="gp.regression.GpPredictor">
+        <constructor-arg name="kernelFunc" value="#{objectCreator.rbfKernel(3)}" />
+    </bean>
+
+    <bean id="ssmGpPredictor" class="gp.regression.GpPredictor">
+        <constructor-arg name="kernelFunc" value="#{objectCreator.rbfKernel(1)}" />
+    </bean>
+
+    <bean id="gpBostonOptimalPredictor" class="gp.regression.GpPredictor">
+        <constructor-arg name="kernelFunc" ref="optimalBostonRbfKernel" />
     </bean>
 
     <bean id="co2GpPredictor" class="gp.regression.GpPredictor">
@@ -38,14 +55,13 @@
     </bean>
 
     <bean id="gpClassifier" class="gp.classification.GpClassifier">
-        <constructor-arg name="kernelFun" ref="bostonRbfKernel" />
         <constructor-arg name="stopCriterion" ref="stopCriterion" />
     </bean>
 
     <bean id="breezeLbfgsOptimizer" class="optimization.Optimization$BreezeLbfgsOptimizer" />
 
-    <bean id="gpOptimizer" class="gp.optimization.GPOptimizer">
-        <constructor-arg name="gpPredictor" ref="gpPredictor" />
+    <bean id="gpOptimizerForSsmOptim" class="gp.optimization.GPOptimizer">
+        <constructor-arg name="gpPredictor" ref="ukfTransfGpPredictor" />
         <constructor-arg name="noise" value="#{objectCreator.none()}" />
         <constructor-arg name="gradientOptimizer" ref="breezeLbfgsOptimizer" />
     </bean>
