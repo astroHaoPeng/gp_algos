@@ -8,6 +8,7 @@ import java.io._
 import gp.imageprocessing.ImageProcessingUtils.PreScalingOutput
 import gp.classification.GpClassifier.AfterEstimationClassifierInput
 import org.slf4j.LoggerFactory
+import svm.SvmBasedImageClassifier
 
 /**
  * Created by mjamroz on 04/08/14.
@@ -28,7 +29,8 @@ object ImageProcessingTests {
 
   case class LoadDataSetSpec(kernelMatrix:DenseMatrix[Double],
 							 testTrainKernelMatrix:DenseMatrix[Double],testKernelMatrix:DenseMatrix[Double],
-							 trainTargets:DenseVector[Int],testTargets:DenseVector[Int])
+							 trainTargets:DenseVector[Int],testTargets:DenseVector[Int],
+							 trainingIds:DenseVector[Int],testIds:DenseVector[Int])
 
   case class ClassificationResult(probabsOfClass1:DenseVector[Double],misclassified:Int,
 								  avgDeviationFromRightLabel:Double,errorate:Double,
@@ -50,6 +52,22 @@ object ImageProcessingTests {
 
   }
 
+  case class SvmClassificationResult(misclassified:Int,errorate:Double,
+									 predictedLabels:DenseVector[Int],trueLabels:DenseVector[Int])  {
+
+	override def toString = {
+	  val tempBuffer = (0 until predictedLabels.length).foldLeft(new StringBuffer){
+		case (buff,index) =>
+		  val indicator = if (trueLabels(index) != predictedLabels(index)){"WRONG"} else {"OK"}
+		  val line = s"$index: predicted label: ${predictedLabels(index)} true label: ${trueLabels(index)} - $indicator"
+		  buff.append(line)
+		  buff.append('\n')
+	  }
+	  val summarization = s"[misclassified = $misclassified, errorate = $errorate]"
+	  tempBuffer.append(summarization).toString
+	}
+  }
+
   case class ClassificationTestSuiteResult(misclassified:(Double,Double),errorate:(Double,Double),
 										   avgDeviationFromRightLabel:(Double,Double),avgRightPrediction:(Double,Double)){
 	override def toString = {
@@ -59,10 +77,17 @@ object ImageProcessingTests {
 	}
   }
 
+  case class SvmClassificationTestSuiteResult(misclassified:(Double,Double),errorate:(Double,Double)) {
+
+	override def toString = {
+	  s"[misclassified = ${misclassified._1} std ${misclassified._2}, errorate = ${errorate._1} std ${errorate._2}]"
+	}
+  }
+
 
 
   def repeatTestFewTimes(iterNum:Int,testTrainRatio:Double,dir1:String,dir2:String):
-  (Seq[ClassificationResult],ClassificationTestSuiteResult) = {
+  (Seq[(ClassificationResult,SvmClassificationResult)],ClassificationTestSuiteResult,SvmClassificationTestSuiteResult) = {
   	val (wholeKernelMatrix,imageIndexes,targets) = if (new File(fileGenerationFunc(dir1,dir2)).exists()){
 	  logger.info(s"DataLoadSpec file found, loading from file ${fileGenerationFunc(dir1,dir2)}")
 	  loadDataSpec(fileGenerationFunc(dir1,dir2))
@@ -73,13 +98,16 @@ object ImageProcessingTests {
 	  logger.info(s"DataLoadSpec computed and saved to file ${fileGenerationFunc(dir1,dir2)}")
 	  dataLoadSpec
 	}
-	val classResults = (1 to iterNum).foldLeft(Seq.empty[ClassificationResult]){
-	  case (collectedResults,num) =>
+	val svmClassifier = new SvmBasedImageClassifier(wholeKernelMatrix)
+	val (classResults,svmClassResults) = (1 to iterNum).foldLeft((Seq.empty[ClassificationResult],Seq.empty[SvmClassificationResult])){
+	  case ((collectedResults,svmCollectedResults),num) =>
 		val testInstance = prepareOneTestInstance(wholeKernelMatrix,imageIndexes,targets,testTrainRatio)
 	  	val classResult = executeOneTest(testInstance)
-	  	collectedResults :+ classResult
+	  	val svmClassResult = executeSvmTest(dataSpec = testInstance,svmClassifier)
+		(collectedResults :+ classResult,svmCollectedResults :+ svmClassResult)
 	}
-	println(classResults)
+	println(s"----------------------- GP ----------------------- \n ${classResults}")
+	println(s"----------------------- SVM ---------------------- \n ${svmClassResults}")
 	val misclassifiedVector = DenseVector(classResults.map(_.misclassified.toDouble).toArray).toDenseMatrix.t
 	val errorateVector = DenseVector(classResults.map(_.errorate).toArray).toDenseMatrix.t
 	val avgDeviationFromRightLabel = DenseVector(classResults.map(_.avgDeviationFromRightLabel).toArray).toDenseMatrix.t
@@ -92,7 +120,13 @@ object ImageProcessingTests {
 	  errorate = (errorRate._1(0),math.sqrt(errorRate._2(0,0))),
 	  avgDeviationFromRightLabel = (avgDeviation._1(0),math.sqrt(avgDeviation._2(0,0))),
 	  avgRightPrediction = (avgRight._1(0),math.sqrt(avgRight._2(0,0))))
-	(classResults,suiteResult)
+	val svmMisclassifiedVector = DenseVector(svmClassResults.map(_.misclassified.toDouble).toArray).toDenseMatrix.t
+	val svmErrorRateVector = DenseVector(svmClassResults.map(_.errorate).toArray).toDenseMatrix.t
+	val svmMisclassified = StatsUtils.meanAndVarOfData(svmMisclassifiedVector)
+	val svmErrorRate = StatsUtils.meanAndVarOfData(svmErrorRateVector)
+	val svmSuiteResult = SvmClassificationTestSuiteResult(misclassified = (svmMisclassified._1(0),
+	  math.sqrt(svmMisclassified._2(0,0))),errorate = (svmErrorRate._1(0),math.sqrt(svmErrorRate._2(0,0))))
+	(classResults.zip(svmClassResults),suiteResult,svmSuiteResult)
   }
 
   def computeKernelMatrixForWholeDataSet(dir1:String,dir2:String):(DenseMatrix[Double],IndexedSeq[Int],IndexedSeq[Int]) = {
@@ -126,9 +160,25 @@ object ImageProcessingTests {
 	val testKernelMatrix = wholeDsShuffledKernelMatrix(trainSize until wholeDataSetSize,trainSize until wholeDataSetSize)
 	val testTrainKernelMatrix = wholeDsShuffledKernelMatrix(trainSize until wholeDataSetSize,0 until trainSize)
 	val (trainTargets,testTargets) = (shuffledTargets(0 until trainSize),shuffledTargets(trainSize until wholeDataSetSize))
+	val (trainIds,testIds) = (DenseVector.tabulate[Int](trainSize)(index => shuffledIds(index)),
+	  DenseVector.tabulate[Int](wholeDataSetSize-trainSize)(index => shuffledIds(trainSize + index)))
 	LoadDataSetSpec(kernelMatrix = trainKernelMatrix,testTrainKernelMatrix = testTrainKernelMatrix,
-	  testKernelMatrix = testKernelMatrix,trainTargets = trainTargets,testTargets = testTargets)
+	  testKernelMatrix = testKernelMatrix,trainTargets = trainTargets,testTargets = testTargets,
+		trainingIds = trainIds,testIds = testIds)
 
+  }
+
+  def executeSvmTest(dataSpec:LoadDataSetSpec,svmClassifier:SvmBasedImageClassifier):SvmClassificationResult = {
+	val predictedLabelsBySvm =
+	  svmClassifier.classifyImages(dataSpec.trainingIds,dataSpec.trainTargets,dataSpec.testIds)
+	val misclassified = (0 until predictedLabelsBySvm.length).foldLeft(0){
+	  case (misclassifiedNum,index) =>
+	  	val label = predictedLabelsBySvm(index)
+	  	if (dataSpec.testTargets(index) != label){misclassifiedNum + 1} else {misclassifiedNum}
+	}
+	val errorate = misclassified.toDouble / predictedLabelsBySvm.length
+	SvmClassificationResult(misclassified = misclassified,errorate = errorate,
+	  predictedLabels = predictedLabelsBySvm,trueLabels = dataSpec.testTargets)
   }
 
   def executeOneTest(dataSpec:LoadDataSetSpec):ClassificationResult = {
@@ -190,10 +240,15 @@ object ImageProcessingTests {
   }
 
   def main(args:Array[String]):Unit = {
-	//val (_,testSuiteResult) = repeatTestFewTimes(10,0.8,"dolphin","emu")
+	val (_,testSuiteResult,svmTestSuiteResult) = repeatTestFewTimes(100,0.8,"lobster","crab")
 	//val (_,testSuiteResult) = repeatTestFewTimes(10,0.9,"panda","okapi")
-	val (_,testSuiteResult) = repeatTestFewTimes(100,0.9,"scissors","starfish")
+	//val (_,testSuiteResult) = repeatTestFewTimes(100,0.9,"scissors","starfish")  "lobster","crab"
+	//val (_,testSuiteResult) = repeatTestFewTimes(100,0.7,"cannon","car_side")
+	//val (_,testSuiteResult) = repeatTestFewTimes(100,0.9,"lobster","crab")
+	println("------------------------- GP SUITE -------------------------")
 	println(testSuiteResult)
+	println("------------------------- SVM SUITE ------------------------")
+	println(svmTestSuiteResult)
   }
 
 }
