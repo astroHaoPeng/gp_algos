@@ -2,13 +2,13 @@ package gp.classification
 
 import breeze.linalg.{*, DenseMatrix, DenseVector}
 import gp.classification.EpParameterEstimator.SiteParams
-import utils.KernelRequisites.{KernelFuncHyperParams, kernelMatrixType, KernelFunc}
+import utils.KernelRequisites.{KernelFuncHyperParams, kernelMatrixType}
 import breeze.numerics.sqrt
 
 /**
  * Created by mjamroz on 13/03/14.
  */
-class GpClassifier(kernelFun:KernelFunc,stopCriterion:EpParameterEstimator.stopCriterionFunc) {
+class GpClassifier(stopCriterion:EpParameterEstimator.stopCriterionFunc) {
 
   import GpClassifier._
   import utils.MatrixUtils._

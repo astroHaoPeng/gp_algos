@@ -15,6 +15,12 @@ class MarginalLikelihoodEvaluator(stopCriterion:EpParameterEstimator.stopCriteri
   import utils.MatrixUtils._
   import MarginalLikelihoodEvaluator._
 
+  def logLikelihoodWithKernelMatrixPassed(kernelMatrix:DenseMatrix[Double],targets:DenseVector[Int]):Double = {
+	val epParameterEstimator = new EpParameterEstimator(kernelMatrix,targets,stopCriterion)
+	val (siteParams,_) = epParameterEstimator.estimateSiteParams
+	siteParams.marginalLogLikelihood.get
+  }
+
   def logLikelihoodWithoutGrad(trainInput:DenseMatrix[Double],
 					targets:DenseVector[Int],hyperParams:DenseVector[Double]):Double = {
 	val newKernelFunc = kernelFunc.changeHyperParams(hyperParams)
