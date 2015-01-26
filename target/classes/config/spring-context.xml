@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="objectCreator" class="utils.TestingUtils$ScalaObjectsCreator" />
+
+     <!-- GaussianRbfParams(-0.03672911112580335,-0.8027556425944483,0.035355339059327376) -->
+    <!-- 1.3, 0.1011 -->
+    <bean id="bostonRbfParams" class="utils.KernelRequisites$GaussianRbfParams">
+        <constructor-arg name="signalVar" value="-0.0367" />
+        <constructor-arg name="lengthScales" value="#{objectCreator.lengthScales(13)}" />
+        <constructor-arg name="noiseVar" value="#{ T(java.lang.Math).sqrt(0.00125) }" />
+    </bean>
+
+
+    <bean  id="bostonRbfKernel" class="utils.KernelRequisites$GaussianRbfKernel">
+        <constructor-arg name="rbfParams" ref="bostonRbfParams" />
+    </bean>
+
+    <bean id="optimalBostonRbfKernel" class="utils.KernelRequisites$GaussianRbfKernel">
+        <constructor-arg name="rbfParams" value="#{objectCreator.optimalBostonHp()}" />
+    </bean>
+
+    <bean id="co2HyperParams" class="gp.regression.Co2Prediction$Co2HyperParams">
+        <constructor-arg name="dv" value="#{objectCreator.co2HyperParamsVec()}" />
+    </bean>
+
+    <bean id="co2Kernel" class="gp.regression.Co2Prediction$Co2Kernel">
+        <constructor-arg name="co2HyperParams" ref="co2HyperParams" />
+    </bean>
+
+    <bean id="gpPredictor" class="gp.regression.GpPredictor">
+        <constructor-arg name="kernelFunc" ref="bostonRbfKernel" />
+    </bean>
+
+    <bean id="ukfTransfGpPredictor" class="gp.regression.GpPredictor">
+        <constructor-arg name="kernelFunc" value="#{objectCreator.rbfKernel(3)}" />
+    </bean>
+
+    <bean id="ssmGpPredictor" class="gp.regression.GpPredictor">
+        <constructor-arg name="kernelFunc" value="#{objectCreator.rbfKernel(1)}" />
+    </bean>
+
+    <bean id="gpBostonOptimalPredictor" class="gp.regression.GpPredictor">
+        <constructor-arg name="kernelFunc" ref="optimalBostonRbfKernel" />
+    </bean>
+
+    <bean id="co2GpPredictor" class="gp.regression.GpPredictor">
+        <constructor-arg name="kernelFunc" ref="co2Kernel" />
+    </bean>
+
+    <bean id="stopCriterion" class="gp.classification.EpParameterEstimator$AvgBasedStopCriterion">
+        <constructor-arg name="eps" value="0.01" />
+    </bean>
+
+    <bean id="gpClassifier" class="gp.classification.GpClassifier">
+        <constructor-arg name="stopCriterion" ref="stopCriterion" />
+    </bean>
+
+    <bean id="breezeLbfgsOptimizer" class="optimization.Optimization$BreezeLbfgsOptimizer" />
+
+    <bean id="gpOptimizerForSsmOptim" class="gp.optimization.GPOptimizer">
+        <constructor-arg name="gpPredictor" ref="ukfTransfGpPredictor" />
+        <constructor-arg name="noise" value="#{objectCreator.none()}" />
+        <constructor-arg name="gradientOptimizer" ref="breezeLbfgsOptimizer" />
+    </bean>
+</beans>
