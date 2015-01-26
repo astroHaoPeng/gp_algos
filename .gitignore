@@ -2,3 +2,4 @@
 .idea/workspace.xml
 ./logs
 .DS_Store
+*.dat
