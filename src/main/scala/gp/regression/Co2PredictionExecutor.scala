@@ -58,7 +58,7 @@ class Co2PredictionExecutor {
 	  (svmPredictor.predict(testInstance.predictionInput),None)
   }
 
-  def executeTestForSeKernel(trainTestRatio:Double,fileName:String="co2/maunaLoa2D.txt"):PredictionTestSuiteResult = {
+  def executeTestForSeKernel(trainTestRatio: Double, fileName: String = "co2/maunaLoa2D.txt"): PredictionTestSuiteResult = {
 	val testInstance = prepareTestInstance(trainTestRatio,fileName)
 	val kernel = (new TestingUtils.ScalaObjectsCreator()).rbfKernel(1)
 	val optimalHps = obtainOptimalHyperParamsForKernel(testInstance.predictionInput,kernel)
@@ -79,12 +79,12 @@ class Co2PredictionExecutor {
 
   def executeCo2TestForPredictors(trainTestRatio:Double) = {
 	val kernel = genericAppContext.getBean("co2Kernel",classOf[Co2Kernel])
-	executeTestForPredictors(trainTestRatio,kernel,"co2/maunaLoa2D.txt")
+	executeTestForPredictors(trainTestRatio, kernel, "co2/maunaLoa2D.txt")
   }
 
   def executeBostonTestForPredictors(trainTestRatio:Double) = {
 	val kernel = genericAppContext.getBean("bostonRbfKernel",classOf[GaussianRbfKernel])
-	executeTestForPredictors(trainTestRatio,kernel,"boston.csv")
+	executeTestForPredictors(trainTestRatio, kernel, "boston.csv")
   }
 
   def executeTest(testInstance:PredictionTestInstance,kernel:KernelFunc)(executingFunc:testExecutingFunc):PredictionTestSuiteResult = {

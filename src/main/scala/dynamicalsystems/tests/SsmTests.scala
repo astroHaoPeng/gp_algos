@@ -16,12 +16,12 @@ object SsmTests {
 	override val rNoise: DenseMatrix[Double] = DenseMatrix((0.1*0.1))
 	override val qNoise: DenseMatrix[Double] = rNoise
 	override val ssmModel: SsmModel = new SinusoidalSsm
-	override val resultFilePath: String = "ssm/sin/"
+	override val resultFilePath: String = "ssm/sin"
   }
 
   class KitagawaSsmTest extends SsmTest {
 
-	override val resultFilePath: String = "ssm/kit/"
+	override val resultFilePath: String = "ssm/kit"
 	override val qNoise: DenseMatrix[Double] = DenseMatrix((0.01*0.01))
 	override val rNoise: DenseMatrix[Double] = DenseMatrix((0.2*0.2))
 	override val ssmModel: SsmModel = new KitagawaSsm
