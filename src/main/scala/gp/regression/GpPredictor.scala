@@ -96,7 +96,7 @@ class GpPredictor(val kernelFunc:KernelFunc) {
   def preComputeComponentsWithHpOptimization(trainingData:DenseMatrix[Double],sigmaNoise:Option[Double],
 											 targets:DenseVector[Double]):
   			(afterLearningComponents,KernelFuncHyperParams) = {
-	val optimalHyperParams:KernelFuncHyperParams = obtainOptimalHyperParams(trainingData,sigmaNoise,targets,false)
+	val optimalHyperParams:KernelFuncHyperParams = obtainOptimalHyperParams(trainingData,sigmaNoise,targets,true)
 	(preComputeComponents(trainingData,optimalHyperParams,sigmaNoise,targets),optimalHyperParams)
   }
 

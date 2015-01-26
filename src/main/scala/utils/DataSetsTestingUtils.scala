@@ -34,6 +34,10 @@ object DataSetsTestingUtils {
 	}
   }
 
+  def loadDataSet(fileName:String,sep:Char = ' '):DenseMatrix[Double] = {
+	IOUtilities.csvFileToDenseMatrix(fileName,sep = sep)
+  }
+
 
 
 }

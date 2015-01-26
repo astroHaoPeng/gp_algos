@@ -60,7 +60,6 @@ class EpParameterEstimator(kernelMatrix:DenseMatrix[Double],targets:DenseVector[
 	  sigmaMatrix = kernelMatrix - (vMatrix.t * vMatrix)
 	  miParams = sigmaMatrix * niSiteParams
 	  currentParams = currentParams.copy(niSiteParams = niSiteParams,tauSiteParams = tauSiteParams)
-
 	  logger.info(s"End of iteration = ${j} - average difference = ${avgBetweenSiteParams(oldParams,currentParams)}")
 	}
 	val siteParams = SiteParams(niSiteParams = niSiteParams,tauSiteParams = tauSiteParams)

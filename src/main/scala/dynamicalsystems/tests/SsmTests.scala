@@ -1,7 +1,8 @@
 package dynamicalsystems.tests
 
 import dynamicalsystems.filtering.SsmModel
-import breeze.linalg.DenseMatrix
+import breeze.linalg.{DenseVector, DenseMatrix}
+import utils.StatsUtils.GaussianDistribution
 
 /**
  * Created by mjamroz on 11/05/14.
@@ -24,14 +25,16 @@ object SsmTests {
 	override val qNoise: DenseMatrix[Double] = DenseMatrix((0.01*0.01))
 	override val rNoise: DenseMatrix[Double] = DenseMatrix((0.2*0.2))
 	override val ssmModel: SsmModel = new KitagawaSsm
+	override val initHiddenStateDistr = GaussianDistribution(mean = DenseVector(0.),
+					DenseMatrix((0.5*0.5)))
   }
 
   def main(args:Array[String]) = {
 
-	val seqLength = 200
+	val seqLength = 10
 	val (sinusoidalSsmTest,kitSsmTest) = (new SinusoidalSsmTest,new KitagawaSsmTest)
-	sinusoidalSsmTest.run(seqLength)
-	//kitSsmTest.run(seqLength)
+	//sinusoidalSsmTest.run(seqLength)
+	kitSsmTest.run(seqLength)
   }
 
 }

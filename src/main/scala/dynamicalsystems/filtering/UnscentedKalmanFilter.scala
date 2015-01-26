@@ -121,14 +121,13 @@ class UnscentedKalmanFilter(gpOptimizer:GPOptimizer) {
 	  sigmaPoints = sigmaPoints, transformedSigmaPoints = transformedSigmaPoints)
   }
 
-  def inferWithUkfOptimWrtToMarginall(input:UnscentedFilteringInput,
+  def inferWithUkfOptimWrtToMll(input:UnscentedFilteringInput,
 								 initParams:Option[UnscentedTransformParams],rangeForParam:Range=ukfParamRange):FilteringOutput = {
 
 	val objFunction:optimization.Optimization.objectiveFunction = {
 	  point:Array[Double] =>
 		val unscentedParams = UnscentedTransformParams.fromVector(point)
 		val out = inferHiddenState(input,Some(unscentedParams),true)
-	  	/*We want to minimize negative log likelihood */
 	  	if (out.logLikelihood.get == Double.NegativeInfinity){Double.MinValue}
 	  	else if (out.logLikelihood.get == Double.PositiveInfinity){Double.MaxValue}
 	  	else {out.logLikelihood.get}

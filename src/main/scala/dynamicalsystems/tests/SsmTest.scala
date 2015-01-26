@@ -29,9 +29,9 @@ trait SsmTest extends SsmTestingUtils{
   genericContext.load("classpath:config/spring-context.xml")
   genericContext.refresh
 
-  val gpPredictor = genericContext.getBean("gpPredictor",classOf[GpPredictor])
   val gpOptimizer = genericContext.getBean(classOf[GPOptimizer])
-
+  val gpPredictorForUkfTransformOptim = gpOptimizer.gpPredictor
+  val gpPredictorForGpUkf = genericContext.getBean("ssmGpPredictor",classOf[GpPredictor])
 
   def run(seqLength:Int) = {
 	val samples = generateSamples(seqLength)
@@ -47,7 +47,7 @@ trait SsmTest extends SsmTestingUtils{
 
   def doTheTestWithUkfParamsOptim(samples:(DenseMatrix[Double],DenseMatrix[Double])):SsmTestingResult = {
 	val func:(UnscentedKalmanFilter,UnscentedFilteringInput,DenseMatrix[Double]) => FilteringOutput = {
-	  (ukf,ukfInput,hidden) => ukf.inferWithUkfOptimWrtToNll(ukfInput,None,hidden)
+	  (ukf,ukfInput,hidden) => ukf.inferWithUkfOptimWrtToMll(ukfInput,None)
 	}
 	testWithUkf(samples,("ukf/true_optim.dat","ukf/predicted_optim.dat"))(func)
   }
@@ -73,7 +73,7 @@ trait SsmTest extends SsmTestingUtils{
 									params:UnscentedTransformParams = UnscentedTransformParams.defaultParams):SsmTestingResult = {
 	val func:(GPUnscentedKalmanFilter,UnscentedFilteringInput,DenseMatrix[Double]) => FilteringOutput = {
 	  (gpUkf,ukfInput,hidden) =>
-		gpUkf.inferWithUkfOptimWithWrtToNll(ukfInput,None,true)
+		gpUkf.inferWithUkfOptimWrtToMll(ukfInput,None)
 	}
 	testWithGpUkf(samples,("gpukf/true_optim.dat","gpukf/predicted_optim.dat"))(func)
   }
@@ -110,7 +110,7 @@ trait SsmTest extends SsmTestingUtils{
   def testWithGpUkf(samples:(DenseMatrix[Double],DenseMatrix[Double]),paths:(String,String))(
 	func:(GPUnscentedKalmanFilter,UnscentedFilteringInput,DenseMatrix[Double]) => FilteringOutput) = {
 	val (hidden,obs) = samples
-	val gpUkf = new GPUnscentedKalmanFilter(gpOptimizer,gpPredictor)
+	val gpUkf = new GPUnscentedKalmanFilter(gpOptimizer,gpPredictorForGpUkf)
 	val ukfInput = ukfInputGen(obs,hidden.cols)
 	val out = func(gpUkf,ukfInput,hidden)
 	require(out.logLikelihood.isDefined,"Log likelihood must be defined")

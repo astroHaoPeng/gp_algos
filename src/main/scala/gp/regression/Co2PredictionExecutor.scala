@@ -2,8 +2,8 @@ package gp.regression
 
 import breeze.linalg.{DenseVector, DenseMatrix}
 import gp.regression.GpPredictor.PredictionInput
-import utils.KernelRequisites.{KernelFunc, KernelFuncHyperParams}
-import utils.StatsUtils
+import utils.KernelRequisites.{GaussianRbfKernel, KernelFunc, KernelFuncHyperParams}
+import utils.{DataSetsTestingUtils, TestingUtils, StatsUtils}
 import org.springframework.context.support.GenericXmlApplicationContext
 import gp.regression.Co2Prediction.Co2Kernel
 import svm.SvmRegressionImpl
@@ -47,7 +47,9 @@ class Co2PredictionExecutor {
 	(testInstance,kernel) =>
 	  val gpPredictor = new GpPredictor(kernel)
 	  val (posterior,ll) = gpPredictor.predict(testInstance.predictionInput)
-	  (StatsUtils.NormalDistributionSampler.sample(posterior),Some(ll))
+	  val meanFrom10Samples:DenseVector[Double] = ((1 to 9).foldLeft(StatsUtils.NormalDistributionSampler.sample(posterior)){
+		case (acc,_) => acc :+ StatsUtils.NormalDistributionSampler.sample(posterior)}) :/ 10.
+	  (meanFrom10Samples,Some(ll))
   }
 
   val svmPredictor:testExecutingFunc = {
@@ -56,10 +58,17 @@ class Co2PredictionExecutor {
 	  (svmPredictor.predict(testInstance.predictionInput),None)
   }
 
-  def executeTestForPredictors(trainTestRatio:Double):
+  def executeTestForSeKernel(trainTestRatio:Double,fileName:String="co2/maunaLoa2D.txt"):PredictionTestSuiteResult = {
+	val testInstance = prepareTestInstance(trainTestRatio,fileName)
+	val kernel = (new TestingUtils.ScalaObjectsCreator()).rbfKernel(1)
+	val optimalHps = obtainOptimalHyperParamsForKernel(testInstance.predictionInput,kernel)
+	val optimalKernel = kernel.changeHyperParams(optimalHps.toDenseVector)
+	executeTest(testInstance,optimalKernel)(gpMeanPredictor)
+  }
+
+  def executeTestForPredictors(trainTestRatio:Double,kernel:KernelFunc,fileName:String):
   	(PredictionTestSuiteResult,PredictionTestSuiteResult,PredictionTestSuiteResult) = {
-	val testInstance = prepareTestInstance(trainTestRatio)
-	val kernel = genericAppContext.getBean("co2Kernel",classOf[Co2Kernel])
+	val testInstance = prepareTestInstance(trainTestRatio,fileName)
 	val optimalHps = obtainOptimalHyperParamsForKernel(testInstance.predictionInput,kernel)
 	val optimalKernel = kernel.changeHyperParams(optimalHps.toDenseVector)
 	val gpMeanResult = executeTest(testInstance,optimalKernel)(gpMeanPredictor)
@@ -68,30 +77,41 @@ class Co2PredictionExecutor {
 	(gpMeanResult,gpSampleResult,svmResult)
   }
 
+  def executeCo2TestForPredictors(trainTestRatio:Double) = {
+	val kernel = genericAppContext.getBean("co2Kernel",classOf[Co2Kernel])
+	executeTestForPredictors(trainTestRatio,kernel,"co2/maunaLoa2D.txt")
+  }
+
+  def executeBostonTestForPredictors(trainTestRatio:Double) = {
+	val kernel = genericAppContext.getBean("bostonRbfKernel",classOf[GaussianRbfKernel])
+	executeTestForPredictors(trainTestRatio,kernel,"boston.csv")
+  }
+
   def executeTest(testInstance:PredictionTestInstance,kernel:KernelFunc)(executingFunc:testExecutingFunc):PredictionTestSuiteResult = {
 	val (predictedValues,ll) = executingFunc(testInstance,kernel)
 	val trueValues = testInstance.testTargets
-	val mseVal = StatsUtils.mse(predictedValues.toDenseMatrix,trueValues.toDenseMatrix,horSample = true)
+	val mseVal = StatsUtils.mse(predictedValues.toDenseMatrix,trueValues.toDenseMatrix,horSample = false)
 	PredictionTestSuiteResult(testTargets = testInstance.testTargets,
 	  predictedValues = predictedValues,mse = mseVal,ll = ll)
   }
 
-  def prepareTestInstance(trainTestRatio:Double):PredictionTestInstance = {
+  def prepareTestInstance(trainTestRatio:Double,fileName:String):PredictionTestInstance = {
 
-	val co2Data:DenseMatrix[Double] = Co2Prediction.loadInput(fileName = "co2/maunaLoa2D.txt",colNum = 2)
-
-	val wholeDsTargets:DenseVector[Double] = co2Data(::,1)
-	val wholeDs:DenseMatrix[Double] = co2Data(::,0).toDenseMatrix.t
-	val sampleNum = co2Data.rows
+	val data:DenseMatrix[Double] = Co2Prediction.loadInput(fileName) //Co2Prediction.loadInput(fileName = fileName)
+	val dim = data.cols
+	val wholeDsTargets:DenseVector[Double] = data(::,-1)
+	val wholeDs:DenseMatrix[Double] = data(::,0 to -2)
+	val sampleNum = data.rows
 	val trainNum = (trainTestRatio*sampleNum).toInt
 	assert(wholeDs.rows == sampleNum)
-	assert(wholeDs.cols == 1)
-	val orderedIds:IndexedSeq[Int] = 0 until co2Data.rows
+	assert(wholeDs.cols == dim-1)
+	val orderedIds:IndexedSeq[Int] = 0 until data.rows
 	val shuffledIds:IndexedSeq[Int] = util.Random.shuffle(orderedIds)
 	val shuffledTargets:DenseVector[Double] = DenseVector.tabulate[Double](sampleNum){
 	  case id => wholeDsTargets(shuffledIds(id))}
-	val shuffledDs:DenseMatrix[Double] = DenseMatrix.tabulate[Double](sampleNum,1){
-	  case (row,_) => wholeDs(shuffledIds(row),0)
+	val shuffledDs:DenseMatrix[Double] = DenseMatrix.zeros[Double](sampleNum,dim-1)
+	(0 until sampleNum).foreach{ row =>
+	  shuffledDs(row,::) := wholeDs(shuffledIds(row),::)
 	}
 	val predInput = PredictionInput(trainingData = shuffledDs(0 until trainNum,::),
 	  testData = shuffledDs(trainNum until sampleNum,::),sigmaNoise = None,targets = shuffledTargets(0 until trainNum))
@@ -103,5 +123,6 @@ class Co2PredictionExecutor {
 	val (trainingData,targets) = (predictionInput.trainingData,predictionInput.targets)
 	samplePredictor.obtainOptimalHyperParams(trainingData,None,targets,optimizeNoise = true)
   }
+  DenseVector().t
 
 }

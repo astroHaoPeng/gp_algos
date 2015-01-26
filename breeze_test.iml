@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
-    <facet type="scala" name="Scala">
-      <configuration>
-        <option name="compilerLibraryLevel" value="Project" />
-        <option name="compilerLibraryName" value="Maven: org.scala-lang:scala-compiler-bundle:2.10.3" />
-        <option name="vmOptions" value="-Xms64m -Xmx3G" />
-      </configuration>
-    </facet>
     <facet type="Spring" name="Spring">
       <configuration>
         <fileset id="fileset" name="Spring Application Context" removed="false">
@@ -34,18 +27,15 @@
     <orderEntry type="library" name="Maven: org.scalanlp:breeze_2.10:0.8.1" level="project" />
     <orderEntry type="library" name="Maven: org.scalanlp:breeze-macros_2.10:0.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.scalamacros:quasiquotes_2.10:2.0.0-M8" level="project" />
-    <orderEntry type="library" name="Maven: org.scala-lang:scala-reflect:2.10.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.fommil.netlib:core:1.1.2" level="project" />
     <orderEntry type="library" name="Maven: net.sourceforge.f2j:arpack_combined_all:0.1" level="project" />
     <orderEntry type="library" name="Maven: net.sf.opencsv:opencsv:2.3" level="project" />
     <orderEntry type="library" name="Maven: com.github.rwl:jtransforms:2.4.0" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.8.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.commons:commons-math3:3.2" level="project" />
     <orderEntry type="library" name="Maven: org.spire-math:spire_2.10:0.7.4" level="project" />
     <orderEntry type="library" name="Maven: org.spire-math:spire-macros_2.10:0.7.4" level="project" />
     <orderEntry type="library" name="Maven: com.typesafe.scala-logging:scala-logging-slf4j_2.10:2.1.2" level="project" />
     <orderEntry type="library" name="Maven: com.typesafe.scala-logging:scala-logging-api_2.10:2.1.2" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.6" level="project" />
     <orderEntry type="library" name="Maven: com.github.fommil.netlib:netlib-native_ref-osx-x86_64:natives:1.1" level="project" />
     <orderEntry type="library" name="Maven: com.github.fommil.netlib:native_ref-java:1.1" level="project" />
     <orderEntry type="library" name="Maven: com.github.fommil:jniloader:1.1" level="project" />
@@ -61,6 +51,7 @@
     <orderEntry type="library" name="Maven: com.github.fommil.netlib:netlib-native_system-linux-armhf:natives:1.1" level="project" />
     <orderEntry type="library" name="Maven: com.github.fommil.netlib:netlib-native_system-win-x86_64:natives:1.1" level="project" />
     <orderEntry type="library" name="Maven: com.github.fommil.netlib:netlib-native_system-win-i686:natives:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-math3:3.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:3.2.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:3.2.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
@@ -74,17 +65,18 @@
     <orderEntry type="library" name="Maven: com.davidsoergel:dsutils:1.051" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: net.sourceforge.collections:collections-generic:4.01" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.6" level="project" />
-    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
-    <orderEntry type="library" name="Maven: com.intellij:annotations:7.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.davidsoergel:conja:1.061" level="project" />
     <orderEntry type="library" name="Maven: edu.berkeley.compbio:ml:0.921" level="project" />
     <orderEntry type="library" name="Maven: com.davidsoergel:trees:1.031" level="project" />
-    <orderEntry type="library" name="Maven: com.davidsoergel:stats:0.931" level="project" />
     <orderEntry type="library" name="Maven: com.davidsoergel:runutils:0.911" level="project" />
     <orderEntry type="library" name="Maven: com.martiansoftware:JSAP:2.0a-ds1" level="project" />
+    <orderEntry type="library" name="Maven: com.davidsoergel:stats:0.931" level="project" />
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:20040616" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest_2.10:2.0" level="project" />
+    <orderEntry type="library" name="Maven: com.intellij:annotations:7.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.6" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.6" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest_2.10:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.scala-lang:scala-reflect:2.10.4" level="project" />
   </component>
 </module>
-

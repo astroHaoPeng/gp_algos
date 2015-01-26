@@ -3,7 +3,7 @@ package gp.tasks
 import utils.IOUtilities
 import java.io.File
 import org.springframework.context.support.GenericXmlApplicationContext
-import gp.regression.GpPredictor
+import gp.regression.{Co2PredictionExecutor, GpPredictor}
 import gp.regression.GpPredictor.PredictionInput
 import utils.StatsUtils.GaussianDistribution
 import breeze.linalg.{DenseMatrix, DenseVector}
@@ -22,7 +22,7 @@ object MasterThesisRelatedTasks {
   genericContext.refresh()
 
   def writeCo2DataSetToFile = {
-	val (co2Train,_) = co2DataToYearWithValue(loadInput,1.0)
+	val (co2Train,_) = co2DataToYearWithValue(loadInput(),1.0)
 	val co2DsFile = new File("src/main/resources/co2/maunaLoa2D.txt")
 	IOUtilities.writeVectorsToFile(co2DsFile,co2Train(::,0),co2Train(::,1))
   }
@@ -58,7 +58,7 @@ object MasterThesisRelatedTasks {
 
   def evaluateGpPredictionOnCo2Ds = {
 	val trainTestRatio = 0.7
-	val (co2Train,co2Test) = co2DataToYearWithValue(loadInput,trainTestRatio)
+	val (co2Train,co2Test) = co2DataToYearWithValue(loadInput(),trainTestRatio)
 	val wholeDataSet = DenseMatrix.vertcat[Double](co2Train,co2Test)
 	val co2GpPredictor = genericContext.getBean("co2GpPredictor", classOf[GpPredictor])
 	val predInput = PredictionInput(trainingData = co2Train(::, 0).toDenseMatrix.t, sigmaNoise = None,
@@ -68,6 +68,38 @@ object MasterThesisRelatedTasks {
 	val co2PredFile = new File("src/main/resources/co2/co2PredResults.txt")
 	val meanWithStddev = gpPosteriorToVecOutput(co2PredictionResult,wholeDataSet)
 	IOUtilities.writeVectorsToFile(co2PredFile,meanWithStddev(::,0),meanWithStddev(::,1),meanWithStddev(::,2))
+  }
+
+  def evaluateAllPredictorsOnCo2Ds = {
+	val trainTestRatio = 0.7
+	val co2Executor = new Co2PredictionExecutor
+	val (gpMean,gpSample,svm) = co2Executor.executeCo2TestForPredictors(trainTestRatio)
+	println("----------------------- GP MEAN ----------------------")
+	println(gpMean)
+	println("----------------------- GP SAMPLE --------------------")
+	println(gpSample)
+	println("----------------------- SVM --------------------------")
+	println(svm)
+  }
+
+  def evaluateAllPredictorsOnBostonDs = {
+	val trainTestRatio = 0.7
+	val co2PredictionExecutor = new Co2PredictionExecutor
+	val (gpMean,gpSample,svm) = co2PredictionExecutor.executeBostonTestForPredictors(trainTestRatio)
+	println("----------------------- GP MEAN ----------------------")
+	println(gpMean)
+	println("----------------------- GP SAMPLE --------------------")
+	println(gpSample)
+	println("----------------------- SVM --------------------------")
+	println(svm)
+  }
+
+  def evaluateSeKernelOnCo2Ds = {
+	val trainTestRatio = 0.7
+	val co2Executor = new Co2PredictionExecutor
+	val seGpMean = co2Executor.executeTestForSeKernel(trainTestRatio)
+	println("---------------------- SE GP MEAN --------------------")
+	println(seGpMean)
   }
 
   def evaluateGpPredictionOnBostonDs = {
@@ -97,7 +129,10 @@ object MasterThesisRelatedTasks {
 	//writeCo2DataSetToFile
 	//evaluateGpPredictionOnCo2Ds
 	//evaluateGpPredictionOnBostonDs
-	evaluateSsmInference
+	//evaluateSsmInference
+	//evaluateAllPredictorsOnCo2Ds
+	//evaluateSeKernelOnCo2Ds
+	evaluateAllPredictorsOnBostonDs
   }
 
 }

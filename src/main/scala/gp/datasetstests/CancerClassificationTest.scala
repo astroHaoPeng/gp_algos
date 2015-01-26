@@ -35,7 +35,7 @@ class CancerClassificationTest {
   val eps = 0.01
   val stopCriterion:EpParameterEstimator.stopCriterionFunc = new AvgBasedStopCriterion(eps)
   val rbfKernel = GaussianRbfKernel(rbfParams = initRbfParams)
-  val gpClassifier = new GpClassifier(rbfKernel,stopCriterion)
+  val gpClassifier = new GpClassifier(stopCriterion)
 
   val probabsToClasses:DenseVector[Double] => DenseVector[Int] = {probabs =>
 	probabs.mapValues {probab => if (probab < 0.5) -1 else 1}
@@ -126,7 +126,7 @@ class CancerClassificationTest {
 	val optimizedParams = hyperParamOptimizer.optimizeHyperParams(
 	  ClassifierInput(trainKernelMatrix = kernelMatrix,targets = targets,
 		initHyperParams = rbfKernel.rbfParams,trainData = Some(input)))
-	val newGpClassifier = new GpClassifier(rbfKernel.changeHyperParams(optimizedParams.toDenseVector),stopCriterion)
+	val newGpClassifier = new GpClassifier(stopCriterion)
 	val learnParams = newGpClassifier.trainClassifier(
 	  ClassifierInput(trainKernelMatrix = kernelMatrix,trainData = Some(input),
 		targets = targets,initHyperParams = optimizedParams))

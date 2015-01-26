@@ -136,22 +136,26 @@ object Co2Prediction {
 	}
   }
 
-  def loadInput: DenseMatrix[Double] = {
-	val lines = io.Source.fromFile(new ClassPathResource("co2/maunaLoa.txt").getFile).getLines().toSeq
-	val finalMatrix = DenseMatrix.zeros[Double](lines.length, 14)
+  def loadInput(fileName:String = "co2/maunaLoa.txt"): DenseMatrix[Double] = {
+	val lines = io.Source.fromFile(new ClassPathResource(fileName).getFile).getLines().toSeq
+	assert(lines.size > 1)
+	val colSplitReg = "(\\s+|\\t+)"
+	val colNum = lines(0).split(colSplitReg).length
+	val finalMatrix = DenseMatrix.zeros[Double](lines.length, colNum)
 	lines.foldLeft(0) {
 	  case (index, line) =>
-		val numbers = line.split("(\\s|\\t)").map(_.toDouble)
+		val numbers = line.split(colSplitReg).map(_.toDouble)
 		finalMatrix(index, ::) := DenseVector(numbers).t
 		index + 1
 	}
 	finalMatrix
   }
 
+
   /*Result is pair of Nx2 matrices where 1st column of a given row is a year, 2nd column is a co2 ppm */
   def co2DataToYearWithValue(matrix: DenseMatrix[Double], trainTestRatio: Double):
   (DenseMatrix[Double], DenseMatrix[Double]) = {
-	require(trainTestRatio > 0 && trainTestRatio < 1, "Division's ratio should be between 0 and 1")
+	require(trainTestRatio >= 0 && trainTestRatio <= 1, "Division's ratio should be between 0 and 1")
 	val yearCo2PpmTuples: IndexedSeq[(Double, Double)] = (0 until matrix.rows).foldLeft(IndexedSeq[(Double, Double)]()) {
 	  case (acc, row) =>
 		val year = matrix(row, 0)
@@ -192,7 +196,7 @@ object Co2Prediction {
 
   def main(args: Array[String]):Unit = {
 	val trainTestRatio = 0.8
-	val (co2Train,co2Test) = co2DataToYearWithValue(loadInput,trainTestRatio)
+	val (co2Train,co2Test) = co2DataToYearWithValue(loadInput(),trainTestRatio)
 	val genericContext = new GenericXmlApplicationContext()
 	genericContext.load("classpath:config/spring-context.xml")
 	genericContext.refresh()

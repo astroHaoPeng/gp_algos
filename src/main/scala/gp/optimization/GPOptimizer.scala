@@ -11,11 +11,12 @@ import utils.MatrixUtils._
 import gp.optimization.GPOptimizer.GPOInput
 import scala.Some
 import org.slf4j.LoggerFactory
+import scala.beans.BeanProperty
 
 /**
  * Created by mjamroz on 14/04/14.
  */
-class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer:GradientBasedOptimizer) {
+class GPOptimizer(@BeanProperty var gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer:GradientBasedOptimizer) {
 
   val logger = LoggerFactory.getLogger(classOf[GPOptimizer])
 
@@ -169,6 +170,6 @@ class GPOptimizer(gpPredictor:GpPredictor,noise:Option[Double],gradientOptimizer
 object GPOptimizer {
 
   case class GPOInput(ranges:IndexedSeq[Range],mParam:Int,cParam:Int,
-					  kParam:Double,optimizeHpOnInitGrid:Boolean=true)
+					  kParam:Double,optimizeHpOnInitGrid:Boolean=false)
 
 }

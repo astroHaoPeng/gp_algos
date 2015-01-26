@@ -85,7 +85,7 @@ object StatsUtils {
 		}
 		acc + (diff dot diff)
 	}
-	squaredSum / estimate.rows
+	squaredSum / numOfSamples
   }
   
   def nllOfHiddenData(trueHiddenStates:DenseMatrix[Double],inferredDistr:Array[GaussianDistribution]):Double = {
